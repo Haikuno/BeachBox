@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "config": "ignore",
+        "raylib.h": "c",
+        "gl.h": "c",
+        "kos.h": "c",
+        "glkos.h": "c",
+        "glu.h": "c",
+        "controller.h": "c",
+        "maple.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}

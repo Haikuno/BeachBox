@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/toolchains/dc/kos/include/",
+                "/opt/toolchains/dc/kos/kernel/arch/dreamcast/include/",
+                "/opt/toolchains/dc/kos/kernel/arch/dreamcast/include/dc/maple/**",
+                "/opt/toolchains/dc/kos-ports/include",
+                "/opt/toolchains/dc/raylib/raylib/src/"
+            ],
+            "forcedInclude": [
+                "main.c"
+            ],
+            "compilerPath": "/opt/toolchains/dc/sh-elf/bin/sh-elf-gcc",
+            "cStandard": "c23",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
