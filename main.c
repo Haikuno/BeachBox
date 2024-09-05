@@ -2,9 +2,10 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glkos.h>
-#include <raylib.h>
 #include "dc/maple.h"
 #include "dc/vmufs.h"
+#include <dc/vmu_fb.h>
+#include <raylib.h>
 #include "raymath.h"
 
 #define SCREEN_WIDTH 640
@@ -35,6 +36,7 @@ enum Scene {
 #include "src/ui.c"
 #include "src/background.c"
 #include "src/controller.c"
+#include "src/vmu.c"
 
 #include "src/scenes/raylogo.c"
 #include "src/scenes/loading.c"
@@ -68,6 +70,7 @@ void update_game() {
 }
 
 void draw_game() {
+    thd_create(1, draw_vmu_animation, 0);
     BeginDrawing();
     static void (*draw_scene_functions[])(void) = {
         [RAYLOGO] = draw_raylogo_scene,
