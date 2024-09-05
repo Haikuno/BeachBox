@@ -1,8 +1,8 @@
 #define MAX_SAND_PARTICLES 20
-#define WAVE_HEIGHT 20
-#define WAVE_WIDTH 15
 #define SLOW_WAVE_HEIGHT 12
 #define SLOW_WAVE_WIDTH 8
+#define FAST_WAVE_HEIGHT 20
+#define FAST_WAVE_WIDTH 15
 float last_sand_particle_spawn_time;
 
 struct SandParticle {
@@ -28,11 +28,11 @@ void draw_ocean() {
         }
     }
 
-    static float fastWaveStep = 0;
     static float slowWaveStep = 0;
+    static float fastWaveStep = 0;
 
+    slowWaveStep += current_object_speed != 0 ? 0.002f * current_object_speed : 0.01f;
     fastWaveStep += current_object_speed != 0 ? 0.004f * current_object_speed : 0.02f;
-    slowWaveStep += current_object_speed != 0 ? 0.002f * current_object_speed : 0.04f;
 
     if (fastWaveStep > 100) fastWaveStep = 0;
     if (slowWaveStep > 100) slowWaveStep = 0;
@@ -47,10 +47,10 @@ void draw_ocean() {
     }
 
     for (int row = 0; row < 2; row++) {
-        int y = centerY + (row * WAVE_HEIGHT);
-        for (int x = 0; x < SCREEN_WIDTH; x += WAVE_WIDTH) {
-            float offsetY = sinf((x + fastWaveStep * 100) / 50.0f) * WAVE_HEIGHT / 2 + 45;
-            DrawRectangle(x, y + (int)offsetY, WAVE_WIDTH, WAVE_HEIGHT, colors[row + 2]);
+        int y = centerY + (row * FAST_WAVE_HEIGHT);
+        for (int x = 0; x < SCREEN_WIDTH; x += FAST_WAVE_WIDTH) {
+            float offsetY = sinf((x + fastWaveStep * 100) / 50.0f) * FAST_WAVE_HEIGHT / 2 + 45;
+            DrawRectangle(x, y + (int)offsetY, FAST_WAVE_WIDTH, FAST_WAVE_HEIGHT, colors[row + 2]);
         }
     }
 }
