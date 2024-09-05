@@ -122,6 +122,7 @@ void draw_vmu_animation() {
     vmu_wave_calc();
     vmu_sand_calc();
 
+    // Sand
     vmufb_paint_area(&vmu_fb, vmu_sand_pos_x, 16, 8, 8, vmu_sand_2);
     vmufb_paint_area(&vmu_fb, vmu_sand_pos_x, 24, 8, 8, vmu_sand_1);
 
@@ -137,6 +138,7 @@ void draw_vmu_animation() {
     vmufb_paint_area(&vmu_fb, vmu_sand_pos_x + 32, 24, 8, 8, vmu_sand_1);
     vmufb_paint_area(&vmu_fb, vmu_sand_pos_x + 40, 24, 8, 8, vmu_sand_1);
 
+    // Wave
     vmufb_paint_area(&vmu_fb, 0, vmu_wave_pos_y, 8, 8, vmu_wave_frame_1);
     vmufb_paint_area(&vmu_fb, 8, vmu_wave_pos_y, 8, 8, vmu_wave_frame_1);
     vmufb_paint_area(&vmu_fb, 16, vmu_wave_pos_y, 8, 8, vmu_wave_frame_1);
