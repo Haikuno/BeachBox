@@ -36,6 +36,7 @@ bool IsTriggerPressed(int gamepad, enum Triggers trigger) {
 }
 
 
+// TODO: add pause menu in game scene
 
 void update_controller() {
     switch (current_scene) {

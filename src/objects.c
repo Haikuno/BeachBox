@@ -39,68 +39,72 @@ void init_objects() {
     objects_bitfield = 0;
     current_object_speed = base_object_speed = 5;
     calculate_object_cooldowns();
-    last_coin_spawn_time = last_pillar_spawn_time = last_giant_pillar_spawn_time = GetTime();
+    last_coin_spawn_time = last_pillar_spawn_time = GetTime();
+    last_giant_pillar_spawn_time = GetTime() + 20;  // Make the first giant pillar spawn later in the run
 }
 
 void spawn_coin() {
-    for (uint16_t i = 0; i < COINS_LAST_BIT; i++) {
-        if (objects_bitfield & (1 << i)) {  // This slot is not free
-            continue;
+    uint16_t i;
+    for (i = 0; i < COINS_LAST_BIT; i++) {
+        if (!(objects_bitfield & (1 << i))) {
+            break;
         }
-
-        double now = GetTime();
-        bool should_spawn_coin = now - last_coin_spawn_time >= coin_cooldown;
-        if (!should_spawn_coin) return;
-
-        // The current index is free
-        objects_bitfield |= (1 << i);  // Set the i-th bit to 1 so we know this slot is taken
-
-        objects.size[i] = COIN_SIZE;
-        objects.pos[i] = (Vector2){.x = SCREEN_WIDTH + 100, .y = GetRandomValue(190, FLOOR_HEIGHT - 100)};
-        objects.is_shifted[i] = GetRandomValue(0, 1);
-
-        // We set both times to avoid spawning two coins at the same time
-        last_coin_spawn_time = now;
-
-        base_object_speed = MIN(base_object_speed + 0.1, MAX_OBJECT_SPEED);
-        calculate_object_cooldowns();
-        return;
     }
+
+    double now = GetTime();
+    if (i >= COINS_LAST_BIT || now - last_coin_spawn_time < coin_cooldown) return;
+
+    objects_bitfield |= (1 << i);
+
+    objects.size[i] = COIN_SIZE;
+    objects.pos[i] = (Vector2){.x = SCREEN_WIDTH + 100, .y = GetRandomValue(190, FLOOR_HEIGHT - 100)};
+    objects.is_shifted[i] = GetRandomValue(0, 1);
+
+    last_coin_spawn_time = now;
+    base_object_speed = MIN(base_object_speed + 0.1, MAX_OBJECT_SPEED);
+    calculate_object_cooldowns();
 }
 
-// TODO: add upside down pillars
 void spawn_pillar() {
-    for (uint16_t i = COINS_LAST_BIT; i < PILLARS_LAST_BIT; i++) {
-        if (objects_bitfield & (1 << i)) {  // This slot is not free
-            continue;
+    uint16_t i;
+    for (i = COINS_LAST_BIT; i < PILLARS_LAST_BIT; i++) {
+        if (!(objects_bitfield & (1 << i))) {
+            break;
         }
+    }
 
-        double now = GetTime();
-        bool should_spawn_pillar = now - last_pillar_spawn_time > pillar_cooldown;
-        if (!should_spawn_pillar) return;
+    double now = GetTime();
+    bool should_spawn_pillar = now - last_pillar_spawn_time > pillar_cooldown;
 
-        // The current index is free
-        objects_bitfield |= (1 << i);
+    if (i >= PILLARS_LAST_BIT || !should_spawn_pillar) return;
 
-        bool should_spawn_giant_pillar = should_spawn_pillar && now - last_giant_pillar_spawn_time > giant_pillar_cooldown;
+    objects_bitfield |= (1 << i);
 
-        if (should_spawn_giant_pillar) {
-            objects.size[i] = (Vector2){.x = 200, .y = FLOOR_HEIGHT};
-            objects.pos[i] = (Vector2){.x = SCREEN_WIDTH + 100, .y = FLOOR_HEIGHT - objects.size[i].y};
+    bool should_spawn_giant_pillar = should_spawn_pillar && now - last_giant_pillar_spawn_time > giant_pillar_cooldown;
 
-            // We set both times to avoid spawning two pillars on top of each other
-            last_giant_pillar_spawn_time = now;
-            last_pillar_spawn_time = now;
-            return;
-        }
-
-        // Spawn a normal pillar
-        objects.size[i] = (Vector2){.x = GetRandomValue(30, 50), .y = GetRandomValue(80, 120)};
+    if (should_spawn_giant_pillar) {
+        objects.size[i] = (Vector2){.x = 200, .y = FLOOR_HEIGHT};
         objects.pos[i] = (Vector2){.x = SCREEN_WIDTH + 100, .y = FLOOR_HEIGHT - objects.size[i].y};
-        objects.is_shifted[i] = GetRandomValue(0, 1);
+
+        // We set both times to avoid spawning two pillars on top of each other
+        last_giant_pillar_spawn_time = now;
         last_pillar_spawn_time = now;
         return;
     }
+
+    // Spawn a normal pillar
+    objects.size[i] = (Vector2){.x = GetRandomValue(30, 50), .y = GetRandomValue(80, 120)};
+    objects.pos[i] = (Vector2){.x = SCREEN_WIDTH + 100, .y = FLOOR_HEIGHT - objects.size[i].y};
+
+    bool is_upside_down = GetRandomValue(0, 1);
+    if (is_upside_down) {
+        objects.size[i].y = GetRandomValue(270, 300);
+        objects.pos[i].y = -5;
+    }
+
+    objects.is_shifted[i] = GetRandomValue(0, 1);
+    last_pillar_spawn_time = now;
+    return;
 }
 
 void add_object() {

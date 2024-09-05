@@ -45,7 +45,7 @@ void update_mainmenu_scene() {
 
 // TODO: make this look pretty
 void draw_mainmenu_scene() {
-    ClearBackground(RAYWHITE);
+    draw_background();
     DrawText("BeachBox", 100, 100, 44, BLACK);
 
     if (do_button(play_button, GRAY)) {

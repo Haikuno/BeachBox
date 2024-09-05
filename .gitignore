@@ -2,3 +2,4 @@
 romdisk.*
 build/*
 *.elf
+output.bin

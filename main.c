@@ -5,6 +5,7 @@
 #include <raylib.h>
 #include "dc/maple.h"
 #include "dc/vmufs.h"
+#include "raymath.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -25,7 +26,7 @@ enum Scene {
     SHOP,
     OPTIONS,
     CREDITS
-} current_scene = LOADING;
+} current_scene = RAYLOGO;
 
 #include "src/helper_functions.c"
 #include "src/save.c"
@@ -56,9 +57,8 @@ void update_game() {
         [MAINMENU] = update_mainmenu_scene,
         [GAME] = update_game_scene,
         [SHOP] = update_shop_scene,
-        // [OPTIONS] = update_options_scene,
-        // [CREDITS] =update_credits_scene
-    };
+        [OPTIONS] = update_options_scene,
+        [CREDITS] = update_credits_scene};
 
     update_scene_functions[current_scene]();
 
@@ -69,17 +69,14 @@ void update_game() {
 
 void draw_game() {
     BeginDrawing();
-
-    draw_background();
-
     static void (*draw_scene_functions[])(void) = {
         [RAYLOGO] = draw_raylogo_scene,
         [LOADING] = draw_loading_scene,
         [MAINMENU] = draw_mainmenu_scene,
         [GAME] = draw_game_scene,
         [SHOP] = draw_shop_scene,
-        // [OPTIONS] = draw_options_scene,
-        // [CREDITS] = draw_credits_scene,
+        [OPTIONS] = draw_options_scene,
+        [CREDITS] = draw_credits_scene,
     };
 
     draw_scene_functions[current_scene]();

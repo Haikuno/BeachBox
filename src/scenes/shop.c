@@ -155,6 +155,7 @@ void jump_to_buy_button() {
 // TODO: confirmation window
 
 void draw_shop_scene() {
+    draw_background();
     DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, (Color){200, 200, 200, 200});
     draw_shop_description();
 

@@ -44,7 +44,7 @@ void draw_game_over() {
     DrawRectangleV((Vector2){SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4}, (Vector2){SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5}, (Color){200, 200, 200, 200});
     DrawText("You lost", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, BLACK);
 
-    const char *coins_text = TextFormat("Coins: %d", current_coins);
+    const char *coins_text = TextFormat("Score: %d", current_coins);
     const char *high_score_text = TextFormat("High Score: %d", save.high_score);
 
     DrawText(coins_text, (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 75, 20, BLACK);
@@ -66,34 +66,35 @@ void draw_game_over() {
 
 void draw_player_meter() {
     DrawRectangleV((Vector2){.x = 20, .y = 60}, (Vector2){.x = 150, .y = 15}, DARKBLUE);
-    DrawRectangleV((Vector2){.x = 20, .y = 60}, (Vector2){.x = 150 * (player.meter / player.max_meter), .y = 15}, BLUE);
+    DrawRectangleV((Vector2){.x = 20, .y = 60}, (Vector2){.x = Lerp(0, 150, player.meter / player.max_meter), .y = 15}, BLUE);
     DrawRectangleLinesV((Vector2){.x = 20, .y = 60}, (Vector2){.x = 150, .y = 15}, BLACK);
 }
 
 void draw_game_scene() {
-    if (!is_game_over) {
-        // We change the draw order of the objects based on if the player is shifted / teleporting or not
-        if (player.is_shifted || is_teleporting) {
-            draw_objects();
-            draw_player();
-        } else {
-            draw_player();
-            draw_objects();
-        }
-
-        // Draw current coint count
-        DrawText(TextFormat("Coins: %d", current_coins), 20, 20, 20, BLACK);
-
-        draw_player_meter();
-
-        if (!teleport_cooldown_timer.is_done) {
-            // draw cooldown meter
-            DrawRectangleV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150, .y = 15}, DARKGRAY);
-            DrawRectangleV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150 / (1 / ((GetTime() - teleport_cooldown_timer.time_started) / teleport_cooldown_timer.duration)), .y = 15}, WHITE);
-            DrawRectangleLinesV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150, .y = 15}, BLACK);
-        }
-
-    } else {
+    draw_background();
+    if (is_game_over) {
         draw_game_over();
+        return;
+    }
+
+    // We change the draw order of the objects based on if the player is shifted / teleporting or not
+    if (player.is_shifted || is_teleporting) {
+        draw_objects();
+        draw_player();
+    } else {
+        draw_player();
+        draw_objects();
+    }
+
+    // Draw current coint count
+    DrawText(TextFormat("Coins: %d", current_coins), 20, 20, 20, BLACK);
+
+    draw_player_meter();
+
+    if (!teleport_cooldown_timer.is_done) {
+        // draw cooldown meter
+        DrawRectangleV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150, .y = 8}, WHITE);
+        DrawRectangleV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150 * Lerp(0, 1, (GetTime() - teleport_cooldown_timer.time_started) / teleport_cooldown_timer.duration), .y = 8}, DARKGRAY);
+        DrawRectangleLinesV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150, .y = 8}, BLACK);
     }
 }
