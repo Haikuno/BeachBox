@@ -1,6 +1,6 @@
 struct UiButton load_button = {
-    .pos = {.x = 80, .y = SCREEN_HEIGHT * 0.45},
-    .size = {.x = 200, .y = 50},
+    .pos = {.x = 10, .y = SCREEN_HEIGHT * 0.45},
+    .size = {.x = 300, .y = 50},
     .column = 0,
     .row = 0,
     .layer = 0,
@@ -9,7 +9,7 @@ struct UiButton load_button = {
 
 struct UiButton new_game_button = {
     .pos = {.x = 320, .y = SCREEN_HEIGHT * 0.45},
-    .size = {.x = 200, .y = 50},
+    .size = {.x = 300, .y = 50},
     .column = 1,
     .row = 0,
     .layer = 0,
@@ -23,30 +23,29 @@ void update_loading_scene() {
     }
 
     column_count[0] = 2;
+    row_count[0] = 1;
 }
 
 void draw_loading_scene() {
-    ClearBackground(RAYWHITE);
-
     // TODO: add visual feedback, add confirmation windows
 
-    if (do_button(load_button)) {
-        int code = load_game();
-        if (code == -1) {
+    if (do_button(load_button, GRAY)) {
+        int return_code = load_game();
+        if (return_code == -1) {
             printf(" NO VMU FOUND! \n");
-        } else if (code == 1) {
+        } else if (return_code == 1) {
             printf(" SUCCESSFULLY LOADED GAME \n");
             change_scene(MAINMENU);
         }
     }
 
-    if (do_button(new_game_button)) {
-        int code = new_game();
-        if (code == -1) {
+    if (do_button(new_game_button, GRAY)) {
+        int return_code = new_game();
+        if (return_code == -1) {
             printf(" NO VMU FOUND! \n");
-        } else if (code == 0) {
+        } else if (return_code == 0) {
             printf(" NOT ENOUGH SPACE IN VMU! \n");
-        } else if (code == 1) {
+        } else if (return_code == 1) {
             printf(" SUCCESSFULLY CREATED NEW GAME \n");
             change_scene(MAINMENU);
         }

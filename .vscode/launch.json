@@ -24,7 +24,7 @@
             "name": "Build and launch Flycast",
             "type": "f5anything",
             "request": "launch",
-            "command": "make clean && make && flycast bbox.elf"
+            "command": "reset && make clean && make && flycast bbox.elf",
         }
     ]
 }

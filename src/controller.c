@@ -10,21 +10,50 @@ enum Buttons {
     START = 15
 };
 
+enum Triggers {
+    LEFT_TRIGGER = 4,
+    RIGHT_TRIGGER
+};
+
+bool is_left_trigger_down = false;
+bool is_right_trigger_down = false;
+
+bool IsTriggerPressed(int gamepad, enum Triggers trigger) {
+    static const float trigger_threshold = 0.5f;
+    bool *is_trigger_down = (trigger == LEFT_TRIGGER) ? &is_left_trigger_down : &is_right_trigger_down;
+    float trigger_movement = GetGamepadAxisMovement(0, trigger);
+
+    if (trigger_movement > trigger_threshold && !*is_trigger_down) {
+        *is_trigger_down = true;
+        return true;
+    }
+
+    if (trigger_movement <= trigger_threshold && *is_trigger_down) {
+        *is_trigger_down = false;
+    }
+
+    return false;
+}
+
+
+
 void update_controller() {
     switch (current_scene) {
         case GAME:
-            if (IsGamepadButtonDown(0, DPAD_LEFT)) {
-                if (!is_game_over) {
-                    move_player((Vector2){.x = -1, .y = 0});
-                } else {
+            if (is_game_over) {
+                if (IsGamepadButtonPressed(0, DPAD_LEFT)) {
                     move_cursor('L');
+                } else if (IsGamepadButtonPressed(0, DPAD_RIGHT)) {
+                    move_cursor('R');
                 }
+                break;
             }
-            if (IsGamepadButtonDown(0, DPAD_RIGHT)) {
-                if (!is_game_over) {
-                    move_player((Vector2){.x = 1, .y = 0});
-                } else {
-                    move_cursor('R');                }
+
+            if (IsGamepadButtonDown(0, DPAD_LEFT) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) < 0) {
+                move_player((Vector2){.x = -1, .y = 0});
+            }
+            if (IsGamepadButtonDown(0, DPAD_RIGHT) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) > 0) {
+                move_player((Vector2){.x = 1, .y = 0});
             }
 
             if (IsGamepadButtonDown(0, A)) {
@@ -33,11 +62,14 @@ void update_controller() {
                 cut_jump();
             }
 
-            if (IsGamepadButtonPressed(0, X)) {
-                toggle_player_shift();
-            } else if (IsGamepadButtonReleased(0, X)) {
-                toggle_player_shift();
+            if (IsTriggerPressed(0, LEFT_TRIGGER)) {
+                slow_down();
             }
+            if (IsTriggerPressed(0, RIGHT_TRIGGER)) {
+                teleport();
+            }
+
+            shift_player(IsGamepadButtonDown(0, X));
             break;
 
         case LOADING:

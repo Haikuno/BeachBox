@@ -48,19 +48,22 @@ void draw_mainmenu_scene() {
     ClearBackground(RAYWHITE);
     DrawText("BeachBox", 100, 100, 44, BLACK);
 
-    if (do_button(play_button)) {
+    if (do_button(play_button, GRAY)) {
         change_scene(GAME);
     }
-    if (do_button(shop_button)) {
-        //current_scene = SHOP;
+    if (do_button(shop_button, GRAY)) {
+        change_scene(SHOP);
     }
-    if (do_button(options_button)) {
-        //current_scene = OPTIONS;
+    if (do_button(options_button, GRAY)) {
+        //change_scene(OPTIONS);
+        printf("Options not implemented yet!\n");
     }
-    if (do_button(credits_button)) {
-        //current_scene = CREDITS;
+    if (do_button(credits_button, GRAY)) {
+        //change_scene(CREDITS);
+        printf("Credits not implemented yet!\n");
     }
 
+    DrawRectangle(380, 80, 200, 100, (Color){200, 200, 200, 150});
     DrawText(TextFormat("Coins: %d", save.total_coins), 400, 100, 20, BLACK);
     DrawText(TextFormat("Runs: %d", save.total_runs), 400, 120, 20, BLACK);
     DrawText(TextFormat("Highscore: %d", save.high_score), 400, 140, 20, BLACK);
