@@ -70,7 +70,7 @@ void update_game() {
 }
 
 void draw_game() {
-    
+    thd_create(1, draw_vmu_animation, 0);
     BeginDrawing();
     static void (*draw_scene_functions[])(void) = {
         [RAYLOGO] = draw_raylogo_scene,
