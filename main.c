@@ -30,12 +30,13 @@ enum Scene {
 } current_scene = RAYLOGO;
 
 #include "src/helper_functions.c"
+#include "src/timer.c"
 #include "src/save.c"
 #include "src/player.c"
 #include "src/objects.c"
-#include "src/ui.c"
 #include "src/background.c"
 #include "src/controller.c"
+#include "src/ui.c"
 #include "src/vmu.c"
 
 #include "src/scenes/raylogo.c"

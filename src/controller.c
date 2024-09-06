@@ -35,6 +35,9 @@ bool IsTriggerPressed(int gamepad, enum Triggers trigger) {
     return false;
 }
 
+// Forward declarations
+void change_scene(enum Scene);
+void move_cursor(char);
 
 // TODO: add pause menu in game scene
 
@@ -73,6 +76,10 @@ void update_controller() {
             shift_player(IsGamepadButtonDown(0, X));
             break;
 
+        case RAYLOGO:
+            if (IsGamepadButtonPressed(0, START)) {
+                change_scene(LOADING);
+            }
         case LOADING:
         case MAINMENU:
         case SHOP:

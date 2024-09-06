@@ -21,22 +21,6 @@ inline bool CheckCollisionRectangleV(Vector2 vec1, Vector2 pos1, Vector2 vec2, V
     return CheckCollisionRecs((Rectangle){vec1.x, vec1.y, pos1.x, pos1.y}, (Rectangle){vec2.x, vec2.y, pos2.x, pos2.y});
 }
 
-struct Timer {
-    float time_started;
-    float duration;
-    bool is_done;
-};
-
-inline void start_timer(struct Timer *timer, float duration) {
-    timer->time_started = GetTime();
-    timer->duration = duration;
-    timer->is_done = false;
-}
-
-inline void update_timer(struct Timer *timer) {
-    timer->is_done = GetTime() - timer->time_started >= timer->duration;
-}
-
 inline float sin_breathe(float time, float rate) {
     return (sin(time * rate)) * 5;
 }

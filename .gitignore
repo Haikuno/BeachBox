@@ -3,3 +3,4 @@ romdisk.*
 build/*
 *.elf
 output.bin
+.vscode/settings.json

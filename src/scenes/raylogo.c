@@ -12,7 +12,7 @@ const float animation_duration = 1.0f;
 float time_elapsed = 0.0f;
 
 void update_raylogo_scene() {
-    if (IsGamepadButtonPressed(0, START) || raylogo_timer.is_done) {
+    if (raylogo_timer.is_done) {
         change_scene(LOADING);
     }
     update_timer(&raylogo_timer);

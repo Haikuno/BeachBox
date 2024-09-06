@@ -26,28 +26,52 @@ void update_loading_scene() {
     row_count[0] = 1;
 }
 
-void draw_loading_scene() {
-    // TODO: add visual feedback, add confirmation windows
-    
-    if (do_button(load_button, GRAY)) {
-        int return_code = load_game();
-        if (return_code == -1) {
+void load_game_callback() {
+    int return_code = load_game();
+
+    switch (return_code) {
+        case -1:
             printf(" NO VMU FOUND! \n");
-        } else if (return_code == 1) {
+            break;
+        case 0:
+            printf(" NO SAVES FOUND! \n");
+            break;
+        case 1:
             printf(" SUCCESSFULLY LOADED GAME \n");
             change_scene(MAINMENU);
-        }
+            break;
+    }
+}
+
+void new_game_callback() {
+    int return_code = new_game();
+
+    switch (return_code) {
+        case -1:
+            printf(" NO VMU FOUND! \n");
+            break;
+        case 0:
+            printf(" NOT ENOUGH SPACE IN VMU! \n");
+            break;
+        case 1:
+            printf(" SUCCESSFULLY CREATED NEW GAME \n");
+            change_scene(MAINMENU);
+            break;
+    }
+}
+
+void draw_loading_scene() {
+    static void (*callback)() = NULL;
+
+    if (do_button(load_button, GRAY)) {
+        selected_layer = 1;
+        callback = load_game_callback;
     }
 
     if (do_button(new_game_button, GRAY)) {
-        int return_code = new_game();
-        if (return_code == -1) {
-            printf(" NO VMU FOUND! \n");
-        } else if (return_code == 0) {
-            printf(" NOT ENOUGH SPACE IN VMU! \n");
-        } else if (return_code == 1) {
-            printf(" SUCCESSFULLY CREATED NEW GAME \n");
-            change_scene(MAINMENU);
-        }
+        selected_layer = 1;
+        callback = new_game_callback;
     }
+
+    draw_confirmation_window(callback);
 }

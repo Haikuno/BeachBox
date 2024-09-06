@@ -11,7 +11,7 @@ uint8_t column_count[MAX_ROWS] = {1};
 struct UiButton {
     Vector2 pos;
     Vector2 size;
-    const char* text;
+    const char *text;
     uint8_t column;
     uint8_t row;
     uint8_t layer;
@@ -103,7 +103,7 @@ void draw_rotating_sun(Vector2 anchor_pos) {
     DrawRectanglePro(rect_2, (Vector2){11.25, 11.25}, angle - 45, YELLOW);
 }
 
-// returns true if the button is pressed
+// Returns true if the button is pressed
 bool do_button(struct UiButton button, Color color) {
     if (selected_layer != button.layer) return false;
 
@@ -120,4 +120,41 @@ bool do_button(struct UiButton button, Color color) {
     DrawText(button.text, (int)(button.pos.x + button.size.x / 2 - MeasureText(button.text, 20) / 2), (int)(button.pos.y + button.size.y / 2 - 10), 20, BLACK);
 
     return is_selected && is_pressed;
+}
+
+// Returns true if yes is pressed, false otherwise
+void draw_confirmation_window(void (*callback)()) {
+    if (selected_layer == 0) return;
+
+    const Vector2 conf_window_size = {SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.5f};
+    const Vector2 conf_window_pos = {(SCREEN_WIDTH - conf_window_size.x) / 2.0f, (SCREEN_HEIGHT - conf_window_size.y) / 2.0f};
+    const Color conf_window_color = {200, 200, 200, 200};
+
+    DrawRectangleV(conf_window_pos, conf_window_size, conf_window_color);
+
+    const Vector2 button_size = {conf_window_size.x * 0.4f, conf_window_size.y * 0.25f};
+
+    struct UiButton yes_button = {.pos = {conf_window_pos.x + 30, conf_window_pos.y + conf_window_size.y * 0.5f}, .size = button_size, .column = 0, .row = 0, .layer = 1, .text = "Yes"};
+    struct UiButton no_button = {.pos = {conf_window_pos.x + conf_window_size.x - button_size.x - 30, conf_window_pos.y + conf_window_size.y * 0.5f}, .size = button_size, .column = 1, .row = 0, .layer = 1, .text = "No"};
+
+    DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, BLACK);
+
+    static bool first_a_release = true;
+
+    if (first_a_release && IsGamepadButtonReleased(0, A)) {
+        first_a_release = false;
+        return;
+    }
+
+    if (do_button(yes_button, GRAY)) {
+        callback();
+        first_a_release = true;
+        return;
+    }
+
+    if (do_button(no_button, GRAY)) {
+        selected_layer = 0;
+        first_a_release = true;
+        return;
+    }
 }

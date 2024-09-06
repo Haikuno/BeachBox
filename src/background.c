@@ -39,7 +39,7 @@ void draw_ocean() {
 
     int centerY = SCREEN_HEIGHT / 2;
     for (int row = 0; row < 2; row++) {
-        int y = centerY - (1.8 * SLOW_WAVE_HEIGHT) + (row * SLOW_WAVE_HEIGHT) + 25;
+        int y = centerY + (row * SLOW_WAVE_HEIGHT);
         for (int x = 0; x < SCREEN_WIDTH; x += SLOW_WAVE_WIDTH) {
             float offsetY = sinf((x + slowWaveStep * 100) / 50.0f) * SLOW_WAVE_HEIGHT / 2;
             DrawRectangle(x, y + (int)offsetY, SLOW_WAVE_WIDTH, SLOW_WAVE_HEIGHT, colors[row]);
