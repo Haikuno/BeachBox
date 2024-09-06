@@ -28,7 +28,7 @@ void update_loading_scene() {
 
 void draw_loading_scene() {
     // TODO: add visual feedback, add confirmation windows
-
+    thd_create(1, draw_vmu_loading, 0);
     if (do_button(load_button, GRAY)) {
         int return_code = load_game();
         if (return_code == -1) {
