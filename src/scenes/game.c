@@ -38,8 +38,8 @@ void update_game_scene() {
 }
 
 void draw_game_over() {
-    is_slowing_down = false;  // To turn off the inverted color effect
-    current_object_speed = 5; // To reset the object speed
+    is_slowing_down = false;   // To turn off the inverted color effect
+    current_object_speed = 5;  // To reset the object speed
     if (new_high_score) save.high_score = current_coins;
 
     DrawRectangleV((Vector2){SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4}, (Vector2){SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5}, (Color){200, 200, 200, 200});

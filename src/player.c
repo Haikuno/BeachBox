@@ -39,7 +39,7 @@ void init_player() {
     teleport_cooldown_timer.time_started = 0;
 }
 
-inline void lose_game() {
+void lose_game() {
 #ifndef DEBUG_GODMODE
     is_game_over = true;
     save.total_runs++;

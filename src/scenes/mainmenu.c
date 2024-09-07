@@ -55,11 +55,11 @@ void draw_mainmenu_scene() {
         change_scene(SHOP);
     }
     if (do_button(options_button, GRAY)) {
-        //change_scene(OPTIONS);
+        // change_scene(OPTIONS);
         printf("Options not implemented yet!\n");
     }
     if (do_button(credits_button, GRAY)) {
-        //change_scene(CREDITS);
+        // change_scene(CREDITS);
         printf("Credits not implemented yet!\n");
     }
 

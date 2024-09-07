@@ -12,7 +12,8 @@
         "string_view": "c",
         "initializer_list": "c",
         "*.m": "c",
-        "vmufs.h": "c"
+        "vmufs.h": "c",
+        "vmu_frames.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

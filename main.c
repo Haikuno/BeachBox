@@ -36,8 +36,8 @@ enum Scene {
 #include "src/objects.c"
 #include "src/background.c"
 #include "src/controller.c"
-#include "src/ui.c"
 #include "src/vmu.c"
+#include "src/ui.c"
 
 #include "src/scenes/raylogo.c"
 #include "src/scenes/loading.c"

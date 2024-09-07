@@ -8,6 +8,7 @@ uint8_t selected_layer = 0;  // Used for confirmation windows
 uint8_t row_count[MAX_COLUMNS] = {1};
 uint8_t column_count[MAX_ROWS] = {1};
 
+// The struct that holds the data for each button
 struct UiButton {
     Vector2 pos;
     Vector2 size;
@@ -20,11 +21,13 @@ struct UiButton {
 // Forward declarations
 void init_game_scene();
 
+// Changes the current scene, and calls the corresponding init function (if needed)
 inline void change_scene(enum Scene scene) {
     current_scene = scene;
     selected_column = 0;
     selected_row = 0;
     selected_layer = 0;
+    vmu_current_frame = 0;
 
     switch (scene) {
         case GAME:
@@ -35,6 +38,7 @@ inline void change_scene(enum Scene scene) {
     }
 }
 
+// Moves the "cursor" when the player presses the DPAD, changing the selected UiButton
 void move_cursor(char direction) {
     const uint8_t prev_column = selected_column;
     const uint8_t prev_row = selected_row;
@@ -86,10 +90,13 @@ void move_cursor(char direction) {
     if (selected_column == 255) selected_column = prev_column;
 }
 
+
+// Checks if the passed UiButton is selected
 inline bool is_button_selected(struct UiButton button) {
     return button.column == selected_column && button.row == selected_row && button.layer == selected_layer;
 }
 
+// Draws a rotating sun around the selected UiButton
 void draw_rotating_sun(Vector2 anchor_pos) {
     static float angle = 0.0f;
     angle = fmodf(angle + 0.75f, 360.0f);
@@ -122,7 +129,7 @@ bool do_button(struct UiButton button, Color color) {
     return is_selected && is_pressed;
 }
 
-// Returns true if yes is pressed, false otherwise
+// Takes a function pointer to call when the action is confirmed
 void draw_confirmation_window(void (*callback)()) {
     if (selected_layer == 0) return;
 
