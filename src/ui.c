@@ -148,7 +148,7 @@ void draw_confirmation_window(void (*callback)()) {
 
     DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, BLACK);
 
-    static bool first_a_release = true;
+    static bool first_a_release = true; // We ignore the first release of A as it is released on the first frame (since you need to release A to open this menu)
 
     if (first_a_release && IsGamepadButtonReleased(0, A)) {
         first_a_release = false;

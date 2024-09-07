@@ -1,6 +1,6 @@
 #define MAX_OBJECTS 16
 
-#define MAX_OBJECT_SPEED 10
+#define MAX_OBJECT_SPEED 15
 
 #define COIN_SIZE \
     (Vector2) { .x = 10, .y = 10 }
@@ -32,8 +32,8 @@ float last_pillar_spawn_time;
 float last_giant_pillar_spawn_time;
 
 void calculate_object_cooldowns() {
-    coin_cooldown = 10 / current_object_speed;
-    pillar_cooldown = 16 / current_object_speed;
+    coin_cooldown = 8 / current_object_speed;
+    pillar_cooldown = 15 / current_object_speed;
     giant_pillar_cooldown = 70 / current_object_speed;
 }
 
@@ -42,7 +42,7 @@ void init_objects() {
     current_object_speed = base_object_speed = 5;
     calculate_object_cooldowns();
     last_coin_spawn_time = last_pillar_spawn_time = GetTime();
-    last_giant_pillar_spawn_time = GetTime() + 20;  // Make the first giant pillar spawn later in the run
+    last_giant_pillar_spawn_time = GetTime() + 28;  // Make the first giant pillar spawn later in the run
 }
 
 void spawn_pillar() {
@@ -65,6 +65,7 @@ void spawn_pillar() {
     if (should_spawn_giant_pillar) {
         objects.size[index] = (Vector2){.x = 200, .y = FLOOR_HEIGHT};
         objects.pos[index] = (Vector2){.x = SCREEN_WIDTH + 100, .y = FLOOR_HEIGHT - objects.size[index].y};
+        objects.is_shifted[index] = false;
 
         // We set both times to avoid spawning two pillars on top of each other
         last_giant_pillar_spawn_time = now;
@@ -87,6 +88,8 @@ void spawn_pillar() {
     return;
 }
 
+
+// This function is also responsible of increasing the object speed each time a coin is spawned
 void spawn_coin() {
     uint16_t index;
     for (index = COINS_FIRST_BIT; index <= COINS_LAST_BIT; index++) {
@@ -107,7 +110,7 @@ void spawn_coin() {
     objects.is_shifted[index] = GetRandomValue(0, 1);
 
     last_coin_spawn_time = now;
-    base_object_speed = MIN(base_object_speed + 0.1, MAX_OBJECT_SPEED);
+    base_object_speed = MIN(base_object_speed + 0.09, MAX_OBJECT_SPEED);
     calculate_object_cooldowns();
 }
 

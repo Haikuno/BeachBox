@@ -123,7 +123,7 @@ void update_shop_scene() {
     row_count[0] = 7;
     row_count[1] = row_count[2] = 1;
 
-    if (selected_column == 0) {
+    if (selected_column == 0 && selected_layer == 0) {
         selected_shop_option = selected_row;
     }
 }

@@ -84,7 +84,7 @@ void update_player() {
     update_timer(&teleport_cooldown_timer);
 
     update_player_pos();
-    player.meter -= 0.13;
+    player.meter -= 0.16;
     if (is_slowing_down) player.meter -= 0.13 / (1 + save.player_upgrade_levels.slowdown_cost_level) * 0.75;
 
     if (player.meter <= 0) {
