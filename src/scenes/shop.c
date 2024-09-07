@@ -141,10 +141,11 @@ void draw_shop_description() {
 
     const char *description = descriptions[selected_shop_option];
     Color cost_color = can_afford(selected_shop_option) ? BLACK : RED;
+    Color level_color = get_upgrade_level(selected_shop_option) == max_upgrade_levels[selected_shop_option] ? DARKGREEN : BLACK;
 
     DrawText(description, 270, 50, 20, BLACK);
     DrawText(TextFormat("Cost: %d coins", costs[selected_shop_option]), 270, 250, 20, cost_color);
-    DrawText(TextFormat("Level: %d/%d", get_upgrade_level(selected_shop_option), max_upgrade_levels[selected_shop_option]), 270, 300, 20, BLACK);
+    DrawText(TextFormat("Level: %d/%d", get_upgrade_level(selected_shop_option), max_upgrade_levels[selected_shop_option]), 270, 300, 20, level_color);
 }
 
 void jump_to_buy_button() {

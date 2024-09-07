@@ -53,11 +53,17 @@ void update_controller() {
                 break;
             }
 
-            if (IsGamepadButtonDown(0, DPAD_LEFT) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) < 0) {
-                move_player((Vector2){.x = -1, .y = 0});
-            }
-            if (IsGamepadButtonDown(0, DPAD_RIGHT) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) > 0) {
-                move_player((Vector2){.x = 1, .y = 0});
+            float axis_movement_left_x = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
+
+            if (axis_movement_left_x != 0) {
+                move_player((Vector2){.x = axis_movement_left_x, .y = 0});
+            } else {
+                if (IsGamepadButtonDown(0, DPAD_LEFT)) {
+                    move_player((Vector2){.x = -1, .y = 0});
+                }
+                if (IsGamepadButtonDown(0, DPAD_RIGHT)) {
+                    move_player((Vector2){.x = 1, .y = 0});
+                }
             }
 
             if (IsGamepadButtonDown(0, A)) {
