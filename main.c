@@ -86,12 +86,14 @@ void draw_game() {
     draw_scene_functions[current_scene]();
 
 #ifdef DEBUG_DRAW_FPS
-    DrawFPS(400, 10);
+    DrawRectangle(0, 440, 130, 50, (Color){22, 22, 22, 200});
+    DrawFPS(27, 450);
 #endif
 
 #ifdef DEBUG_DRAW_CURSOR_INFO
-    DrawText(TextFormat("col: %d, row: %d", selected_column, selected_row), 430, 230, 20, RED);
-    DrawText(TextFormat("col_count: %d, row_count: %d", column_count[selected_row], row_count[selected_column]), 350, 270, 20, RED);
+    DrawRectangle(320, 20, 300, 120, (Color){22, 22, 22, 200});
+    DrawText(TextFormat("col: %d, row: %d", selected_column, selected_row), 395, 40, 20, RED);
+    DrawText(TextFormat("col_count: %d, row_count: %d", column_count[selected_row], row_count[selected_column]), 345, 80, 20, RED);
 #endif
 
     EndDrawing();

@@ -13,7 +13,8 @@
         "initializer_list": "c",
         "*.m": "c",
         "vmufs.h": "c",
-        "vmu_frames.h": "c"
+        "vmu_frames.h": "c",
+        "vmu_animations.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

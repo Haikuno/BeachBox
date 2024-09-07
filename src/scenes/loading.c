@@ -16,6 +16,9 @@ struct UiButton new_game_button = {
     .text = "New",
 };
 
+struct Timer error_timer = {.is_done = true};
+char error_text[50];
+
 void update_loading_scene() {
     for (uint8_t i = 0; i < MAX_COLUMNS; i++) {
         column_count[i] = 0;
@@ -24,6 +27,14 @@ void update_loading_scene() {
 
     column_count[0] = 2;
     row_count[0] = 1;
+    update_timer(&error_timer);
+}
+
+void draw_error_popup() {
+    if (error_timer.is_done) return;
+
+    DrawRectangle(SCREEN_WIDTH / 2 - 250, SCREEN_HEIGHT / 2 - 100, 500, 200, (Color){55, 55, 55, 250});
+    DrawText(error_text, (int)(SCREEN_WIDTH / 2 - MeasureText(error_text, 32) / 2), (int)(SCREEN_HEIGHT / 2 - 15), 32, RED);
 }
 
 void load_game_callback() {
@@ -31,13 +42,14 @@ void load_game_callback() {
 
     switch (return_code) {
         case -1:
-            printf(" NO VMU FOUND! \n");
+            start_timer(&error_timer, 3.0f);
+            strcpy(error_text, "NO VMU FOUND!");
             break;
         case 0:
-            printf(" NO SAVES FOUND! \n");
+            start_timer(&error_timer, 3.0f);
+            strcpy(error_text, "NO SAVE DATA FOUND!");
             break;
         case 1:
-            printf(" SUCCESSFULLY LOADED GAME \n");
             change_scene(MAINMENU);
             break;
     }
@@ -48,13 +60,14 @@ void new_game_callback() {
 
     switch (return_code) {
         case -1:
-            printf(" NO VMU FOUND! \n");
+            start_timer(&error_timer, 3.0f);
+            strcpy(error_text, "NO VMU FOUND!");
             break;
         case 0:
-            printf(" NOT ENOUGH SPACE IN VMU! \n");
+            start_timer(&error_timer, 3.0f);
+            strcpy(error_text, "NOT ENOUGH SPACE IN VMU!");
             break;
         case 1:
-            printf(" SUCCESSFULLY CREATED NEW GAME \n");
             change_scene(MAINMENU);
             break;
     }
@@ -78,4 +91,5 @@ void draw_loading_scene() {
     }
 
     draw_confirmation_window(callback);
+    draw_error_popup();
 }

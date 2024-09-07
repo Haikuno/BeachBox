@@ -1,4 +1,4 @@
-#include "vmu_frames.h"
+#include "vmu_animations.h"
 
 vmufb_t vmu_fb;
 int vmu_current_frame = 0;
@@ -21,11 +21,13 @@ void draw_vmu_animation() {
 
     switch (current_scene) {
         case RAYLOGO:
+            //TODO: raylogo VMU animation
             break;
         case LOADING:
             SET_VMU_ANIMATION(vmu_loading_animation);
             break;
         case MAINMENU:
+            //TODO: mainmenu VMU animation
             break;
         case GAME:
             if (is_game_over) {
@@ -35,10 +37,13 @@ void draw_vmu_animation() {
             }
             break;
         case SHOP:
+            //TODO: shop VMU animation
             break;
         case OPTIONS:
+            //TODO: options VMU animation
             break;
         case CREDITS:
+            //TODO: credits VMU animation
             break;
     }
 
