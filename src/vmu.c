@@ -3,6 +3,8 @@
 vmufb_t vmu_fb;
 int vmu_current_frame = 0;
 
+#define SET_VMU_ANIMATION(animation) (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
+
 void draw_vmu_animation() {
     static float last_vmu_update = 0;
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
@@ -21,18 +23,15 @@ void draw_vmu_animation() {
         case RAYLOGO:
             break;
         case LOADING:
-            vmu_current_animation = vmu_frames_loading;
-            vmu_current_num_frames = sizeof(vmu_frames_loading) / sizeof(vmu_frames_loading[0]);
+            SET_VMU_ANIMATION(vmu_loading_animation);
             break;
         case MAINMENU:
             break;
         case GAME:
             if (is_game_over) {
-                vmu_current_animation = vmu_frames_game_over;
-                vmu_current_num_frames = sizeof(vmu_frames_game_over) / sizeof(vmu_frames_game_over[0]);
+                SET_VMU_ANIMATION(vmu_game_over_animation);
             } else {
-                vmu_current_animation = vmu_frames_game_scene;
-                vmu_current_num_frames = sizeof(vmu_frames_game_scene) / sizeof(vmu_frames_game_scene[0]);
+                SET_VMU_ANIMATION(vmu_game_scene_animation);
             }
             break;
         case SHOP:

@@ -338,14 +338,14 @@ const char vmu_gameover_2[] = {
     0b00100000, 0b00001111, 0b11111000, 0b00000000, 0b00011100, 0b00001000,
     0b00100000, 0b00001111, 0b00000000, 0b00000000, 0b00000000, 0b00001000};
 
-const char *vmu_frames_loading[] = {
+const char *vmu_loading_animation[] = {
     vmu_loading_1,
     vmu_loading_2,
     vmu_loading_3,
     vmu_loading_4,
 };
 
-const char *vmu_frames_game_scene[] = {
+const char *vmu_game_scene_animation[] = {
     vmu_game_scene_1,
     vmu_game_scene_2,
     vmu_game_scene_3,
@@ -354,7 +354,7 @@ const char *vmu_frames_game_scene[] = {
     vmu_game_scene_2,
 };
 
-const char *vmu_frames_game_over[] = {
+const char *vmu_game_over_animation[] = {
     vmu_gameover_1,
     vmu_gameover_2,
 };
