@@ -40,6 +40,11 @@ inline void change_scene(enum Scene scene) {
 
 // Moves the "cursor" when the player presses the DPAD, changing the selected UiButton
 void move_cursor(char direction) {
+    if (selected_layer == 1) {
+        row_count[0] = 1;
+        column_count[0] = 2;
+    }
+
     const uint8_t prev_column = selected_column;
     const uint8_t prev_row = selected_row;
 
@@ -90,7 +95,6 @@ void move_cursor(char direction) {
     if (selected_column == 255) selected_column = prev_column;
 }
 
-
 // Checks if the passed UiButton is selected
 inline bool is_button_selected(struct UiButton button) {
     return button.column == selected_column && button.row == selected_row && button.layer == selected_layer;
@@ -112,8 +116,6 @@ void draw_rotating_sun(Vector2 anchor_pos) {
 
 // Returns true if the button is pressed
 bool do_button(struct UiButton button, Color color) {
-    if (selected_layer != button.layer) return false;
-
     const bool is_selected = is_button_selected(button);
     const bool is_pressed = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
 
@@ -155,6 +157,7 @@ void draw_confirmation_window(void (*callback)()) {
 
     if (do_button(yes_button, GRAY)) {
         callback();
+        selected_layer = 0;
         first_a_release = true;
         return;
     }

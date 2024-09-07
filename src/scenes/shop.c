@@ -152,10 +152,17 @@ void jump_to_buy_button() {
     selected_column = 1;
 }
 
+void return_to_main_menu() {
+    change_scene(MAINMENU);
+    save_game();
+}
+
 void draw_shop_scene() {
     draw_background();
     DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, (Color){200, 200, 200, 200});
     draw_shop_description();
+
+    static void (*callback)() = NULL;
 
     // Draw total coins
     const char *coins_text = TextFormat("Coins: %d", save.total_coins);
@@ -176,11 +183,18 @@ void draw_shop_scene() {
     }
 
     if (do_button(shop_buttons[7], can_buy ? GRAY : DARKGRAY) && !button_pressed && can_buy) {  // Buy
-        purchase();
+        callback = purchase;
+        selected_layer = 1;
+        selected_column = 0;
+        selected_row = 0;
     }
 
     if (do_button(shop_buttons[8], GRAY)) {  // Exit
-        save_game();
-        change_scene(MAINMENU);
+        callback = return_to_main_menu;
+        selected_layer = 1;
+        selected_column = 0;
+        selected_row = 0;
     }
+
+    draw_confirmation_window(callback);
 }

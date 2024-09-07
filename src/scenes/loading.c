@@ -64,13 +64,17 @@ void draw_loading_scene() {
     static void (*callback)() = NULL;
 
     if (do_button(load_button, GRAY)) {
-        selected_layer = 1;
         callback = load_game_callback;
+        selected_layer = 1;
+        selected_column = 0;
+        selected_row = 0;
     }
 
     if (do_button(new_game_button, GRAY)) {
-        selected_layer = 1;
         callback = new_game_callback;
+        selected_layer = 1;
+        selected_column = 0;
+        selected_row = 0;
     }
 
     draw_confirmation_window(callback);
