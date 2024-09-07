@@ -1,6 +1,7 @@
 TARGET = bbox.elf
 OBJS = main.o romdisk.o
 KOS_ROMDISK_DIR = romdisk
+CFLAGS += -std=c2x
 
 all: rm-elf $(TARGET)
 

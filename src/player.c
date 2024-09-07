@@ -109,11 +109,13 @@ inline void cut_jump() {
     }
 }
 
+// The slowdown power
 inline void slow_down() {
     if (!save.player_upgrade_levels.slowdown_unlocked) return;
     is_slowing_down = !is_slowing_down;
 }
 
+// The teleport power
 inline void teleport() {
     if (!save.player_upgrade_levels.teleport_unlocked) return;
     if (!teleport_cooldown_timer.is_done) return;

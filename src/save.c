@@ -1,12 +1,23 @@
+// Most of the information in this file and the calc_CRC function was taken from: https://mc.pp.se/dc/vms/fileheader.html , credits to Marcus Comstedt
+
 // Colors must be in ARGB4444 format, so I've converted the RGB values from my image to ARGB4444 below.
 
-const uint16_t vmu_light_blue = 0b1111101111011111;  // rgb(186,217,246)
-const uint16_t vmu_black = 0b1111000000000000;       // rgb(0,0,0)
-const uint16_t vmu_red = 0b1111110000010001;         // rgb(202,21,21)
-const uint16_t vmu_periwinkle = 0b1111100010011111;  // rgb(133,148,242)
-const uint16_t vmu_blue = 0b1111010001101111;        // rgb(70,96,255)
-const uint16_t vmu_sand = 0b1111110010100101;        // rgb(207,171,90)
-const uint16_t vmu_darksand = 0b1111110001110010;    // rgb(198,120,46)
+// The palette consists of 16 16-bit integers, one for each colour in the palette. Each integer consists of four four-bit fields:
+
+// 0-3 : Alpha (15 is fully opaque, 0 is fully transparent)
+// 4-7 : Red
+// 8-11 : Green
+// 12-15 : Blue
+// So a value of 0b1111'0000'1111'0000 would be pure green with no transparency.
+
+const uint16_t vmu_light_blue = 0b1111'1011'1101'1111;
+const uint16_t vmu_black = 0b1111'0000'0000'0000;
+const uint16_t vmu_red = 0b1111'1100'0001'0001;
+const uint16_t vmu_periwinkle = 0b1111'1000'1001'1111;
+const uint16_t vmu_blue = 0b1111'0100'0110'1111;
+const uint16_t vmu_sand = 0b1111'1100'1010'0101;
+const uint16_t vmu_darksand = 0b1111'1100'0111'0010;
+const uint16_t vmu_color_blank = 0b0000'0000'0000'0000;
 
 const uint16_t bios_save_palette[] = {
     vmu_light_blue,
@@ -16,18 +27,24 @@ const uint16_t bios_save_palette[] = {
     vmu_blue,
     vmu_sand,
     vmu_darksand,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-};  // Palette must be defined for the image array below to display correctly
-    // TODO: Explain to the user how to get their pngs to an array like this, possibly point them to crayon tools
-static const int8_t bios_save_animation[] = {
+    vmu_color_blank,
+    vmu_color_blank,
+    vmu_color_blank,
+    vmu_color_blank,
+    vmu_color_blank,
+    vmu_color_blank,
+    vmu_color_blank,
+    vmu_color_blank,
+    vmu_color_blank,
+};
+
+// The below array contains the frames of the animation shown in the Dreamcast BIOS.
+// Each value is a nybble corresponding to a colour index in the palette above.
+// For example, 0x01 would be a light blue pixel on the left and a black pixel on the right.
+
+// TODO: Explain to the user how to get their pngs to an array like this, possibly point them to crayon tools
+const int8_t bios_save_animation[] = {
+    ///////////////////////////////////   FRAME 1    /////////////////////////////////////////////
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -60,6 +77,7 @@ static const int8_t bios_save_animation[] = {
     0x55, 0x65, 0x55, 0x55, 0x55, 0x55, 0x55, 0x65, 0x55, 0x55, 0x55, 0x55, 0x56, 0x55, 0x55, 0x55,
     0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
     0x55, 0x55, 0x55, 0x65, 0x55, 0x55, 0x55, 0x55, 0x55, 0x65, 0x55, 0x55, 0x55, 0x55, 0x56, 0x55,
+    ///////////////////////////////////   FRAME 2    /////////////////////////////////////////////
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -92,6 +110,7 @@ static const int8_t bios_save_animation[] = {
     0x55, 0x55, 0x55, 0x56, 0x55, 0x55, 0x55, 0x55, 0x55, 0x65, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
     0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
     0x55, 0x55, 0x55, 0x55, 0x55, 0x56, 0x55, 0x55, 0x55, 0x55, 0x55, 0x65, 0x55, 0x55, 0x55, 0x55,
+    ///////////////////////////////////   FRAME 3    /////////////////////////////////////////////
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x01, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x10, 0x00, 0x00,
@@ -145,10 +164,10 @@ struct __attribute__((packed)) Save {
     int16_t graphic_eyecatch_type;  // Graphic eyecatch type (0 = none)
     int16_t crc;                    // CRC (ignored for game files.)
     int32_t bytes_after_header;     // Number of bytes of actual file data following header, icon(s) and graphic eyecatch. (Ignored for game files.)
-    char reserved[20];              // Reserved (fill with zeros)
+    char header_reserved[20];       // Reserved (fill with zeros)
     int16_t icon_palette[16];       // Icon palette (16 16-bit integers)
-    uint8_t icon_bitmaps[1536];     // Icon bitmaps (Nybbles)
-    // Text fields are padded with space ($20). String fileds are padded with NUL ($00). Integer fields are little endian.
+    uint8_t icon_bitmaps[512 * 3];  // Icon bitmaps (Nybbles) (512 bytes per frame)
+    // Text fields are padded with space ($20). String fileds are padded with NUL ($00).
 
     // SAVE DATA //
     struct PlayerUpgradeLevels player_upgrade_levels;
@@ -177,17 +196,30 @@ int save_game() {
     if (!vmu) {
         return -1;
     }
-    int save_size = sizeof(save);
 
-    // strcpy(save.vms_menu_description, "BeachBox");
+    size_t save_size = sizeof(save);
+    size_t header_size = sizeof(save.vms_menu_description) +
+                         sizeof(save.dc_description) +
+                         sizeof(save.app_identifier) +
+                         sizeof(save.number_icons) +
+                         sizeof(save.icon_animation_speed) +
+                         sizeof(save.graphic_eyecatch_type) +
+                         sizeof(save.crc) +
+                         sizeof(save.bytes_after_header) +
+                         sizeof(save.header_reserved) +
+                         sizeof(save.icon_palette) +
+                         sizeof(save.icon_bitmaps);
+
+    printf("header size: %d\n", header_size);
+
     strcpy(save.dc_description, "BeachBox - PsyOps");
     strcpy(save.app_identifier, "Psyops");
     save.number_icons = 3;
     save.icon_animation_speed = 14;
     save.graphic_eyecatch_type = 0;
     save.crc = calc_CRC((unsigned char *)&save, save_size);
-    save.bytes_after_header = save_size - 1666;  // 642 is the amount of bytes in the header
-    memcpy(save.reserved, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 20);
+    save.bytes_after_header = save_size - header_size;
+    memcpy(save.header_reserved, 00000000000000000000, 20);
     memcpy(save.icon_palette, bios_save_palette, sizeof(bios_save_palette));
     memcpy(save.icon_bitmaps, bios_save_animation, sizeof(bios_save_animation));
 
