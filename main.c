@@ -25,6 +25,7 @@ enum Scene {
     MAINMENU,
     GAME,
     SHOP,
+    UNLOCKABLES,
     OPTIONS,
     CREDITS
 } current_scene = RAYLOGO;
@@ -44,6 +45,7 @@ enum Scene {
 #include "src/scenes/mainmenu.c"
 #include "src/scenes/game.c"
 #include "src/scenes/shop.c"
+#include "src/scenes/unlockables.c"
 #include "src/scenes/options.c"
 #include "src/scenes/credits.c"
 
@@ -60,6 +62,7 @@ void update_game() {
         [MAINMENU] = update_mainmenu_scene,
         [GAME] = update_game_scene,
         [SHOP] = update_shop_scene,
+        [UNLOCKABLES] = update_unlockables_scene,
         [OPTIONS] = update_options_scene,
         [CREDITS] = update_credits_scene};
 
@@ -79,6 +82,7 @@ void draw_game() {
         [MAINMENU] = draw_mainmenu_scene,
         [GAME] = draw_game_scene,
         [SHOP] = draw_shop_scene,
+        [UNLOCKABLES] = draw_unlockables_scene,
         [OPTIONS] = draw_options_scene,
         [CREDITS] = draw_credits_scene,
     };

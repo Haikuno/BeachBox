@@ -1,4 +1,20 @@
 #define FLOOR_HEIGHT 350
+#define PLAYER_COLOR_COUNT 12
+
+const Color player_colors[PLAYER_COLOR_COUNT] = {
+    RED,
+    ORANGE,
+    YELLOW,
+    GREEN,
+    BLUE,
+    (Color){137, 207, 240, 255},  // Light blue
+    (Color){75, 54, 157, 255},    // Indigo
+    (Color){112, 54, 157, 255},   // Violet
+    PINK,
+    GOLD,
+    WHITE,
+    DARKGRAY,
+};
 
 struct Character {
     Vector2 size;
@@ -8,6 +24,7 @@ struct Character {
     float max_meter;
     float meter;
     bool is_shifted;
+    Color color;
 } player;
 
 struct Timer teleport_duration_timer;
@@ -22,13 +39,14 @@ uint16_t current_coins;       // The amount of coins collected in this run
 bool new_high_score = false;  // If the player got a new high score this run
 
 void init_player() {
-    player.size = (Vector2){.x = 32, .y = 32};
+    player.size = (Vector2){.x = 32, .y = 32},
     player.pos = (Vector2){.x = 100, .y = FLOOR_HEIGHT - player.size.y};
     player.velocity = (Vector2){.x = 0, .y = 0};
     player.speed = 6.5 + 0.5 * save.player_upgrade_levels.player_speed_level;
     player.max_meter = 100 + 10 * save.player_upgrade_levels.meter_level;
     player.meter = player.max_meter;
     player.is_shifted = false;
+    player.color = player_colors[save.color_index];
 
     is_slowing_down = false;
     is_teleporting = false;
@@ -127,7 +145,9 @@ inline void teleport() {
 }
 
 void draw_player() {
-    Color color = is_teleporting ? GREEN : RED;
+    const Color transparent = {0, 0, 0, 0};
+
+    Color color = is_teleporting ? transparent : player.color;
     color.a = player.is_shifted ? 140 : color.a;
 
     DrawRectangleV(player.pos, player.size, color);

@@ -167,7 +167,6 @@ void draw_shop_scene() {
 
     // Draw total coins
     const char *coins_text = TextFormat("Coins: %d", save.total_coins);
-
     DrawText(coins_text, 10 + MeasureText(coins_text, 20) / 2, 10, 20, BLACK);
 
     DrawLine(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.4, SCREEN_HEIGHT, BLACK);

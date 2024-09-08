@@ -16,20 +16,29 @@ struct UiButton shop_button = {
     .text = "Shop",
 };
 
-struct UiButton options_button = {
+struct UiButton unlockables_button = {
     .pos = {.x = 43, .y = 270},
     .size = {.x = 150, .y = 40},
     .column = 0,
     .row = 2,
     .layer = 0,
-    .text = "Options",
+    .text = "Unlockables",
 };
 
-struct UiButton credits_button = {
+struct UiButton options_button = {
     .pos = {.x = 43, .y = 320},
     .size = {.x = 150, .y = 40},
     .column = 0,
     .row = 3,
+    .layer = 0,
+    .text = "Options",
+};
+
+struct UiButton credits_button = {
+    .pos = {.x = 43, .y = 370},
+    .size = {.x = 150, .y = 40},
+    .column = 0,
+    .row = 4,
     .layer = 0,
     .text = "Credits",
 };
@@ -40,10 +49,10 @@ void update_mainmenu_scene() {
         row_count[i] = 0;
     }
 
-    row_count[0] = 4;
+    row_count[0] = 5;
+    column_count[0] = 1;
 }
 
-// TODO: make this look pretty
 void draw_mainmenu_scene() {
     draw_background();
     DrawText("BeachBox", 100, 100, 44, BLACK);
@@ -53,6 +62,9 @@ void draw_mainmenu_scene() {
     }
     if (do_button(shop_button, GRAY)) {
         change_scene(SHOP);
+    }
+    if (do_button(unlockables_button, GRAY)) {
+        change_scene(UNLOCKABLES);
     }
     if (do_button(options_button, GRAY)) {
         // change_scene(OPTIONS);

@@ -18,6 +18,16 @@ struct UiButton {
     uint8_t layer;
 };
 
+// The struct that holds the data for an arrow pair (used in unlockables scene)
+struct UiArrows {
+    Vector2 size;
+    Vector2 pos_left;
+    Vector2 pos_right;
+    uint8_t column;
+    uint8_t row;
+    uint8_t layer;
+};
+
 // Forward declarations
 void init_game_scene();
 
@@ -30,6 +40,9 @@ inline void change_scene(enum Scene scene) {
     vmu_current_frame = 0;
 
     switch (scene) {
+        case UNLOCKABLES:
+            init_player(); // We init player here to set the correct player color and size for the unlockables scene
+            break;
         case GAME:
             init_game_scene();
             break;
@@ -100,6 +113,11 @@ inline bool is_button_selected(struct UiButton button) {
     return button.column == selected_column && button.row == selected_row && button.layer == selected_layer;
 }
 
+// Checks if the passed UiArrow is selected
+inline bool is_arrow_selected(struct UiArrows arrow) {
+    return arrow.column == selected_column && arrow.row == selected_row && arrow.layer == selected_layer;
+}
+
 // Draws a rotating sun around the selected UiButton
 void draw_rotating_sun(Vector2 anchor_pos) {
     static float angle = 0.0f;
@@ -131,6 +149,40 @@ bool do_button(struct UiButton button, Color color) {
     return is_selected && is_pressed;
 }
 
+// Returns 1 if right is pressed, -1 if left is pressed, 0 otherwise
+int do_arrows(struct UiArrows arrow, Color color) {
+    const bool is_selected = is_arrow_selected(arrow);
+    const bool is_right_pressed = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT);
+    const bool is_left_pressed = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT);
+
+    if (is_selected) {
+        color = (Color){235, 245, 255, 255};
+    }
+
+    // Left arrow
+    Vector2 left_v1 = {.x = arrow.pos_left.x + arrow.size.x / 2, .y = arrow.pos_left.y};
+    Vector2 left_v2 = {.x = arrow.pos_left.x, .y = arrow.pos_left.y + arrow.size.y / 2};
+    Vector2 left_v3 = {.x = arrow.pos_left.x + arrow.size.x / 2, .y = arrow.pos_left.y + arrow.size.y};
+
+    DrawTriangle(left_v1, left_v2, left_v3, color);
+    DrawTriangleLines(left_v1, left_v2, left_v3, BLACK);
+
+    // Right arrow
+    Vector2 right_v1 = {.x = arrow.pos_right.x + arrow.size.x, .y = arrow.pos_right.y + arrow.size.y / 2};
+    Vector2 right_v2 = {.x = arrow.pos_right.x + arrow.size.x / 2, .y = arrow.pos_right.y};
+    Vector2 right_v3 = {.x = arrow.pos_right.x + arrow.size.x / 2, .y = arrow.pos_right.y + arrow.size.y};
+
+    DrawTriangle(right_v1, right_v2, right_v3, color);
+    DrawTriangleLines(right_v1, right_v2, right_v3, BLACK);
+
+
+    if (is_right_pressed) return 1;
+
+    if (is_left_pressed) return -1;
+
+    return 0;
+}
+
 // Takes a function pointer to call when the action is confirmed
 void draw_confirmation_window(void (*callback)()) {
     if (selected_layer == 0) return;
@@ -148,7 +200,7 @@ void draw_confirmation_window(void (*callback)()) {
 
     DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, BLACK);
 
-    static bool first_a_release = true; // We ignore the first release of A as it is released on the first frame (since you need to release A to open this menu)
+    static bool first_a_release = true;  // We ignore the first release of A as it is released on the first frame (since you need to release A to open this menu)
 
     if (first_a_release && IsGamepadButtonReleased(0, A)) {
         first_a_release = false;

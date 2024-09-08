@@ -89,6 +89,7 @@ void update_controller() {
         case LOADING:
         case MAINMENU:
         case SHOP:
+        case UNLOCKABLES:
         case OPTIONS:
         case CREDITS:
             if (IsGamepadButtonPressed(0, DPAD_LEFT)) {

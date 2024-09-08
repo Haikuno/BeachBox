@@ -174,6 +174,7 @@ struct __attribute__((packed)) Save {
     uint16_t total_coins;
     uint16_t total_runs;
     uint16_t high_score;
+    uint8_t color_index; // Selected color from player_colors array
     char reserved_data[300];  // reserve 300 bytes for future expansion just in case, since we already are using less than 2 blocks
 } save;
 
