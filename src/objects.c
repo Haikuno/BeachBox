@@ -111,7 +111,7 @@ void spawn_coin() {
     calculate_object_cooldowns();
 }
 
-void add_object() {
+void add_objects() {
     if (objects_bitfield == MAX_OBJECTS) return;
     now = GetTime();
     spawn_pillar();
@@ -124,11 +124,17 @@ inline bool is_giant_pillar(Vector2 size) {
 
 void update_objects() {
     current_object_speed = is_slowing_down ? base_object_speed * 0.65 : base_object_speed;
-    add_object();
+    add_objects();
 
     for (uint8_t index = 0; index < MAX_OBJECTS; index++) {
         if (!(objects_bitfield & (1 << index))) continue;  // Skip if the object is not active
         objects.pos[index].x -= current_object_speed;      // Move objects
+
+        // Remove objects that are off the screen
+        if (objects.pos[index].x < -objects.size[index].x) {
+            objects_bitfield &= ~(1 << index);
+            continue;
+        }
 
         // Check for collisions with the player
 
@@ -154,15 +160,10 @@ void update_objects() {
                 break;
             }
         }
-
-        // Remove objects that are off the screen
-        if (objects.pos[index].x < -objects.size[index].x) {
-            objects_bitfield &= ~(1 << index);
-        }
     }
 }
 
-void invert_color(Color *color) {
+void invert_color(Color* color) {
     color->r = 255 - color->r;
     color->g = 255 - color->g;
     color->b = 255 - color->b;
