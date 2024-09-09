@@ -38,30 +38,32 @@ uint8_t hat_price[HAT_MAX] = {
 void draw_hat_price(uint8_t index) {
     Vector2 size = {350, 130};
     Vector2 pos = {.x = SCREEN_WIDTH / 2 - size.x / 2, .y = FLOOR_HEIGHT - size.y * 2};
-    DrawRectangleV(pos, size, (Color){77, 77, 77, 200});
+    DrawRectangleV(pos, size, (Color){22, 22, 22, 225});
 
     DrawText("Locked!", pos.x + size.x / 2 - MeasureText("Locked!", 20) / 2, pos.y + size.y / 2 - 50, 20, RED);
 
     if (index != 9) {  // if not crown
         const char *price_text = TextFormat("Price: %d", hat_price[index]);
-        DrawText(price_text, pos.x + size.x / 2 - MeasureText(price_text, 20) / 2, pos.y + size.y / 2 - 20, 20, BLACK);
+        DrawText(price_text, pos.x + size.x / 2 - MeasureText(price_text, 20) / 2, pos.y + size.y / 2 - 20, 20, WHITE);
         if (selected_row == 2) return;  // if on confirm button
-        DrawText("Press A to buy", pos.x + size.x / 2 - MeasureText("Press A to buy", 20) / 2, pos.y + size.y / 2 + 30, 20, BLACK);
+        DrawText("Press A to buy", pos.x + size.x / 2 - MeasureText("Press A to buy", 20) / 2, pos.y + size.y / 2 + 30, 20, WHITE);
         return;
     }
 
     // Crown
 
     const char *crown_explanation_text = TextFormat("Reach 100 highscore to unlock!");
-    DrawText(crown_explanation_text, pos.x + size.x / 2 - MeasureText(crown_explanation_text, 20) / 2, pos.y + size.y / 2, 20, BLACK);
+    DrawText(crown_explanation_text, pos.x + size.x / 2 - MeasureText(crown_explanation_text, 20) / 2, pos.y + size.y / 2, 20, WHITE);
 }
 
 void draw_unlockables_scene() {
     draw_background();
 
     // Draw total coins
+    DrawRectangle(245, 0, 150, 40, ui_button_color);
+    DrawRectangleLines(245, 0, 150, 40, ui_button_selected_color);
     const char *coins_text = TextFormat("Coins: %d", save.total_coins);
-    DrawText(coins_text, 10 + MeasureText(coins_text, 20) / 2, 10, 20, BLACK);
+    DrawText(coins_text, 245 + (150 - MeasureText(coins_text, 20)) / 2, 10, 20, ui_button_selected_color);
 
     // Draw player
     Vector2 player_size_unlockables = (Vector2){.x = player.size.x * 2, .y = player.size.y * 2};
@@ -113,7 +115,7 @@ void draw_unlockables_scene() {
         }
     }
 
-    int hat_arrows_return_code = do_arrows(hat_arrows, GRAY);
+    int hat_arrows_return_code = do_arrows(hat_arrows);
     if (is_arrow_selected(hat_arrows) && hat_arrows_return_code != 0) {
         save.hat_index = (save.hat_index + hat_arrows_return_code) % HAT_MAX;
         if (save.hat_index == 255) save.hat_index = HAT_MAX-1;  // Wrap around
@@ -128,7 +130,7 @@ void draw_unlockables_scene() {
         .size = arrows_size,
     };
 
-    int color_arrows_return_code = do_arrows(color_arrows, GRAY);
+    int color_arrows_return_code = do_arrows(color_arrows);
     if (color_arrows_return_code != 0 && is_arrow_selected(color_arrows)) {
         save.color_index = (save.color_index + color_arrows_return_code) % PLAYER_COLOR_COUNT;
         if (save.color_index == 255) save.color_index = PLAYER_COLOR_COUNT - 1;  // Wrap around
@@ -136,8 +138,7 @@ void draw_unlockables_scene() {
     }
 
     // Draw buttons
-    const Color button_color = is_hat_unlocked(save.hat_index) ? GRAY : DARKGRAY;
-    if (do_button(unlockables_confirm_button, button_color)) {
+    if (do_button(unlockables_confirm_button)) {
         if (is_hat_unlocked(save.hat_index)) {
             save_game();
             change_scene(MAINMENU);

@@ -142,10 +142,10 @@ void draw_shop_description() {
     };
 
     const char *description = descriptions[selected_shop_option];
-    Color cost_color = can_afford(selected_shop_option) ? BLACK : RED;
-    Color level_color = get_upgrade_level(selected_shop_option) == max_upgrade_levels[selected_shop_option] ? DARKGREEN : BLACK;
+    Color cost_color = can_afford(selected_shop_option) ? WHITE : RED;
+    Color level_color = get_upgrade_level(selected_shop_option) == max_upgrade_levels[selected_shop_option] ? DARKGREEN : WHITE;
 
-    DrawText(description, 270, 50, 20, BLACK);
+    DrawText(description, 270, 50, 20, WHITE);
     DrawText(TextFormat("Cost: %d coins", costs[selected_shop_option]), 270, 250, 20, cost_color);
     DrawText(TextFormat("Level: %d/%d", get_upgrade_level(selected_shop_option), max_upgrade_levels[selected_shop_option]), 270, 300, 20, level_color);
 }
@@ -162,40 +162,42 @@ void return_to_main_menu() {
 
 void draw_shop_scene() {
     draw_background();
-    DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, (Color){200, 200, 200, 200});
+    DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, (Color){22, 22, 22, 225});
     draw_shop_description();
 
     static void (*callback)() = NULL;
 
     // Draw total coins
+    DrawRectangle(55, 0, 150, 40, ui_button_color);
+    DrawRectangleLines(55, 0, 150, 40, ui_button_selected_color);
     const char *coins_text = TextFormat("Coins: %d", save.total_coins);
-    DrawText(coins_text, 10 + MeasureText(coins_text, 20) / 2, 10, 20, BLACK);
+    DrawText(coins_text, 55 + (150 - MeasureText(coins_text, 20)) / 2, 10, 20, ui_button_selected_color);
 
-    DrawLine(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.4, SCREEN_HEIGHT, BLACK);
+    DrawLine(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.4, SCREEN_HEIGHT, RAYWHITE);
 
     bool can_buy = can_afford(selected_shop_option) && can_upgrade(selected_shop_option);
-    bool button_pressed = false;
 
-    for (int i = 0; i < 7; i++) {
-        Color color = can_afford(i) && can_upgrade(i) ? GRAY : DARKGRAY;
-        if (do_button(shop_buttons[i], color)) {
-            if (can_buy) jump_to_buy_button();
-            button_pressed = true;
-        }
-    }
-
-    if (do_button(shop_buttons[7], can_buy ? GRAY : DARKGRAY) && !button_pressed && can_buy) {  // Buy
+    // Buy
+    if (do_button(shop_buttons[7]) && can_buy) {
         callback = purchase;
         selected_layer = 1;
         selected_column = 0;
         selected_row = 0;
     }
 
-    if (do_button(shop_buttons[8], GRAY)) {  // Exit
+    // Exit
+    if (do_button(shop_buttons[8])) {
         callback = return_to_main_menu;
         selected_layer = 1;
         selected_column = 0;
         selected_row = 0;
+    }
+
+    // Purchase options
+    for (int i = 0; i < 7; i++) {
+        if (do_button(shop_buttons[i])) {
+            if (can_buy) jump_to_buy_button();
+        }
     }
 
     draw_confirmation_window(callback);

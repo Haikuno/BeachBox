@@ -42,33 +42,44 @@ void draw_game_over() {
     current_object_speed = 5;  // To reset the object speed
     if (new_high_score) save.high_score = current_coins;
 
-    DrawRectangleV((Vector2){SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4}, (Vector2){SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5}, (Color){200, 200, 200, 200});
-    DrawText("You lost", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, BLACK);
+    DrawRectangleV((Vector2){SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4}, (Vector2){SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5}, ui_button_color);
+    DrawText("You lost", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
 
     const char *coins_text = TextFormat("Score: %d", current_coins);
     const char *high_score_text = TextFormat("High Score: %d", save.high_score);
 
-    DrawText(coins_text, (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 75, 20, BLACK);
-    DrawText(high_score_text, (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 95, 20, BLACK);
+    DrawText(coins_text, (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 75, 20, RAYWHITE);
+    DrawText(high_score_text, (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 95, 20, RAYWHITE);
     if (new_high_score) {
-        DrawText("New High Score!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 115, 20, BLACK);
+        DrawText("New High Score!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 115, 20, RAYWHITE);
     }
 
-    if (do_button(play_again, GRAY)) {
+    if (do_button(play_again)) {
         save_game();
         init_game_scene();
     }
 
-    if (do_button(main_menu_from_game, GRAY)) {
+    if (do_button(main_menu_from_game)) {
         save_game();
         change_scene(MAINMENU);
     }
 }
 
-void draw_player_meter() {
-    DrawRectangleV((Vector2){.x = 20, .y = 60}, (Vector2){.x = 150, .y = 15}, DARKBLUE);
-    DrawRectangleV((Vector2){.x = 20, .y = 60}, (Vector2){.x = Lerp(0, 150, player.meter / player.max_meter), .y = 15}, BLUE);
-    DrawRectangleLinesV((Vector2){.x = 20, .y = 60}, (Vector2){.x = 150, .y = 15}, BLACK);
+void draw_player_ui() {
+    DrawRectangle(10, 10, 180, 80, ui_button_color);
+
+    // Draw current coint count
+    DrawText(TextFormat("Coins: %d", current_coins), 55, 20, 20, RAYWHITE);
+
+    DrawRectangleV((Vector2){.x = 20, .y = 50}, (Vector2){.x = 150, .y = 15}, DARKBLUE);
+    DrawRectangleV((Vector2){.x = 20, .y = 50}, (Vector2){.x = Lerp(0, 150, player.meter / player.max_meter), .y = 15}, BLUE);
+    DrawRectangleLinesV((Vector2){.x = 20, .y = 50}, (Vector2){.x = 150, .y = 15}, BLACK);
+
+    if (!teleport_cooldown_timer.is_done) {
+        DrawRectangleV((Vector2){.x = 20, .y = 75}, (Vector2){.x = 150, .y = 8}, WHITE);
+        DrawRectangleV((Vector2){.x = 20, .y = 75}, (Vector2){.x = 150 * Lerp(0, 1, (GetTime() - teleport_cooldown_timer.time_started) / teleport_cooldown_timer.duration), .y = 8}, DARKGRAY);
+        DrawRectangleLinesV((Vector2){.x = 20, .y = 75}, (Vector2){.x = 150, .y = 8}, BLACK);
+    }
 }
 
 void draw_game_scene() {
@@ -87,15 +98,5 @@ void draw_game_scene() {
         draw_objects();
     }
 
-    // Draw current coint count
-    DrawText(TextFormat("Coins: %d", current_coins), 20, 20, 20, BLACK);
-
-    draw_player_meter();
-
-    if (!teleport_cooldown_timer.is_done) {
-        // draw cooldown meter
-        DrawRectangleV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150, .y = 8}, WHITE);
-        DrawRectangleV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150 * Lerp(0, 1, (GetTime() - teleport_cooldown_timer.time_started) / teleport_cooldown_timer.duration), .y = 8}, DARKGRAY);
-        DrawRectangleLinesV((Vector2){.x = 20, .y = 90}, (Vector2){.x = 150, .y = 8}, BLACK);
-    }
+    draw_player_ui();
 }

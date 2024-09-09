@@ -31,6 +31,8 @@ float last_coin_spawn_time;
 float last_pillar_spawn_time;
 float last_giant_pillar_spawn_time;
 
+double now;
+
 void calculate_object_cooldowns() {
     coin_cooldown = 8 / current_object_speed;
     pillar_cooldown = 15 / current_object_speed;
@@ -46,17 +48,15 @@ void init_objects() {
 }
 
 void spawn_pillar() {
+    bool should_spawn_pillar = now - last_pillar_spawn_time > pillar_cooldown;
+    if (!should_spawn_pillar) return;
+
     uint16_t index;
     for (index = PILLARS_FIRST_BIT; index <= PILLARS_LAST_BIT; index++) {
         if (!(objects_bitfield & (1 << index))) {
             break;
         }
     }
-
-    double now = GetTime();
-    bool should_spawn_pillar = now - last_pillar_spawn_time > pillar_cooldown;
-
-    if (!should_spawn_pillar) return;
 
     objects_bitfield |= (1 << index);
 
@@ -90,17 +90,15 @@ void spawn_pillar() {
 
 // This function is also responsible of increasing the object speed each time a coin is spawned
 void spawn_coin() {
+    bool should_spawn_coin = now - last_coin_spawn_time > coin_cooldown;
+    if (!should_spawn_coin) return;
+
     uint16_t index;
     for (index = COINS_FIRST_BIT; index <= COINS_LAST_BIT; index++) {
         if (!(objects_bitfield & (1 << index))) {
             break;
         }
     }
-
-    double now = GetTime();
-    bool should_spawn_coin = now - last_coin_spawn_time > coin_cooldown;
-
-    if (!should_spawn_coin) return;
 
     objects_bitfield |= (1 << index);
 
@@ -115,6 +113,7 @@ void spawn_coin() {
 
 void add_object() {
     if (objects_bitfield == MAX_OBJECTS) return;
+    now = GetTime();
     spawn_pillar();
     spawn_coin();
 }

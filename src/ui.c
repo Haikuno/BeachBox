@@ -8,6 +8,9 @@ uint8_t selected_layer = 0;  // Used for confirmation windows
 uint8_t row_count[MAX_COLUMNS] = {1};
 uint8_t column_count[MAX_ROWS] = {1};
 
+const Color ui_button_color = {22, 22, 22, 200};
+const Color ui_button_selected_color = {230, 230, 230, 222};
+
 // The struct that holds the data for each button
 struct UiButton {
     Vector2 pos;
@@ -41,7 +44,7 @@ inline void change_scene(enum Scene scene) {
 
     switch (scene) {
         case UNLOCKABLES:
-            init_player(); // We init player here to set the correct player color and size for the unlockables scene
+            init_player();  // We init player here to set the correct player color and size for the unlockables scene
             break;
         case GAME:
             init_game_scene();
@@ -133,48 +136,44 @@ void draw_rotating_sun(Vector2 anchor_pos) {
 }
 
 // Returns true if the button is pressed
-bool do_button(struct UiButton button, Color color) {
+bool do_button(struct UiButton button) {
     const bool is_selected = is_button_selected(button);
     const bool is_pressed = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
+    const Color button_color = is_selected ? ui_button_selected_color : ui_button_color;
+    const Color text_color = is_selected ? BLACK : RAYWHITE;
 
-    if (is_selected) {
-        color = (Color){235, 245, 255, 255};
-        draw_rotating_sun(button.pos);
-    }
+    if (is_selected) draw_rotating_sun(button.pos);
 
-    DrawRectangleV(button.pos, button.size, color);
-    DrawRectangleLinesV(button.pos, button.size, BLACK);
-    DrawText(button.text, (int)(button.pos.x + button.size.x / 2 - MeasureText(button.text, 20) / 2), (int)(button.pos.y + button.size.y / 2 - 10), 20, BLACK);
+    DrawRectangleV(button.pos, button.size, button_color);
+    DrawRectangleLinesV(button.pos, button.size, text_color);
+    DrawText(button.text, (int)(button.pos.x + button.size.x / 2 - MeasureText(button.text, 20) / 2), (int)(button.pos.y + button.size.y / 2 - 10), 20, text_color);
 
     return is_selected && is_pressed;
 }
 
 // Returns 1 if right is pressed, -1 if left is pressed, 0 otherwise
-int do_arrows(struct UiArrows arrow, Color color) {
+int do_arrows(struct UiArrows arrow) {
     const bool is_selected = is_arrow_selected(arrow);
     const bool is_right_pressed = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT);
     const bool is_left_pressed = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT);
-
-    if (is_selected) {
-        color = (Color){235, 245, 255, 255};
-    }
+    const Color arrow_color = is_selected ? ui_button_selected_color : ui_button_color;
+    const Color border_color = BLACK;
 
     // Left arrow
     Vector2 left_v1 = {.x = arrow.pos_left.x + arrow.size.x / 2, .y = arrow.pos_left.y};
     Vector2 left_v2 = {.x = arrow.pos_left.x, .y = arrow.pos_left.y + arrow.size.y / 2};
     Vector2 left_v3 = {.x = arrow.pos_left.x + arrow.size.x / 2, .y = arrow.pos_left.y + arrow.size.y};
 
-    DrawTriangle(left_v1, left_v2, left_v3, color);
-    DrawTriangleLines(left_v1, left_v2, left_v3, BLACK);
+    DrawTriangle(left_v1, left_v2, left_v3, arrow_color);
+    DrawTriangleLines(left_v1, left_v2, left_v3, border_color);
 
     // Right arrow
     Vector2 right_v1 = {.x = arrow.pos_right.x + arrow.size.x, .y = arrow.pos_right.y + arrow.size.y / 2};
     Vector2 right_v2 = {.x = arrow.pos_right.x + arrow.size.x / 2, .y = arrow.pos_right.y};
     Vector2 right_v3 = {.x = arrow.pos_right.x + arrow.size.x / 2, .y = arrow.pos_right.y + arrow.size.y};
 
-    DrawTriangle(right_v1, right_v2, right_v3, color);
-    DrawTriangleLines(right_v1, right_v2, right_v3, BLACK);
-
+    DrawTriangle(right_v1, right_v2, right_v3, arrow_color);
+    DrawTriangleLines(right_v1, right_v2, right_v3, border_color);
 
     if (is_right_pressed) return 1;
 
@@ -207,14 +206,14 @@ void draw_confirmation_window(void (*callback)()) {
         return;
     }
 
-    if (do_button(yes_button, GRAY)) {
+    if (do_button(yes_button)) {
         callback();
         selected_layer = 0;
         first_a_release = true;
         return;
     }
 
-    if (do_button(no_button, GRAY)) {
+    if (do_button(no_button)) {
         selected_layer = 0;
         first_a_release = true;
         return;
