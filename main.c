@@ -41,7 +41,7 @@ enum Hats {
     HAT_F,
     HAT_MUPRH,
     HAT_CROWN,
-    MAX_HATS
+    HAT_MAX
 };
 
 #include "src/helper_functions.c"

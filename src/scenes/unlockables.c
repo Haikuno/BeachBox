@@ -22,7 +22,7 @@ inline bool is_hat_unlocked(uint8_t index) {
     return save.hats_unlocked[index];
 }
 
-uint8_t hat_price[MAX_HATS] = {
+uint8_t hat_price[HAT_MAX] = {
     0,    // No hat
     50,   // Red Slime
     50,   // Blue Slime
@@ -115,8 +115,8 @@ void draw_unlockables_scene() {
 
     int hat_arrows_return_code = do_arrows(hat_arrows, GRAY);
     if (is_arrow_selected(hat_arrows) && hat_arrows_return_code != 0) {
-        save.hat_index = (save.hat_index + hat_arrows_return_code) % MAX_HATS;
-        if (save.hat_index == 255) save.hat_index = MAX_HATS;  // Wrap around
+        save.hat_index = (save.hat_index + hat_arrows_return_code) % HAT_MAX;
+        if (save.hat_index == 255) save.hat_index = HAT_MAX-1;  // Wrap around
     }
 
     // Color selection arrows

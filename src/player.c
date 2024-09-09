@@ -16,7 +16,7 @@ const Color player_colors[PLAYER_COLOR_COUNT] = {
     DARKGRAY,
 };
 
-Texture2D hats[MAX_HATS];
+Texture2D hats[HAT_MAX];
 
 struct Character {
     Vector2 size;
@@ -108,7 +108,7 @@ void update_player() {
 
     update_player_pos();
     player.meter -= 0.16;
-    if (is_slowing_down) player.meter -= 0.13 / (1 + save.player_upgrade_levels.slowdown_cost_level) * 0.75;
+    if (is_slowing_down) player.meter -= 0.22 / ( 1 + save.player_upgrade_levels.slowdown_cost_level / 4);
 
     if (player.meter <= 0) {
         lose_game();

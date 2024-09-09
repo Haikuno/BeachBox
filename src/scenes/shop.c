@@ -111,6 +111,8 @@ void purchase() {
         default:
             break;
     }
+    selected_column = 0;
+    selected_row = selected_shop_option;
 }
 
 void update_shop_scene() {

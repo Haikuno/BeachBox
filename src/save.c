@@ -43,7 +43,7 @@ const uint16_t bios_save_palette[] = {
 // For example, 0x01 would be a light blue pixel on the left and a black pixel on the right.
 
 // TODO: Explain to the user how to get their pngs to an array like this, possibly point them to crayon tools
-const int8_t bios_save_animation[] = {
+const uint8_t bios_save_animation[] = {
     ///////////////////////////////////   FRAME 1    /////////////////////////////////////////////
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -176,7 +176,7 @@ struct __attribute__((packed)) Save {
     uint16_t high_score;
     uint8_t color_index;  // Selected color from player_colors array
     uint8_t hat_index;    // Selected hat from hats array
-    bool hats_unlocked[MAX_HATS];
+    bool hats_unlocked[HAT_MAX];
     char reserved_data[300];  // reserve 300 bytes for future expansion just in case, since we already are using less than 2 blocks
 } save;
 
@@ -255,6 +255,6 @@ int load_game() {
 // This function also saves the game
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found
 int new_game() {
-    save.hats_unlocked[0] = true;
+    save.hats_unlocked[HAT_NIL] = true;
     return save_game();
 }

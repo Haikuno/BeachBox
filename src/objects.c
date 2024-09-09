@@ -1,6 +1,6 @@
 #define MAX_OBJECTS 16
 
-#define MAX_OBJECT_SPEED 15
+#define MAX_OBJECT_SPEED 13
 
 #define COIN_SIZE \
     (Vector2) { .x = 10, .y = 10 }
@@ -124,7 +124,7 @@ inline bool is_giant_pillar(Vector2 size) {
 }
 
 void update_objects() {
-    current_object_speed = is_slowing_down ? base_object_speed / 2 : base_object_speed;
+    current_object_speed = is_slowing_down ? base_object_speed * 0.65 : base_object_speed;
     add_object();
 
     for (uint8_t index = 0; index < MAX_OBJECTS; index++) {
