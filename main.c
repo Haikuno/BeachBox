@@ -30,6 +30,20 @@ enum Scene {
     CREDITS
 } current_scene = RAYLOGO;
 
+enum Hats {
+    HAT_NIL,
+    HAT_SLIME_RED,
+    HAT_SLIME_BLUE,
+    HAT_BOX,
+    HAT_M,
+    HAT_L,
+    HAT_Z,
+    HAT_F,
+    HAT_MUPRH,
+    HAT_CROWN,
+    MAX_HATS
+};
+
 #include "src/helper_functions.c"
 #include "src/timer.c"
 #include "src/save.c"
@@ -51,6 +65,15 @@ enum Scene {
 
 void init_game() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "BeachBox");
+    hats[HAT_SLIME_RED] = LoadTexture("rd/hats/slime_red.png");
+    hats[HAT_SLIME_BLUE] = LoadTexture("rd/hats/slime_blue.png");
+    hats[HAT_BOX] = LoadTexture("rd/hats/box.png");
+    hats[HAT_M] = LoadTexture("rd/hats/m.png");
+    hats[HAT_L] = LoadTexture("rd/hats/l.png");
+    hats[HAT_Z] = LoadTexture("rd/hats/z.png");
+    hats[HAT_F] = LoadTexture("rd/hats/f.png");
+    hats[HAT_MUPRH] = LoadTexture("rd/hats/murph.png");
+    hats[HAT_CROWN] = LoadTexture("rd/hats/crown.png");
 }
 
 void update_game() {

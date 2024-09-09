@@ -14,7 +14,16 @@
         "*.m": "c",
         "vmufs.h": "c",
         "vmu_frames.h": "c",
-        "vmu_animations.h": "c"
+        "vmu_animations.h": "c",
+        "timer.h": "c",
+        "types.h": "c",
+        "irq.h": "c",
+        "cache.h": "c",
+        "byteorder.h": "c",
+        "arch.h": "c",
+        "stddef.h": "c",
+        "raymath.h": "c",
+        "newlib.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

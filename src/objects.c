@@ -88,7 +88,6 @@ void spawn_pillar() {
     return;
 }
 
-
 // This function is also responsible of increasing the object speed each time a coin is spawned
 void spawn_coin() {
     uint16_t index;

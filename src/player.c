@@ -16,6 +16,8 @@ const Color player_colors[PLAYER_COLOR_COUNT] = {
     DARKGRAY,
 };
 
+Texture2D hats[MAX_HATS];
+
 struct Character {
     Vector2 size;
     Vector2 pos;
@@ -63,6 +65,9 @@ void lose_game() {
     save.total_runs++;
     save.total_coins += current_coins;
     new_high_score = save.high_score < current_coins;
+    if (current_coins >= 100) {
+        save.hats_unlocked[HAT_CROWN] = true;  // Unlock crown
+    }
 #endif
 }
 
@@ -146,10 +151,39 @@ inline void teleport() {
 
 void draw_player() {
     const Color transparent = {0, 0, 0, 0};
+    const Color hat_teleport_color = {0, 0, 0, 120};
 
-    Color color = is_teleporting ? transparent : player.color;
-    color.a = player.is_shifted ? 140 : color.a;
+    Color current_player_color = is_teleporting ? transparent : player.color;
+    current_player_color.a = player.is_shifted ? 140 : current_player_color.a;
 
-    DrawRectangleV(player.pos, player.size, color);
+    Color hat_color = is_teleporting ? hat_teleport_color : WHITE;
+    hat_color.a = player.is_shifted ? 140 : hat_color.a;
+
+    DrawRectangleV(player.pos, player.size, current_player_color);
     DrawRectangleLinesExV(player.pos, player.size, 2, BLACK);
+
+    // draw hat
+    if (save.hat_index != HAT_NIL) {
+        uint8_t x_pos = player.pos.x + player.size.x / 4;
+
+        // F and Murph need +2 X alignment
+        if (save.hat_index == HAT_F || save.hat_index == HAT_MUPRH) {
+            x_pos += 2;
+        } else if (save.hat_index == HAT_CROWN) {
+            x_pos -= 2;  // Crown needs -2
+        }
+
+        uint8_t y_pos = player.pos.y - 16;
+
+        // M and L need +6 Y alignment, Z needs +3, Crown needs +2
+        if (save.hat_index == HAT_M || save.hat_index == HAT_L) {
+            y_pos += 6;
+        } else if (save.hat_index == HAT_Z) {
+            y_pos += 3;
+        } else if (save.hat_index == HAT_CROWN) {
+            y_pos += 2;
+        }
+
+        DrawTextureV(hats[save.hat_index], (Vector2){player.pos.x + player.size.x / 4, player.pos.y - 16}, hat_color);
+    }
 }

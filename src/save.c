@@ -174,7 +174,9 @@ struct __attribute__((packed)) Save {
     uint16_t total_coins;
     uint16_t total_runs;
     uint16_t high_score;
-    uint8_t color_index; // Selected color from player_colors array
+    uint8_t color_index;  // Selected color from player_colors array
+    uint8_t hat_index;    // Selected hat from hats array
+    bool hats_unlocked[MAX_HATS];
     char reserved_data[300];  // reserve 300 bytes for future expansion just in case, since we already are using less than 2 blocks
 } save;
 
@@ -253,16 +255,6 @@ int load_game() {
 // This function also saves the game
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found
 int new_game() {
-    save.high_score = 0;
-    save.total_coins = 0;
-    save.total_runs = 0;
-    save.player_upgrade_levels.teleport_unlocked = false;
-    save.player_upgrade_levels.slowdown_unlocked = false;
-    save.player_upgrade_levels.player_speed_level = 0;
-    save.player_upgrade_levels.meter_level = 0;
-    save.player_upgrade_levels.teleport_cooldown_level = 0;
-    save.player_upgrade_levels.teleport_distance_level = 0;
-    save.player_upgrade_levels.slowdown_cost_level = 0;
-
+    save.hats_unlocked[0] = true;
     return save_game();
 }
