@@ -11,13 +11,15 @@ struct Objects {
     bool is_shifted[MAX_OBJECTS];
 } objects = {0};
 
-// 0 represents a free slot
+// Bitfield that keeps track of which objects are active, 0 being inactive and 1 active
 uint16_t objects_bitfield;
 
+// We split the bitfield in half, the first 8 bits being the pillars and the last 8 bits being the coins
 #define PILLARS_FIRST_BIT 0
 #define PILLARS_LAST_BIT 7
 #define COINS_FIRST_BIT 8
 #define COINS_LAST_BIT 15
+// So for example, a value of 0b00010000'00000001 would mean there's a pillar occupying the first bit, and a coin on the 13th bit
 
 float base_object_speed;
 float current_object_speed;
@@ -123,7 +125,7 @@ inline bool is_giant_pillar(Vector2 size) {
 }
 
 void update_objects() {
-    current_object_speed = is_slowing_down ? base_object_speed * 0.65 : base_object_speed;
+    current_object_speed = is_slowing_down ? base_object_speed / 1.5 : base_object_speed;
     add_objects();
 
     for (uint8_t index = 0; index < MAX_OBJECTS; index++) {

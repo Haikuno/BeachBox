@@ -1,18 +1,23 @@
 #define FLOOR_HEIGHT 350
-#define PLAYER_COLOR_COUNT 12
+#define PLAYER_COLOR_COUNT 17
 
 const Color player_colors[PLAYER_COLOR_COUNT] = {
     RED,
     ORANGE,
+    GOLD,
     YELLOW,
+    DARKGREEN,
+    LIME,
     GREEN,
     BLUE,
     (Color){137, 207, 240, 255},  // Light blue
     (Color){75, 54, 157, 255},    // Indigo
     (Color){112, 54, 157, 255},   // Violet
+    MAGENTA,
     PINK,
-    GOLD,
     WHITE,
+    GRAY,
+    DARKBROWN,
     DARKGRAY,
 };
 
@@ -108,7 +113,7 @@ void update_player() {
 
     update_player_pos();
     player.meter -= 0.16;
-    if (is_slowing_down) player.meter -= 0.22 / ( 1 + save.player_upgrade_levels.slowdown_cost_level / 4);
+    if (is_slowing_down) player.meter -= 0.22 / (1 + save.player_upgrade_levels.slowdown_cost_level / 4);
 
     if (player.meter <= 0) {
         lose_game();
