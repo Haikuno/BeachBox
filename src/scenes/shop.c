@@ -178,7 +178,7 @@ void draw_shop_scene() {
     bool can_buy = can_afford(selected_shop_option) && can_upgrade(selected_shop_option);
 
     // Buy
-    if (do_button(shop_buttons[7]) && can_buy) {
+    if (do_button(shop_buttons[7], can_buy) && can_buy) {
         callback = purchase;
         selected_layer = 1;
         selected_column = 0;
@@ -186,7 +186,7 @@ void draw_shop_scene() {
     }
 
     // Exit
-    if (do_button(shop_buttons[8])) {
+    if (do_button(shop_buttons[8], true)) {
         callback = return_to_main_menu;
         selected_layer = 1;
         selected_column = 0;
@@ -195,8 +195,8 @@ void draw_shop_scene() {
 
     // Purchase options
     for (int i = 0; i < 7; i++) {
-        if (do_button(shop_buttons[i])) {
-            if (can_buy) jump_to_buy_button();
+        if (do_button(shop_buttons[i], can_afford(i) && can_upgrade(i))) {
+            jump_to_buy_button();
         }
     }
 

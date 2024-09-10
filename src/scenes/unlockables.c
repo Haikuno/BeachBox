@@ -118,7 +118,7 @@ void draw_unlockables_scene() {
     int hat_arrows_return_code = do_arrows(hat_arrows);
     if (is_arrow_selected(hat_arrows) && hat_arrows_return_code != 0) {
         save.hat_index = (save.hat_index + hat_arrows_return_code) % HAT_MAX;
-        if (save.hat_index == 255) save.hat_index = HAT_MAX-1;  // Wrap around
+        if (save.hat_index == 255) save.hat_index = HAT_MAX - 1;  // Wrap around
     }
 
     // Color selection arrows
@@ -138,10 +138,8 @@ void draw_unlockables_scene() {
     }
 
     // Draw buttons
-    if (do_button(unlockables_confirm_button)) {
-        if (is_hat_unlocked(save.hat_index)) {
-            save_game();
-            change_scene(MAINMENU);
-        }
+    if (do_button(unlockables_confirm_button, is_hat_unlocked(save.hat_index))) {
+        save_game();
+        change_scene(MAINMENU);
     }
 }

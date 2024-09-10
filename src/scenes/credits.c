@@ -27,7 +27,7 @@ void draw_credits_scene() {
     const char *credits_text = "Made by Psyops :)";
     DrawText(credits_text, (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
 
-    if (do_button(exit_credits_button)) {
+    if (do_button(exit_credits_button, true)) {
         change_scene(MAINMENU);
     }
 }

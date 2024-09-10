@@ -76,7 +76,7 @@ void new_game_callback() {
 void draw_loading_scene() {
     static void (*callback)() = NULL;
 
-    if (do_button(load_button) && error_timer.is_done) {
+    if (do_button(load_button, true) && error_timer.is_done) {
         if (error_timer.is_done) {
             callback = load_game_callback;
             selected_layer = 1;
@@ -85,7 +85,7 @@ void draw_loading_scene() {
         }
     }
 
-    if (do_button(new_game_button) && error_timer.is_done) {
+    if (do_button(new_game_button, true) && error_timer.is_done) {
         callback = new_game_callback;
         selected_layer = 1;
         selected_column = 0;

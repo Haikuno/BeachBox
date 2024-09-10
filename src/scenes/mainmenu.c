@@ -58,19 +58,19 @@ void draw_mainmenu_scene() {
     DrawText("BeachBox", 100, 100, 44, BLACK);
     DrawText("BeachBox", 98, 100, 44, RAYWHITE);
 
-    if (do_button(play_button)) {
+    if (do_button(play_button, true)) {
         change_scene(GAME);
     }
-    if (do_button(shop_button)) {
+    if (do_button(shop_button, true)) {
         change_scene(SHOP);
     }
-    if (do_button(unlockables_button)) {
+    if (do_button(unlockables_button, true)) {
         change_scene(UNLOCKABLES);
     }
-    if (do_button(options_button)) {
+    if (do_button(options_button, true)) {
         change_scene(OPTIONS);
     }
-    if (do_button(credits_button)) {
+    if (do_button(credits_button, true)) {
         change_scene(CREDITS);
     }
 

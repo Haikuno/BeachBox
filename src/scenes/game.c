@@ -54,12 +54,12 @@ void draw_game_over() {
         DrawText("New High Score!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 115, 20, RAYWHITE);
     }
 
-    if (do_button(play_again)) {
+    if (do_button(play_again, true)) {
         save_game();
         init_game_scene();
     }
 
-    if (do_button(main_menu_from_game)) {
+    if (do_button(main_menu_from_game, true)) {
         save_game();
         change_scene(MAINMENU);
     }

@@ -136,17 +136,21 @@ void draw_rotating_sun(Vector2 anchor_pos) {
 }
 
 // Returns true if the button is pressed
-bool do_button(struct UiButton button) {
+bool do_button(struct UiButton button, bool is_active) {
     const bool is_selected = is_button_selected(button);
     const bool is_pressed = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
     const Color button_color = is_selected ? ui_button_selected_color : ui_button_color;
-    const Color text_color = is_selected ? BLACK : RAYWHITE;
+    Color text_color = is_selected ? BLACK : RAYWHITE;
+
+    if (!is_active) text_color = (Color){30, 30, 30, 150};
 
     if (is_selected) draw_rotating_sun(button.pos);
 
     DrawRectangleV(button.pos, button.size, button_color);
     DrawRectangleLinesV(button.pos, button.size, text_color);
     DrawText(button.text, (int)(button.pos.x + button.size.x / 2 - MeasureText(button.text, 20) / 2), (int)(button.pos.y + button.size.y / 2 - 10), 20, text_color);
+
+    if (!is_active) return false;
 
     return is_selected && is_pressed;
 }
@@ -206,14 +210,14 @@ void draw_confirmation_window(void (*callback)()) {
         return;
     }
 
-    if (do_button(yes_button)) {
+    if (do_button(yes_button, true)) {
         callback();
         selected_layer = 0;
         first_a_release = true;
         return;
     }
 
-    if (do_button(no_button)) {
+    if (do_button(no_button, true)) {
         selected_layer = 0;
         first_a_release = true;
         return;
