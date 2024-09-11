@@ -74,7 +74,7 @@ void draw_mainmenu_scene() {
         change_scene(CREDITS);
     }
 
-    DrawRectangle(380, 80, 200, 100, (Color){22, 22, 22, 200});
+    DrawRectangle(380, 80, 200, 100, ui_background_color);
     DrawText(TextFormat("Coins: %d", save.total_coins), 400, 100, 20, RAYWHITE);
     DrawText(TextFormat("Runs: %d", save.total_runs), 400, 120, 20, RAYWHITE);
     DrawText(TextFormat("Highscore: %d", save.high_score), 400, 140, 20, RAYWHITE);

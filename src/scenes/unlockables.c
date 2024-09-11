@@ -38,7 +38,7 @@ uint8_t hat_price[HAT_MAX] = {
 void draw_hat_price(uint8_t index) {
     Vector2 size = {350, 130};
     Vector2 pos = {.x = SCREEN_WIDTH / 2 - size.x / 2, .y = FLOOR_HEIGHT - size.y * 2};
-    DrawRectangleV(pos, size, (Color){22, 22, 22, 225});
+    DrawRectangleV(pos, size, ui_background_color);
 
     DrawText("Locked!", pos.x + size.x / 2 - MeasureText("Locked!", 20) / 2, pos.y + size.y / 2 - 50, 20, RED);
 

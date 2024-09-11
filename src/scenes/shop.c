@@ -162,7 +162,7 @@ void return_to_main_menu() {
 
 void draw_shop_scene() {
     draw_background();
-    DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, (Color){22, 22, 22, 225});
+    DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, ui_background_color);
     draw_shop_description();
 
     static void (*callback)() = NULL;

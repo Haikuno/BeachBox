@@ -33,7 +33,7 @@ void update_loading_scene() {
 void draw_error_popup() {
     if (error_timer.is_done) return;
 
-    DrawRectangle(SCREEN_WIDTH / 2 - 250, SCREEN_HEIGHT / 2 - 100, 500, 200, (Color){55, 55, 55, 250});
+    DrawRectangle(SCREEN_WIDTH / 2 - 250, SCREEN_HEIGHT / 2 - 100, 500, 200, (Color){1, 17, 34, 220});
     DrawText(error_text, (int)(SCREEN_WIDTH / 2 - MeasureText(error_text, 32) / 2), (int)(SCREEN_HEIGHT / 2 - 15), 32, RED);
 }
 

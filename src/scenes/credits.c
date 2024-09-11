@@ -21,7 +21,7 @@ void update_credits_scene() {
 
 void draw_credits_scene() {
     draw_background();
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_button_color);
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
     // TODO: add actual credits
     const char *credits_text = "Made by Psyops :)";

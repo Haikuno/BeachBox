@@ -8,7 +8,8 @@ uint8_t selected_layer = 0;  // Used for confirmation windows
 uint8_t row_count[MAX_COLUMNS] = {1};
 uint8_t column_count[MAX_ROWS] = {1};
 
-const Color ui_button_color = {22, 22, 22, 200};
+const Color ui_background_color = {1, 17, 35, 180};
+const Color ui_button_color = {1, 35, 69, 200};
 const Color ui_button_selected_color = {230, 230, 230, 222};
 
 // The struct that holds the data for each button
@@ -192,16 +193,15 @@ void draw_confirmation_window(void (*callback)()) {
 
     const Vector2 conf_window_size = {SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.5f};
     const Vector2 conf_window_pos = {(SCREEN_WIDTH - conf_window_size.x) / 2.0f, (SCREEN_HEIGHT - conf_window_size.y) / 2.0f};
-    const Color conf_window_color = {200, 200, 200, 200};
 
-    DrawRectangleV(conf_window_pos, conf_window_size, conf_window_color);
+    DrawRectangleV(conf_window_pos, conf_window_size, ui_background_color);
 
     const Vector2 button_size = {conf_window_size.x * 0.4f, conf_window_size.y * 0.25f};
 
     struct UiButton yes_button = {.pos = {conf_window_pos.x + 30, conf_window_pos.y + conf_window_size.y * 0.5f}, .size = button_size, .column = 0, .row = 0, .layer = 1, .text = "Yes"};
     struct UiButton no_button = {.pos = {conf_window_pos.x + conf_window_size.x - button_size.x - 30, conf_window_pos.y + conf_window_size.y * 0.5f}, .size = button_size, .column = 1, .row = 0, .layer = 1, .text = "No"};
 
-    DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, BLACK);
+    DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
 
     static bool first_a_release = true;  // We ignore the first release of A as it is released on the first frame (since you need to release A to open this menu)
 

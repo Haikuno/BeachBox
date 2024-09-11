@@ -21,7 +21,7 @@ void update_options_scene() {
 
 void draw_options_scene() {
     draw_background();
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_button_color);
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
     // TODO: add actual credits
     DrawText("WIP!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
