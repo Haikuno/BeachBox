@@ -10,7 +10,7 @@ typedef struct {
 BouncingImage images[NUM_IMAGES];
 
 void initialize_images(void) {
-    const char* paths[] = {"/rd/creditspngs/kosapple.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/rayliblogo.png"};
+    const char* paths[] = {"/rd/creditspngs/kosapple.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyopslogo.png"};
     Vector2 positions[] = {{50, 50}, {490, 250}, {300, 350}};
 
     for (int i = 0; i < NUM_IMAGES; i++) {
