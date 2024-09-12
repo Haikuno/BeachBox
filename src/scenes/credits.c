@@ -9,14 +9,10 @@ struct UiButton exit_credits_button = {
     .text = "Return",
 };
 
-
-void update_credits_scene()
-{
-
+void update_credits_scene() {
     update_credits_images();
 
-    for (uint8_t i = 0; i < MAX_COLUMNS; i++)
-    {
+    for (uint8_t i = 0; i < MAX_COLUMNS; i++) {
         column_count[i] = 0;
         row_count[i] = 0;
     }
@@ -25,11 +21,9 @@ void update_credits_scene()
     column_count[0] = 1;
 }
 
-void draw_credits_scene()
-{
+void draw_credits_scene() {
     draw_background();
     draw_credits_images();
-
 
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
@@ -39,8 +33,7 @@ void draw_credits_scene()
     DrawText(credits_text, (int)(SCREEN_WIDTH / 4) + 35, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
     DrawText(credits_text2, (int)(SCREEN_WIDTH / 4) - 80, (int)(SCREEN_HEIGHT / 4) + 65, 30, RAYWHITE);
 
-    if (do_button(exit_credits_button, true))
-    {
+    if (do_button(exit_credits_button, true)) {
         unload_credits_images();
         change_scene(MAINMENU);
     }

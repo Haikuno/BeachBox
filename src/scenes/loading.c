@@ -74,6 +74,8 @@ void new_game_callback() {
 }
 
 void draw_loading_scene() {
+    draw_background();
+
     static void (*callback)() = NULL;
 
     if (do_button(load_button, true) && error_timer.is_done) {

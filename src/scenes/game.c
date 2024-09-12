@@ -69,16 +69,18 @@ void draw_player_ui() {
     DrawRectangle(10, 10, 180, 80, ui_background_color);
 
     // Draw current coint count
-    DrawText(TextFormat("Coins: %d", current_coins), 55, 20, 20, RAYWHITE);
+    DrawText(TextFormat("Coins: %d", current_coins), 60, 20, 20, RAYWHITE);
 
-    DrawRectangleV((Vector2){.x = 20, .y = 50}, (Vector2){.x = 150, .y = 15}, ui_button_color);
-    DrawRectangleV((Vector2){.x = 20, .y = 50}, (Vector2){.x = Lerp(0, 150, player.meter / player.max_meter), .y = 15}, BLUE);
-    DrawRectangleLinesV((Vector2){.x = 20, .y = 50}, (Vector2){.x = 150, .y = 15}, BLACK);
+    // Meter
+    DrawRectangleV((Vector2){.x = 25, .y = 50}, (Vector2){.x = 150, .y = 15}, ui_button_color);
+    DrawRectangleV((Vector2){.x = 25, .y = 50}, (Vector2){.x = Lerp(0, 150, player.meter / player.max_meter), .y = 15}, BLUE);
+    DrawRectangleLinesV((Vector2){.x = 25, .y = 50}, (Vector2){.x = 150, .y = 15}, BLACK);
 
+    // Teleport cooldown
     if (!teleport_cooldown_timer.is_done) {
-        DrawRectangleV((Vector2){.x = 20, .y = 75}, (Vector2){.x = 150, .y = 8}, RAYWHITE);
-        DrawRectangleV((Vector2){.x = 20, .y = 75}, (Vector2){.x = 150 * Lerp(0, 1, (GetTime() - teleport_cooldown_timer.time_started) / teleport_cooldown_timer.duration), .y = 8}, DARKGRAY);
-        DrawRectangleLinesV((Vector2){.x = 20, .y = 75}, (Vector2){.x = 150, .y = 8}, BLACK);
+        DrawRectangleV((Vector2){.x = 25, .y = 75}, (Vector2){.x = 150, .y = 8}, RAYWHITE);
+        DrawRectangleV((Vector2){.x = 25, .y = 75}, (Vector2){.x = 150 * Lerp(0, 1, (GetTime() - teleport_cooldown_timer.time_started) / teleport_cooldown_timer.duration), .y = 8}, DARKGRAY);
+        DrawRectangleLinesV((Vector2){.x = 25, .y = 75}, (Vector2){.x = 150, .y = 8}, BLACK);
     }
 }
 
@@ -89,7 +91,7 @@ void draw_game_scene() {
         return;
     }
 
-    // We change the draw order of the objects based on if the player is shifted / teleporting or not
+    // We change the draw order of the objects if the player is shifted / teleporting or not
     if (player.is_shifted || is_teleporting) {
         draw_objects();
         draw_player();

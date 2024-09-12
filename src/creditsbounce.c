@@ -20,8 +20,6 @@ void initialize_images(void) {
 }
 bool creditsInit = false;
 void update_credits_images(void) {
-    
-
     if (!creditsInit) {
         initialize_images();
         creditsInit = true;
@@ -47,8 +45,8 @@ void draw_credits_images(void) {
 
 void unload_credits_images(void) {
     for (int i = 0; i < 3; i++) {
-            creditsInit = 0;
-            UnloadTexture(images[i].texture);
-            images[i].initialized = false;
+        creditsInit = 0;
+        UnloadTexture(images[i].texture);
+        images[i].initialized = false;
     }
 }
