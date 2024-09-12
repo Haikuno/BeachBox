@@ -15,7 +15,7 @@ void initialize_images(void) {
 
     for (int i = 0; i < NUM_IMAGES; i++) {
         images[i].initialized = true;
-        images[i].speed = (Vector2){6, 6};
+        images[i].speed = (Vector2){4, 3};
         images[i].texture = LoadTexture(paths[i]);
         images[i].position = positions[i];
     }
