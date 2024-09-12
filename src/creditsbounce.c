@@ -1,5 +1,3 @@
-#define NUM_IMAGES 3
-
 typedef struct {
     Vector2 position;
     Vector2 speed;
@@ -7,13 +5,13 @@ typedef struct {
     bool initialized;
 } BouncingImage;
 
-BouncingImage images[NUM_IMAGES];
+BouncingImage images[3];
 
 void initialize_images(void) {
     const char* paths[] = {"/rd/creditspngs/kosapple.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyopslogo.png"};
     Vector2 positions[] = {{50, 50}, {490, 250}, {300, 350}};
 
-    for (int i = 0; i < NUM_IMAGES; i++) {
+    for (int i = 0; i < 3; i++) {
         images[i].initialized = true;
         images[i].speed = (Vector2){4, 3};
         images[i].texture = LoadTexture(paths[i]);
@@ -29,7 +27,7 @@ void update_credits_images(void) {
         creditsInit = true;
     }
 
-    for (int i = 0; i < NUM_IMAGES; i++) {
+    for (int i = 0; i < 3; i++) {
         images[i].position.x += images[i].speed.x;
         images[i].position.y += images[i].speed.y;
 
@@ -41,13 +39,13 @@ void update_credits_images(void) {
 }
 
 void draw_credits_images(void) {
-    for (int i = 0; i < NUM_IMAGES; i++) {
+    for (int i = 0; i < 3; i++) {
         DrawTexture(images[i].texture, (int)images[i].position.x, (int)images[i].position.y, WHITE);
     }
 }
 
 void unload_credits_images(void) {
-    for (int i = 0; i < NUM_IMAGES; i++) {
+    for (int i = 0; i < 3; i++) {
             creditsInit = 0;
             UnloadTexture(images[i].texture);
             images[i].initialized = false;
