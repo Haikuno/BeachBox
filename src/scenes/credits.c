@@ -41,6 +41,7 @@ void draw_credits_scene()
 
     if (do_button(exit_credits_button, true))
     {
+        unload_credits_images();
         change_scene(MAINMENU);
     }
 }

@@ -1,42 +1,55 @@
-typedef struct
-{
+#define NUM_IMAGES 3
+
+typedef struct {
     Vector2 position;
     Vector2 speed;
     Texture2D texture;
     bool initialized;
 } BouncingImage;
 
-BouncingImage logobounce;
-BouncingImage raylibbounce;
-BouncingImage kosbounce;
+BouncingImage images[NUM_IMAGES];
 
-void update_credits_images(){
+void initialize_images(void) {
+    const char* paths[] = {"/rd/creditspngs/kosapple.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/rayliblogo.png"};
+    Vector2 positions[] = {{50, 50}, {490, 250}, {300, 350}};
 
-        static bool pngCreditsInit = 0;
+    for (int i = 0; i < NUM_IMAGES; i++) {
+        images[i].initialized = true;
+        images[i].speed = (Vector2){6, 6};
+        images[i].texture = LoadTexture(paths[i]);
+        images[i].position = positions[i];
+    }
+}
+bool creditsInit = false;
+void update_credits_images(void) {
+    
 
-        if (pngCreditsInit == 0)
-        {
-            kosbounce.initialized = 1;
-            kosbounce.speed = (Vector2){5,5};
-            kosbounce.texture = LoadTexture("/rd/creditspngs/kosapple.png");
-            kosbounce.position = (Vector2){50, 50};
+    if (!creditsInit) {
+        initialize_images();
+        creditsInit = true;
+    }
 
-            raylibbounce.initialized = 1;
-            raylibbounce.speed = (Vector2){5,5};
-            raylibbounce.texture = LoadTexture("/rd/creditspngs/rayliblogo.png");
-            raylibbounce.position = (Vector2){50, 250};
+    for (int i = 0; i < NUM_IMAGES; i++) {
+        images[i].position.x += images[i].speed.x;
+        images[i].position.y += images[i].speed.y;
 
-            logobounce.initialized = 1;
-            logobounce.speed = (Vector2){5,5};
-            logobounce.texture = LoadTexture("/rd/creditspngs/rayliblogo.png");
-            logobounce.position = (Vector2){300, 250};
-            pngCreditsInit = 1;
-        }
-        
+        if (images[i].position.x <= 0 || images[i].position.x + images[i].texture.width >= SCREEN_WIDTH)
+            images[i].speed.x *= -1;
+        if (images[i].position.y <= 0 || images[i].position.y + images[i].texture.height >= SCREEN_HEIGHT)
+            images[i].speed.y *= -1;
+    }
 }
 
-void draw_credits_images(){
-    DrawTexture(raylibbounce.texture, raylibbounce.position.x, raylibbounce.position.y, WHITE);
-    DrawTexture(kosbounce.texture, kosbounce.position.x, kosbounce.position.y, WHITE);
-    DrawTexture(logobounce.texture, logobounce.position.x, logobounce.position.y, WHITE);
+void draw_credits_images(void) {
+    for (int i = 0; i < NUM_IMAGES; i++) {
+        DrawTexture(images[i].texture, (int)images[i].position.x, (int)images[i].position.y, WHITE);
+    }
+}
+
+void unload_credits_images(void) {
+    for (int i = 0; i < NUM_IMAGES; i++) {
+            creditsInit = 0;
+            UnloadTexture(images[i].texture);
+            images[i].initialized = false;
+    }
 }
