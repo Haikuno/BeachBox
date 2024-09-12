@@ -35,6 +35,7 @@ void update_credits_images(void) {
             images[i].speed.x *= -1;
         if (images[i].position.y <= 0 || images[i].position.y + images[i].texture.height >= SCREEN_HEIGHT)
             images[i].speed.y *= -1;
+            
     }
 }
 
