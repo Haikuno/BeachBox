@@ -193,6 +193,16 @@ int calc_CRC(const unsigned char *buf, int size) {
     return n & 0xffff;
 }
 
+struct Timer save_popup_timer;
+
+// This is only drawn if needed
+void draw_save_popup() {
+    if (save_popup_timer.is_done) return;
+    const char *saved_text = "Game saved!";
+    DrawRectangle(SCREEN_WIDTH * 0.7, SCREEN_HEIGHT * 0.85, SCREEN_WIDTH * 0.3, SCREEN_HEIGHT * 0.15, (Color){1, 17, 34, 220});
+    DrawText(saved_text, (int)(SCREEN_WIDTH * 0.7 + MeasureText(saved_text, 22) / 4), (int)(SCREEN_HEIGHT * 0.9), 22, RAYWHITE);
+}
+
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found
 int save_game() {
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
@@ -232,7 +242,11 @@ int save_game() {
         return 0;
     }
 
-    return 0 == vmufs_write(vmu, "BeachBox", &save, save_size, VMUFS_OVERWRITE);
+    if (0 == vmufs_write(vmu, "BeachBox", &save, save_size, VMUFS_OVERWRITE)) {
+        start_timer(&save_popup_timer, 2.0f);
+        return 1;
+    }
+    return -1;  // unknown error
 }
 
 // Returns 1 on success, 0 on no savefile found, -1 on no VMU found
@@ -249,7 +263,7 @@ int load_game() {
         return 1;
     }
     free(save_buffer);
-    return 0;
+    return -1;
 }
 
 // This function also saves the game

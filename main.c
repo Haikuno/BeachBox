@@ -78,6 +78,7 @@ void init_game() {
 
 void update_game() {
     update_controller();
+    update_timer(&save_popup_timer);
 
     static void (*update_scene_functions[])(void) = {
         [RAYLOGO] = update_raylogo_scene,
@@ -122,6 +123,8 @@ void draw_game() {
     DrawText(TextFormat("col: %d, row: %d", selected_column, selected_row), 395, 40, 20, RED);
     DrawText(TextFormat("col_count: %d, row_count: %d", column_count[selected_row], row_count[selected_column]), 345, 80, 20, RED);
 #endif
+
+    draw_save_popup();
 
     EndDrawing();
 }

@@ -54,6 +54,10 @@ void draw_game_over() {
         DrawText("New High Score!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 115, 20, RAYWHITE);
     }
 
+    // TODO: if the A button was being held down before dying, releasing it will trigger a button
+    // this can cause the player to accidentally press the buttons
+    // make an exception for this case
+
     if (do_button(play_again, true)) {
         thd_create(1, save_game, 0);
         init_game_scene();

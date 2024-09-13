@@ -30,7 +30,7 @@ void update_loading_scene() {
     update_timer(&error_timer);
 }
 
-void draw_error_popup() {
+void draw_saved_popup() {
     if (error_timer.is_done) return;
 
     DrawRectangle(SCREEN_WIDTH / 2 - 250, SCREEN_HEIGHT / 2 - 100, 500, 200, (Color){1, 17, 34, 220});
@@ -95,5 +95,5 @@ void draw_loading_scene() {
     }
 
     draw_confirmation_window(callback);
-    draw_error_popup();
+    draw_saved_popup();
 }

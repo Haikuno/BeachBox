@@ -11,5 +11,6 @@ inline void start_timer(struct Timer *timer, float duration) {
 }
 
 inline void update_timer(struct Timer *timer) {
+    if (timer->is_done) return;
     timer->is_done = GetTime() - timer->time_started >= timer->duration;
 }
