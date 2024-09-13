@@ -200,7 +200,7 @@ char saved_text[20];
 void draw_save_popup() {
     if (save_popup_timer.is_done) return;
     DrawRectangle(SCREEN_WIDTH * 0.7, SCREEN_HEIGHT * 0.85, SCREEN_WIDTH * 0.3, SCREEN_HEIGHT * 0.15, (Color){1, 17, 34, 220});
-    DrawText(saved_text, (int)(SCREEN_WIDTH * 0.7 + SCREEN_WIDTH * 0.3 / 2 - MeasureText(saved_text, 22) / 2), (int)(SCREEN_HEIGHT * 0.9), 22, RAYWHITE);
+    DrawText(saved_text, SCREEN_WIDTH * 0.7 + SCREEN_WIDTH * 0.3 / 2 - MeasureText(saved_text, 22) / 2, SCREEN_HEIGHT * 0.9, 22, RAYWHITE);
 }
 
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found
