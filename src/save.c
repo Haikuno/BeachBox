@@ -194,13 +194,13 @@ int calc_CRC(const unsigned char *buf, int size) {
 }
 
 struct Timer save_popup_timer;
+char saved_text[20];
 
 // This is only drawn if needed
 void draw_save_popup() {
     if (save_popup_timer.is_done) return;
-    const char *saved_text = "Game saved!";
     DrawRectangle(SCREEN_WIDTH * 0.7, SCREEN_HEIGHT * 0.85, SCREEN_WIDTH * 0.3, SCREEN_HEIGHT * 0.15, (Color){1, 17, 34, 220});
-    DrawText(saved_text, (int)(SCREEN_WIDTH * 0.7 + MeasureText(saved_text, 22) / 4), (int)(SCREEN_HEIGHT * 0.9), 22, RAYWHITE);
+    DrawText(saved_text, (int)(SCREEN_WIDTH * 0.7 + SCREEN_WIDTH * 0.3 / 2 - MeasureText(saved_text, 22) / 2), (int)(SCREEN_HEIGHT * 0.9), 22, RAYWHITE);
 }
 
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found
@@ -209,6 +209,9 @@ int save_game() {
     if (!vmu) {
         return -1;
     }
+
+    strcpy(saved_text, "Saving...");
+    start_timer(&save_popup_timer, 2.0f);
 
     size_t save_size = sizeof(save);
     size_t header_size = sizeof(save.vms_menu_description) +
@@ -243,7 +246,7 @@ int save_game() {
     }
 
     if (0 == vmufs_write(vmu, "BeachBox", &save, save_size, VMUFS_OVERWRITE)) {
-        start_timer(&save_popup_timer, 2.0f);
+        strcpy(saved_text, "Game Saved!");
         return 1;
     }
     return -1;  // unknown error
