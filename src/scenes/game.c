@@ -55,12 +55,12 @@ void draw_game_over() {
     }
 
     if (do_button(play_again, true)) {
-        save_game();
+        thd_create(1, save_game, 0);
         init_game_scene();
     }
 
     if (do_button(main_menu_from_game, true)) {
-        save_game();
+        thd_create(1, save_game, 0);
         change_scene(MAINMENU);
     }
 }
