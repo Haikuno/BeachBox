@@ -42,7 +42,7 @@ void *draw_vmu_animation(void *param) {
             }
             break;
         case SHOP:
-            // TODO: shop VMU animation
+            SET_VMU_ANIMATION(vmu_shop_animation);
             break;
         case UNLOCKABLES:
             // TODO: unlockables VMU animation
