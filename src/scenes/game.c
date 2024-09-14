@@ -43,15 +43,15 @@ void draw_game_over() {
     if (new_high_score) save.high_score = current_coins;
 
     DrawRectangleV((Vector2){SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4}, (Vector2){SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5}, ui_button_color);
-    DrawText("You lost", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
+    DrawText("You lost", SCREEN_WIDTH / 2 - MeasureText("You lost", 30) / 2, SCREEN_HEIGHT / 4 + 20, 30, RAYWHITE);
 
     const char *coins_text = TextFormat("Score: %d", current_coins);
     const char *high_score_text = TextFormat("High Score: %d", save.high_score);
 
-    DrawText(coins_text, (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 75, 20, RAYWHITE);
-    DrawText(high_score_text, (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 95, 20, RAYWHITE);
+    DrawText(coins_text, SCREEN_WIDTH / 2 - MeasureText(coins_text, 20) / 2, SCREEN_HEIGHT / 4 + 75, 20, RAYWHITE);
+    DrawText(high_score_text, SCREEN_WIDTH / 2 - MeasureText(high_score_text, 20) / 2, SCREEN_HEIGHT / 4 + 95, 20, RAYWHITE);
     if (new_high_score) {
-        DrawText("New High Score!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 115, 20, RAYWHITE);
+        DrawText("New High Score!", SCREEN_WIDTH / 2 - MeasureText("New High Score!", 20) / 2, SCREEN_HEIGHT / 4 + 115, 20, RAYWHITE);
     }
 
     // TODO: if the A button was being held down before dying, releasing it will trigger a button
@@ -73,7 +73,8 @@ void draw_player_ui() {
     DrawRectangle(10, 10, 180, 80, ui_background_color);
 
     // Draw current coint count
-    DrawText(TextFormat("Coins: %d", current_coins), 60, 20, 20, RAYWHITE);
+    const char* coins_text = TextFormat("Coins: %d", current_coins);
+    DrawText(coins_text, 100 - MeasureText(coins_text, 20) / 2, 20, 20, RAYWHITE);
 
     // Meter
     DrawRectangleV((Vector2){.x = 25, .y = 50}, (Vector2){.x = 150, .y = 15}, ui_button_color);
