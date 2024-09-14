@@ -2666,6 +2666,7 @@ void MenuTextAnimation(){
         if (current_scene == MAINMENU){
         static unsigned int timer = 0;
         static unsigned int fortnite = 0;
+        static char buffer[16]; 
         timer++;
         if (timer == 10){
             fortnite++;
@@ -2699,16 +2700,16 @@ void MenuTextAnimation(){
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,3, 7, 48, 6, 2, "your money!");
             break;
             case 5: 
-            char buffer1[16];  
-            snprintf(buffer1, sizeof(buffer1), "You have %d", save.total_coins);
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,1, 1, 48, 6, 2, buffer1);
+             
+            snprintf(buffer, sizeof(buffer), "You have %d", save.total_coins);
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,1, 1, 48, 6, 2, buffer);
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,1, 7, 48, 6, 2, "dollars left");
             break;
             case 6: 
-            char buffer2[16];  
-            snprintf(buffer2, sizeof(buffer2), "%d times!!", save.total_runs);
+             
+            snprintf(buffer, sizeof(buffer), "%d times!!", save.total_runs);
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "You played");
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, buffer2);
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, buffer);
             break;
             case 7:  
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 5, 48, 6, 2, "Congrats!");
