@@ -48,7 +48,7 @@ void *draw_vmu_animation(void *param) {
             // TODO: unlockables VMU animation
             break;
         case OPTIONS:
-            // TODO: options VMU animation
+            SET_VMU_ANIMATION(vmu_knob_animation);
             break;
         case CREDITS:
             SET_VMU_ANIMATION(vmu_credits_animation);
