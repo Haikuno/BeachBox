@@ -2688,9 +2688,7 @@ void MenuTextAnimation(){
             break;
             case 2: 
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,5, 5, 48, 6, 2, "BeachBox!!");
-            
             break;
-
             case 3: 
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "Check out");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, "the shop-");
@@ -2700,20 +2698,17 @@ void MenuTextAnimation(){
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,3, 7, 48, 6, 2, "your money!");
             break;
             case 5: 
-             
             snprintf(buffer, sizeof(buffer), "You have %d", save.total_coins);
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,1, 1, 48, 6, 2, buffer);
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,1, 7, 48, 6, 2, "dollars left");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,3, 7, 48, 6, 2, "coins left");
             break;
             case 6: 
-             
             snprintf(buffer, sizeof(buffer), "%d times!!", save.total_runs);
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "You played");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, buffer);
             break;
             case 7:  
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 5, 48, 6, 2, "Congrats!");
-            
             break;
  
 
