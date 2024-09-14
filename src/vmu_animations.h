@@ -1,3 +1,5 @@
+vmufb_t vmu_fb;
+
 const char vmu_loading_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -2653,3 +2655,69 @@ const char *vmu_credits_animation[] = {
     vmu_credits_frame_2,
     vmu_credits_frame_1
 };
+
+
+
+
+
+
+
+void MenuTextAnimation(){
+        if (current_scene == MAINMENU){
+        static unsigned int timer = 0;
+        static unsigned int fortnite = 0;
+        timer++;
+        if (timer == 10){
+            fortnite++;
+            if (fortnite >= 8) fortnite = 0;
+            timer = 0;
+
+        };
+
+        
+
+        switch (fortnite){
+            case 0:
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "Hello, and");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, "welcome!");
+            break;
+            case 1: 
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,2, 1, 48, 6, 2, "I hope that");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,5, 7, 48, 6, 2, "you enjoy ");
+            break;
+            case 2: 
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,5, 5, 48, 6, 2, "BeachBox!!");
+            
+            break;
+
+            case 3: 
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "Check out");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, "the shop-");
+            break;
+            case 4: 
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "-and spend");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,3, 7, 48, 6, 2, "your money!");
+            break;
+            case 5: 
+            char buffer1[16];  
+            snprintf(buffer1, sizeof(buffer1), "You have %d", save.total_coins);
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,1, 1, 48, 6, 2, buffer1);
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,1, 7, 48, 6, 2, "dollars left");
+            break;
+            case 6: 
+            char buffer2[16];  
+            snprintf(buffer2, sizeof(buffer2), "%d times!!", save.total_runs);
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "You played");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, buffer2);
+            break;
+            case 7:  
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 5, 48, 6, 2, "Congrats!");
+            
+            break;
+ 
+
+        }
+
+    }
+
+}
