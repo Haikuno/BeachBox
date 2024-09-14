@@ -1,4 +1,3 @@
-// TODO: finish credits scene
 #include "../creditsbounce.c"
 struct UiButton exit_credits_button = {
     .pos = {.x = 43, .y = 370},
@@ -9,7 +8,7 @@ struct UiButton exit_credits_button = {
     .text = "Return",
 };
 
-void update_credits_scene() {
+void update_credits_scene(void) {
     update_credits_images();
 
     for (uint8_t i = 0; i < MAX_COLUMNS; i++) {
@@ -21,7 +20,7 @@ void update_credits_scene() {
     column_count[0] = 1;
 }
 
-void draw_credits_scene() {
+void draw_credits_scene(void) {
     draw_background();
     draw_credits_images();
 

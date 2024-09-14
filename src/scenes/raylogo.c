@@ -3,15 +3,15 @@
 
 #define RAYLOGO_SQUARE_SIZE 15
 
-#define RAYLOGO_COLUMNS RAYLOGO_WIDTH / RAYLOGO_SQUARE_SIZE
-#define RAYLOGO_ROWS RAYLOGO_HEIGHT / RAYLOGO_SQUARE_SIZE
+#define RAYLOGO_COLUMNS (RAYLOGO_WIDTH / RAYLOGO_SQUARE_SIZE)
+#define RAYLOGO_ROWS (RAYLOGO_HEIGHT / RAYLOGO_SQUARE_SIZE)
 
 struct Timer raylogo_timer = {.duration = 3.5f, .is_done = false};
 
 const float animation_duration = 1.0f;
 float time_elapsed = 0.0f;
 
-void update_raylogo_scene() {
+void update_raylogo_scene(void) {
     if (raylogo_timer.is_done) {
         change_scene(LOADING);
     }
@@ -19,7 +19,7 @@ void update_raylogo_scene() {
     time_elapsed = GetTime() - animation_duration;
 }
 
-void draw_raylogo_scene() {
+void draw_raylogo_scene(void) {
     ClearBackground(RAYWHITE);
 
     // Text

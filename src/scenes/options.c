@@ -9,7 +9,7 @@ struct UiButton exit_options_button = {
     .text = "Return",
 };
 
-void update_options_scene() {
+void update_options_scene(void) {
     for (uint8_t i = 0; i < MAX_COLUMNS; i++) {
         column_count[i] = 0;
         row_count[i] = 0;
@@ -19,11 +19,11 @@ void update_options_scene() {
     column_count[0] = 1;
 }
 
-void draw_options_scene() {
+void draw_options_scene(void) {
     draw_background();
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
-    // TODO: add actual credits
+    // TODO: add options (music volume, sfx volume)
     DrawText("WIP!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
 
     if (do_button(exit_options_button, true)) {

@@ -29,29 +29,34 @@ float coin_cooldown;
 float pillar_cooldown;
 float giant_pillar_cooldown;
 
-float last_coin_spawn_time;
-float last_pillar_spawn_time;
-float last_giant_pillar_spawn_time;
+struct Timer coin_spawn_timer;
+struct Timer pillar_spawn_timer;
+struct Timer giant_pillar_spawn_timer;
 
-double now;
-
-void calculate_object_cooldowns() {
+void calculate_object_cooldowns(void) {
     coin_cooldown = 8 / current_object_speed;
     pillar_cooldown = 15 / current_object_speed;
     giant_pillar_cooldown = 70 / current_object_speed;
 }
 
-void init_objects() {
+void init_objects(void) {
     objects_bitfield = 0;
     current_object_speed = base_object_speed = 5;
     calculate_object_cooldowns();
-    last_coin_spawn_time = last_pillar_spawn_time = GetTime();
-    last_giant_pillar_spawn_time = GetTime() + 28;  // Make the first giant pillar spawn later in the run
+
+    coin_spawn_timer.is_done = true;
+    pillar_spawn_timer.is_done = true;
+    giant_pillar_spawn_timer.is_done = true;
+
+    start_timer(&coin_spawn_timer, 1);
+    start_timer(&pillar_spawn_timer, 2);
+
+    // Make the first giant pillar spawn later in the run
+    start_timer(&giant_pillar_spawn_timer, 30);
 }
 
-void spawn_pillar() {
-    bool should_spawn_pillar = now - last_pillar_spawn_time > pillar_cooldown;
-    if (!should_spawn_pillar) return;
+void spawn_pillar(void) {
+    if (!pillar_spawn_timer.is_done) return;
 
     uint16_t index;
     for (index = PILLARS_FIRST_BIT; index <= PILLARS_LAST_BIT; index++) {
@@ -62,20 +67,19 @@ void spawn_pillar() {
 
     objects_bitfield |= (1 << index);
 
-    bool should_spawn_giant_pillar = should_spawn_pillar && now - last_giant_pillar_spawn_time > giant_pillar_cooldown;
-
-    if (should_spawn_giant_pillar) {
+    // Spawn a giant pillar
+    if (giant_pillar_spawn_timer.is_done) {
         objects.size[index] = (Vector2){.x = 200, .y = FLOOR_HEIGHT};
         objects.pos[index] = (Vector2){.x = SCREEN_WIDTH + 100, .y = FLOOR_HEIGHT - objects.size[index].y};
         objects.is_shifted[index] = false;
 
-        // We set both times to avoid spawning two pillars on top of each other
-        last_giant_pillar_spawn_time = now;
-        last_pillar_spawn_time = now;
+        // We start both timers to avoid spawning two pillars on top of each other
+        start_timer(&giant_pillar_spawn_timer, giant_pillar_cooldown);
+        start_timer(&pillar_spawn_timer, pillar_cooldown);
         return;
     }
 
-    // Spawn a normal pillar
+    // If couldn't spawn a giant pillar, spawn a normal pillar
     objects.size[index] = (Vector2){.x = GetRandomValue(30, 50), .y = GetRandomValue(80, 120)};
     objects.pos[index] = (Vector2){.x = SCREEN_WIDTH + 100, .y = FLOOR_HEIGHT - objects.size[index].y};
 
@@ -86,14 +90,14 @@ void spawn_pillar() {
     }
 
     objects.is_shifted[index] = GetRandomValue(0, 1);
-    last_pillar_spawn_time = now;
+    start_timer(&pillar_spawn_timer, pillar_cooldown);
     return;
 }
 
 // This function is also responsible of increasing the object speed each time a coin is spawned
-void spawn_coin() {
-    bool should_spawn_coin = now - last_coin_spawn_time > coin_cooldown;
-    if (!should_spawn_coin) return;
+void spawn_coin(void) {
+    if (!coin_spawn_timer.is_done) return;
+    printf("SPAWNING COIN!\n");
 
     uint16_t index;
     for (index = COINS_FIRST_BIT; index <= COINS_LAST_BIT; index++) {
@@ -108,14 +112,13 @@ void spawn_coin() {
     objects.pos[index] = (Vector2){.x = SCREEN_WIDTH + 100, .y = GetRandomValue(190, FLOOR_HEIGHT - 100)};
     objects.is_shifted[index] = GetRandomValue(0, 1);
 
-    last_coin_spawn_time = now;
     base_object_speed = MIN(base_object_speed + 0.09, MAX_OBJECT_SPEED);
     calculate_object_cooldowns();
+    start_timer(&coin_spawn_timer, coin_cooldown);
 }
 
-void add_objects() {
+void add_objects(void) {
     if (objects_bitfield == MAX_OBJECTS) return;
-    now = GetTime();
     spawn_pillar();
     spawn_coin();
 }
@@ -124,7 +127,10 @@ inline bool is_giant_pillar(Vector2 size) {
     return size.y >= FLOOR_HEIGHT;
 }
 
-void update_objects() {
+void update_objects(void) {
+    update_timer(&coin_spawn_timer);
+    update_timer(&pillar_spawn_timer);
+    update_timer(&giant_pillar_spawn_timer);
     current_object_speed = is_slowing_down ? base_object_speed / 1.5 : base_object_speed;
     add_objects();
 
@@ -171,7 +177,7 @@ void invert_color(Color* color) {
     color->b = 255 - color->b;
 }
 
-void draw_objects() {
+void draw_objects(void) {
     // Pillars
     for (uint16_t i = PILLARS_FIRST_BIT; i <= PILLARS_LAST_BIT; i++) {
         if (!(objects_bitfield & (1 << i))) continue;

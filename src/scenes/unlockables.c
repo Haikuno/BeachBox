@@ -10,7 +10,7 @@ struct UiButton unlockables_confirm_button = {
     .text = "Confirm",
 };
 
-void update_unlockables_scene() {
+void update_unlockables_scene(void) {
     for (int i = 0; i < MAX_COLUMNS; i++) {
         column_count[i] = 0;
         row_count[i] = 0;
@@ -56,7 +56,7 @@ void draw_hat_price(uint8_t index) {
     DrawText(crown_explanation_text, pos.x + size.x / 2 - MeasureText(crown_explanation_text, 20) / 2, pos.y + size.y / 2, 20, WHITE);
 }
 
-void draw_unlockables_scene() {
+void draw_unlockables_scene(void) {
     draw_background();
 
     // Draw total coins

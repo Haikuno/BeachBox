@@ -43,7 +43,7 @@ struct UiButton credits_button = {
     .text = "Credits",
 };
 
-void update_mainmenu_scene() {
+void update_mainmenu_scene(void) {
     for (uint8_t i = 0; i < MAX_COLUMNS; i++) {
         column_count[i] = 0;
         row_count[i] = 0;
@@ -53,7 +53,7 @@ void update_mainmenu_scene() {
     column_count[0] = 1;
 }
 
-void draw_mainmenu_scene() {
+void draw_mainmenu_scene(void) {
     draw_background();
     DrawText("BeachBox", 100, 100, 44, BLACK);
     DrawText("BeachBox", 98, 100, 44, RAYWHITE);

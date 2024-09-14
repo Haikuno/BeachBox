@@ -17,7 +17,7 @@
 // #define DEBUG_DRAW_FPS
 // #define DEBUG_DRAW_CURSOR_INFO
 // #define DEBUG_GODMODE
-// #define DEBUG_INFINITE_COINS
+#define DEBUG_INFINITE_COINS
 
 enum Scene {
     RAYLOGO,
@@ -49,8 +49,8 @@ enum Hats {
 #include "src/save.c"
 #include "src/player.c"
 #include "src/objects.c"
-#include "src/background.c"
 #include "src/controller.c"
+#include "src/background.c"
 #include "src/vmu.c"
 #include "src/ui.c"
 
@@ -63,7 +63,7 @@ enum Hats {
 #include "src/scenes/options.c"
 #include "src/scenes/credits.c"
 
-void init_game() {
+void init_game(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "BeachBox");
     hats[HAT_SLIME_RED] = LoadTexture("rd/hats/slime_red.png");
     hats[HAT_SLIME_BLUE] = LoadTexture("rd/hats/slime_blue.png");
@@ -76,7 +76,7 @@ void init_game() {
     hats[HAT_CROWN] = LoadTexture("rd/hats/crown.png");
 }
 
-void update_game() {
+void update_game(void) {
     update_controller();
     update_timer(&save_popup_timer);
 
@@ -97,8 +97,8 @@ void update_game() {
 #endif
 }
 
-void draw_game() {
-    thd_create(1, draw_vmu_animation, 0);
+void draw_game(void) {
+    thd_create(1, draw_vmu_animation, NULL);
     BeginDrawing();
     static void (*draw_scene_functions[])(void) = {
         [RAYLOGO] = draw_raylogo_scene,

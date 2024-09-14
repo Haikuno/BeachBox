@@ -16,7 +16,7 @@ struct UiButton main_menu_from_game = {
     .text = "Main Menu",
 };
 
-void init_game_scene() {
+void init_game_scene(void) {
     init_player();
     init_objects();
     is_game_over = false;
@@ -31,13 +31,14 @@ void init_game_scene() {
     column_count[0] = 2;
 }
 
-void update_game_scene() {
+void update_game_scene(void) {
     if (is_game_over) return;
+    if (is_game_paused) return;
     update_objects();
     update_player();
 }
 
-void draw_game_over() {
+void draw_game_over(void) {
     is_slowing_down = false;   // To turn off the inverted color effect
     current_object_speed = 5;  // To reset the object speed
     if (new_high_score) save.high_score = current_coins;
@@ -69,11 +70,11 @@ void draw_game_over() {
     }
 }
 
-void draw_player_ui() {
+void draw_player_ui(void) {
     DrawRectangle(10, 10, 180, 80, ui_background_color);
 
     // Draw current coint count
-    const char* coins_text = TextFormat("Coins: %d", current_coins);
+    const char *coins_text = TextFormat("Coins: %d", current_coins);
     DrawText(coins_text, 100 - MeasureText(coins_text, 20) / 2, 20, 20, RAYWHITE);
 
     // Meter
@@ -84,12 +85,17 @@ void draw_player_ui() {
     // Teleport cooldown
     if (!teleport_cooldown_timer.is_done) {
         DrawRectangleV((Vector2){.x = 25, .y = 75}, (Vector2){.x = 150, .y = 8}, RAYWHITE);
-        DrawRectangleV((Vector2){.x = 25, .y = 75}, (Vector2){.x = 150 * Lerp(0, 1, (GetTime() - teleport_cooldown_timer.time_started) / teleport_cooldown_timer.duration), .y = 8}, DARKGRAY);
+        DrawRectangleV((Vector2){.x = 25, .y = 75}, (Vector2){.x = 150 * Lerp(0, 1, (teleport_cooldown_timer.progress / teleport_cooldown_timer.duration)), .y = 8}, DARKGRAY);
         DrawRectangleLinesV((Vector2){.x = 25, .y = 75}, (Vector2){.x = 150, .y = 8}, BLACK);
     }
 }
 
-void draw_game_scene() {
+void draw_pause_menu(void) {
+    DrawRectangleV((Vector2){SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3}, (Vector2){SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.20}, ui_button_color);
+    DrawText("Game Paused!", SCREEN_WIDTH / 2 - MeasureText("Game Paused!", 30) / 2, SCREEN_HEIGHT / 3 + 30, 30, RAYWHITE);
+}
+
+void draw_game_scene(void) {
     draw_background();
     if (is_game_over) {
         draw_game_over();
@@ -106,4 +112,8 @@ void draw_game_scene() {
     }
 
     draw_player_ui();
+
+    if (is_game_paused) {
+        draw_pause_menu();
+    }
 }

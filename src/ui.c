@@ -33,7 +33,7 @@ struct UiArrows {
 };
 
 // Forward declarations
-void init_game_scene();
+void init_game_scene(void);
 
 // Changes the current scene, and calls the corresponding init function (if needed)
 inline void change_scene(enum Scene scene) {

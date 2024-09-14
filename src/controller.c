@@ -35,13 +35,13 @@ bool IsTriggerPressed(int gamepad, enum Triggers trigger) {
     return false;
 }
 
+bool is_game_paused = false;
+
 // Forward declarations
 void change_scene(enum Scene);
 void move_cursor(char);
 
-// TODO: add pause menu in game scene
-
-void update_controller() {
+void update_controller(void) {
     switch (current_scene) {
         case GAME:
             if (is_game_over) {
@@ -52,6 +52,12 @@ void update_controller() {
                 }
                 break;
             }
+
+            if (IsGamepadButtonPressed(0, START)) {
+                is_game_paused = !is_game_paused;
+            }
+
+            if (is_game_paused) break;
 
             float axis_movement_left_x = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
 

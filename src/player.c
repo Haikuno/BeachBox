@@ -45,7 +45,7 @@ bool is_game_over;  // If the player lost
 uint16_t current_coins;       // The amount of coins collected in this run
 bool new_high_score = false;  // If the player got a new high score this run
 
-void init_player() {
+void init_player(void) {
     player.size = (Vector2){.x = 32, .y = 32},
     player.pos = (Vector2){.x = 100, .y = FLOOR_HEIGHT - player.size.y};
     player.velocity = (Vector2){.x = 0, .y = 0};
@@ -59,12 +59,10 @@ void init_player() {
     is_teleporting = false;
 
     teleport_duration_timer.is_done = true;
-    teleport_duration_timer.time_started = 0;
     teleport_cooldown_timer.is_done = true;
-    teleport_cooldown_timer.time_started = 0;
 }
 
-void lose_game() {
+void lose_game(void) {
 #ifndef DEBUG_GODMODE
     is_game_over = true;
     save.total_runs++;
@@ -85,7 +83,7 @@ inline void shift_player(bool is_holding_down_x) {
     player.is_shifted = is_holding_down_x;
 }
 
-void update_player_pos() {
+void update_player_pos(void) {
     player.pos.x += is_teleporting ? 8.5 + 0.5 * save.player_upgrade_levels.teleport_distance_level : player.velocity.x;
     if (player.pos.x < 0) player.pos.x = 0;
     if (player.pos.x > SCREEN_WIDTH - player.size.x) player.pos.x = SCREEN_WIDTH - player.size.x;
@@ -103,7 +101,7 @@ void update_player_pos() {
     }
 }
 
-void update_player() {
+void update_player(void) {
     if (is_teleporting) {
         player.velocity.y = MIN(player.velocity.y, 0);  // If the player was falling down before teleporting, we set it back to 0
         update_timer(&teleport_duration_timer);
@@ -120,7 +118,7 @@ void update_player() {
     }
 }
 
-void jump() {
+void jump(void) {
     bool is_player_on_ground = player.pos.y == FLOOR_HEIGHT - player.size.y;
 
     int jump_force = 15;
@@ -131,20 +129,21 @@ void jump() {
 }
 
 // This function gets called when the player lets go of the jump button, cutting the jump short
-inline void cut_jump() {
+inline void cut_jump(void) {
     if (player.velocity.y < 0) {
         player.velocity.y *= 0.7;
     }
 }
 
 // The slowdown power
-inline void slow_down() {
+inline void slow_down(void) {
     if (!save.player_upgrade_levels.slowdown_unlocked) return;
     is_slowing_down = !is_slowing_down;
 }
 
 // The teleport power
-inline void teleport() {
+inline void teleport(void) {
+    printf("timer.is_done = %d\n", teleport_duration_timer.is_done);
     if (!save.player_upgrade_levels.teleport_unlocked) return;
     if (!teleport_cooldown_timer.is_done) return;
     if (teleport_duration_timer.is_done) {  // If the player can teleport
@@ -154,7 +153,7 @@ inline void teleport() {
     }
 }
 
-void draw_player() {
+void draw_player(void) {
     const Color transparent = {0, 0, 0, 0};
     const Color hat_teleport_color = {0, 0, 0, 120};
 

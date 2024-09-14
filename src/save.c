@@ -194,24 +194,25 @@ int calc_CRC(const unsigned char *buf, int size) {
 }
 
 struct Timer save_popup_timer;
-char saved_text[20];
+char saved_text[64];
 
 // This is only drawn if needed
-void draw_save_popup() {
+void draw_save_popup(void) {
     if (save_popup_timer.is_done) return;
     DrawRectangle(SCREEN_WIDTH * 0.7, SCREEN_HEIGHT * 0.85, SCREEN_WIDTH * 0.3, SCREEN_HEIGHT * 0.15, (Color){1, 17, 34, 220});
     DrawText(saved_text, SCREEN_WIDTH * 0.7 + SCREEN_WIDTH * 0.3 / 2 - MeasureText(saved_text, 22) / 2, SCREEN_HEIGHT * 0.9, 22, RAYWHITE);
 }
 
-// Returns 1 on success, 0 on not enough space, -1 on no VMU found
-int save_game() {
+// Returns 1 on success, 0 on not enough space, -1 on no VMU found, -2 on unknown error
+int save_game(void) {
+    if (current_scene != LOADING) start_timer(&save_popup_timer, 2.0f);
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
     if (!vmu) {
+        snprintf(saved_text, sizeof(saved_text), "No VMU found!");
         return -1;
     }
 
-    strcpy(saved_text, "Saving...");
-    start_timer(&save_popup_timer, 2.0f);
+    snprintf(saved_text, sizeof(saved_text), "Saving...");
 
     size_t save_size = sizeof(save);
     size_t header_size = sizeof(save.vms_menu_description) +
@@ -226,10 +227,8 @@ int save_game() {
                          sizeof(save.icon_palette) +
                          sizeof(save.icon_bitmaps);
 
-    printf("header size: %d\n", header_size);
-
-    strcpy(save.dc_description, "BeachBox - PsyOps");
-    strcpy(save.app_identifier, "Psyops");
+    snprintf(save.dc_description, sizeof(save.dc_description), "BeachBox - PsyOps");
+    snprintf(save.app_identifier, sizeof(save.app_identifier), "Psyops");
     save.number_icons = 3;
     save.icon_animation_speed = 14;
     save.graphic_eyecatch_type = 0;
@@ -242,18 +241,21 @@ int save_game() {
     int free_blocks = vmufs_free_blocks(vmu);
 
     if (free_blocks * 512 < save_size) {
+        snprintf(saved_text, sizeof(saved_text), "Not enough space!");
         return 0;
     }
 
     if (0 == vmufs_write(vmu, "BeachBox", &save, save_size, VMUFS_OVERWRITE)) {
-        strcpy(saved_text, "Game Saved!");
+        snprintf(saved_text, sizeof(saved_text), "Game Saved!");
         return 1;
     }
-    return -1;  // unknown error
+
+    snprintf(saved_text, sizeof(saved_text), "Failed to save!");
+    return -2;  // unknown error
 }
 
 // Returns 1 on success, 0 on no savefile found, -1 on no VMU found
-int load_game() {
+int load_game(void) {
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
     if (!vmu) {
         return -1;
@@ -271,7 +273,7 @@ int load_game() {
 
 // This function also saves the game
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found
-int new_game() {
+int new_game(void) {
     save.hats_unlocked[HAT_NIL] = true;
     return save_game();
 }

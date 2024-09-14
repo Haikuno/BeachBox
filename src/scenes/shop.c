@@ -78,7 +78,7 @@ inline bool can_upgrade(enum ShopOptions option) {
     }
 }
 
-void purchase() {
+void purchase(void) {
     switch (selected_shop_option) {
         case SPEED:
             save.player_upgrade_levels.player_speed_level++;
@@ -115,7 +115,7 @@ void purchase() {
     selected_row = selected_shop_option;
 }
 
-void update_shop_scene() {
+void update_shop_scene(void) {
     memset(column_count, 0, sizeof(column_count));
     memset(row_count, 0, sizeof(row_count));
 
@@ -130,7 +130,7 @@ void update_shop_scene() {
     }
 }
 
-void draw_shop_description() {
+void draw_shop_description(void) {
     static const char *descriptions[] = {
         "Increases your movement speed\n\n\"For those who want to go fast\"",
         "Increases your max meter\n\nHelps you stay alive for longer\n\n\"I need more!\"",
@@ -150,17 +150,17 @@ void draw_shop_description() {
     DrawText(TextFormat("Level: %d/%d", get_upgrade_level(selected_shop_option), max_upgrade_levels[selected_shop_option]), 270, 300, 20, level_color);
 }
 
-void jump_to_buy_button() {
+void jump_to_buy_button(void) {
     selected_row = 0;
     selected_column = 1;
 }
 
-void return_to_main_menu() {
+void return_to_main_menu(void) {
     change_scene(MAINMENU);
     thd_create(1, save_game, 0);
 }
 
-void draw_shop_scene() {
+void draw_shop_scene(void) {
     draw_background();
     DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, ui_background_color);
     draw_shop_description();
