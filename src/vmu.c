@@ -24,13 +24,15 @@ void *draw_vmu_animation(void *param) {
 
     switch (current_scene) {
         case RAYLOGO:
-            // TODO: raylogo VMU animation
+            SET_VMU_ANIMATION(vmu_raylib_animation);
+            
             break;
         case LOADING:
             SET_VMU_ANIMATION(vmu_loading_animation);
             break;
         case MAINMENU:
-            // TODO: mainmenu VMU animation
+            SET_VMU_ANIMATION(vmu_face_animation);
+            
             break;
         case GAME:
             if (is_game_over) {
@@ -49,7 +51,7 @@ void *draw_vmu_animation(void *param) {
             // TODO: options VMU animation
             break;
         case CREDITS:
-            // TODO: credits VMU animation
+            SET_VMU_ANIMATION(vmu_credits_animation);
             break;
     }
 
