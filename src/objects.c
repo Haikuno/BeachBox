@@ -97,8 +97,6 @@ void spawn_pillar(void) {
 // This function is also responsible of increasing the object speed each time a coin is spawned
 void spawn_coin(void) {
     if (!coin_spawn_timer.is_done) return;
-    printf("SPAWNING COIN!\n");
-
     uint16_t index;
     for (index = COINS_FIRST_BIT; index <= COINS_LAST_BIT; index++) {
         if (!(objects_bitfield & (1 << index))) {

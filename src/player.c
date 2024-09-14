@@ -143,7 +143,6 @@ inline void slow_down(void) {
 
 // The teleport power
 inline void teleport(void) {
-    printf("timer.is_done = %d\n", teleport_duration_timer.is_done);
     if (!save.player_upgrade_levels.teleport_unlocked) return;
     if (!teleport_cooldown_timer.is_done) return;
     if (teleport_duration_timer.is_done) {  // If the player can teleport
