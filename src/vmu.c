@@ -14,10 +14,14 @@ void *draw_vmu_animation(void *param) {
 
     if (!vmu) return NULL;
 
-    float now = GetTime();
-    if (now - last_vmu_update < 0.25f) return NULL;
+    static struct Timer vmu_update_timer = {.is_done = false};
+    update_timer(&vmu_update_timer);
 
-    last_vmu_update = now;
+    if (!vmu_update_timer.is_done) {
+        return NULL;
+    }
+
+    start_timer(&vmu_update_timer, 0.2f);
 
     const char **vmu_current_animation = NULL;
     int vmu_current_num_frames = 0;
