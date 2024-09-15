@@ -62,7 +62,7 @@ void draw_options_scene(void) {
         change_scene(MAINMENU);
     }
     if (do_button(sfx_volume_options_button, true)) {
-        isVolumeOpen = 1;
+        volume_bool = 1;
         selected_layer = 2;
         selected_column = 0;
         selected_row = 0;
