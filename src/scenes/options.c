@@ -62,6 +62,7 @@ void draw_options_scene(void) {
         change_scene(MAINMENU);
     }
     if (do_button(sfx_volume_options_button, true)) {
+        isVolumeOpen = 1;
         selected_layer = 2;
         selected_column = 0;
         selected_row = 0;
@@ -82,5 +83,6 @@ void draw_options_scene(void) {
 
     draw_confirmation_window(callback);
     draw_sfx_volume_window(callback);
+    draw_music_volume_window(callback);
     draw_saved_popup();
 }
