@@ -44,6 +44,7 @@ enum Hats {
     HAT_MAX
 };
 
+#include "src/audio.c"
 #include "src/helper_functions.c"
 #include "src/timer.c"
 #include "src/save.c"

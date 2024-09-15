@@ -61,6 +61,10 @@ void move_cursor(char direction) {
         row_count[0] = 1;
         column_count[0] = 2;
     }
+        if (selected_layer == 2) {
+        row_count[0] = 2;
+        column_count[0] = 2;
+    }
 
     const uint8_t prev_column = selected_column;
     const uint8_t prev_row = selected_row;
@@ -186,10 +190,66 @@ int do_arrows(struct UiArrows arrow) {
 
     return 0;
 }
-
+bool isVolumeOpen = 0;
 // Takes a function pointer to call when the action is confirmed
+void draw_sfx_volume_window(void (*callback)()) {
+    if (selected_layer == 0 || selected_layer == 1) return;
+    const Vector2 conf_window_size = {SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.5f};
+    const Vector2 conf_window_pos = {(SCREEN_WIDTH - conf_window_size.x) / 2.0f, (SCREEN_HEIGHT - conf_window_size.y) / 2.0f};
+
+    DrawRectangleV(conf_window_pos, conf_window_size, ui_background_color);
+
+    const Vector2 button_size = {conf_window_size.x * 0.4f, conf_window_size.y * 0.25f};
+
+    struct UiButton vol_up_button = {.pos = {(conf_window_pos.x + 30), (conf_window_pos.y + conf_window_size.y * 0.5f) - 30}, .size = button_size, .column = 0, .row = 0, .layer = 2, .text = "Up"};
+    struct UiButton vol_down_button = {.pos = {(conf_window_pos.x + conf_window_size.x - button_size.x - 30), (conf_window_pos.y + conf_window_size.y * 0.5f) - 30}, .size = button_size, .column = 1, .row = 0, .layer = 2, .text = "Down"};
+
+    struct UiButton vol_back1_button = {.pos = {(conf_window_pos.x + conf_window_size.x - button_size.x - 30) - 80, (conf_window_pos.y + conf_window_size.y * 0.5f) + 40}, .size = button_size, .column = 0, .row = 1, .layer = 2, .text = "Back"};
+    struct UiButton vol_back2_button = {.pos = {(conf_window_pos.x + conf_window_size.x - button_size.x - 30) - 80, (conf_window_pos.y + conf_window_size.y * 0.5f) + 40}, .size = button_size, .column = 1, .row = 1, .layer = 2, .text = "Back"};
+
+    DrawText("SFX Volume", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("SFX Volume", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
+
+    static bool first_a_release = true;  // We ignore the first release of A as it is released on the first frame (since you need to release A to open this menu)
+
+    if (first_a_release && IsGamepadButtonReleased(0, A)) {
+        first_a_release = false;
+        return;
+    }
+
+    if (do_button(vol_up_button, true)) {
+        
+        first_a_release = true;
+
+        return;
+    }
+
+    if (do_button(vol_down_button, true)) {
+        
+        first_a_release = true;
+        return;
+    }
+        if (do_button(vol_back1_button, true)) {
+        selected_column = 0;
+        selected_row = 0;
+        selected_layer = 0;
+        first_a_release = true;
+        return;
+    }
+        if (do_button(vol_back2_button, true)) {
+        selected_column = 0;
+        selected_row = 0;
+        selected_layer = 0;
+        first_a_release = true;
+        return;
+    }
+    
+}
+
+
+
+
 void draw_confirmation_window(void (*callback)()) {
-    if (selected_layer == 0) return;
+    if (selected_layer == 0 || selected_layer == 2) return;
 
     const Vector2 conf_window_size = {SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.5f};
     const Vector2 conf_window_pos = {(SCREEN_WIDTH - conf_window_size.x) / 2.0f, (SCREEN_HEIGHT - conf_window_size.y) / 2.0f};

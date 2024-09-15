@@ -1,4 +1,10 @@
 // TODO: implement audio
+#define MAX_VOLUME 200
+#define MIN_VOLUME 0
+
+int sfxVolume;
+int musicVolume;
+
 
 void update_song(void) {
     // TODO: implement songs

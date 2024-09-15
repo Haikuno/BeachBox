@@ -1,19 +1,27 @@
 // TODO: finish options scene
 
-struct UiButton volume_options_button = {
-    .pos = {.x = 43, .y = 120},
+struct UiButton sfx_volume_options_button = {
+    .pos = {.x = 43, .y = 100},
     .size = {.x = 150, .y = 40},
     .column = 0,
     .row = 0,
     .layer = 0,
-    .text = "Volume",
+    .text = "SFX Volume",
+};
+struct UiButton music_volume_options_button = {
+    .pos = {.x = 43, .y = 160},
+    .size = {.x = 150, .y = 40},
+    .column = 0,
+    .row = 1,
+    .layer = 0,
+    .text = "Music Volume",
 };
 
 struct UiButton newsave_options_button = {
     .pos = {.x = 43, .y = 220},
     .size = {.x = 150, .y = 40},
     .column = 0,
-    .row = 1,
+    .row = 2,
     .layer = 0,
     .text = "New Save",
 };
@@ -22,7 +30,7 @@ struct UiButton exit_options_button = {
     .pos = {.x = 43, .y = 320},
     .size = {.x = 150, .y = 40},
     .column = 0,
-    .row = 2,
+    .row = 3,
     .layer = 0,
     .text = "Return",
 };
@@ -35,9 +43,11 @@ void update_options_scene(void) {
         row_count[i] = 0;
     }
 
-    row_count[0] = 3;
+    row_count[0] = 4;
     column_count[0] = 1;
 }
+
+
 
 void draw_options_scene(void) {
     draw_background();
@@ -51,7 +61,16 @@ void draw_options_scene(void) {
     if (do_button(exit_options_button, true)) {
         change_scene(MAINMENU);
     }
-    if (do_button(volume_options_button, true)) {
+    if (do_button(sfx_volume_options_button, true)) {
+        selected_layer = 2;
+        selected_column = 0;
+        selected_row = 0;
+        
+    }
+    if (do_button(music_volume_options_button, true)) {
+        selected_layer = 2;
+        selected_column = 0;
+        selected_row = 0;
         
     }
     if (do_button(newsave_options_button, true)) {
@@ -62,5 +81,6 @@ void draw_options_scene(void) {
     }
 
     draw_confirmation_window(callback);
+    draw_sfx_volume_window(callback);
     draw_saved_popup();
 }
