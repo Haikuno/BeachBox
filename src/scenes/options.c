@@ -43,6 +43,8 @@ void draw_options_scene(void) {
     draw_background();
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
+    static void (*callback)() = NULL;
+
     // TODO: add options (music volume, sfx volume)
     DrawText("WIP!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
 
@@ -53,6 +55,12 @@ void draw_options_scene(void) {
         
     }
     if (do_button(newsave_options_button, true)) {
-        
+        callback = new_game_callback;
+        selected_layer = 1;
+        selected_column = 0;
+        selected_row = 0;
     }
+
+    draw_confirmation_window(callback);
+    draw_saved_popup();
 }
