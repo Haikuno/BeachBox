@@ -2665,19 +2665,19 @@ const char *vmu_credits_animation[] = {
 void MenuTextAnimation(){
         if (current_scene == MAINMENU){
         static unsigned int timer = 0;
-        static unsigned int fortnite = 0;
+        static unsigned int vmu_frame = 0;
         static char buffer[16]; 
         timer++;
         if (timer == 10){
-            fortnite++;
-            if (fortnite >= 8) fortnite = 0;
+            vmu_frame++;
+            if (vmu_frame >= 8) vmu_frame = 0;
             timer = 0;
 
         };
 
         
 
-        switch (fortnite){
+        switch (vmu_frame){
             case 0:
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "Hello, and");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, "welcome!");
