@@ -79,12 +79,12 @@ void draw_loading_scene(void) {
     static void (*callback)() = NULL;
 
     if (do_button(load_button, true) && error_popup_timer.is_done) {
-        if (error_popup_timer.is_done) {
-            callback = load_game_callback;
-            selected_layer = 1;
-            selected_column = 0;
-            selected_row = 0;
-        }
+        
+        callback = load_game_callback;
+        selected_layer = 1;
+        selected_column = 0;
+        selected_row = 0;
+        
     }
 
     if (do_button(new_game_button, true) && error_popup_timer.is_done) {
