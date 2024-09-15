@@ -44,6 +44,7 @@ bool is_game_over;  // If the player lost
 
 uint16_t current_coins;       // The amount of coins collected in this run
 bool new_high_score = false;  // If the player got a new high score this run
+bool held_a_during_death = 0;  
 
 void init_player(void) {
     player.size = (Vector2){.x = 32, .y = 32},
@@ -113,7 +114,10 @@ void update_player(void) {
     player.meter -= 0.16;
     if (is_slowing_down) player.meter -= 0.22 / (1 + save.player_upgrade_levels.slowdown_cost_level / 4);
 
-    if (player.meter <= 0) {
+    if (player.meter <= 0 && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) {
+        held_a_during_death = 1;
+        lose_game();
+    } else if(player.meter <= 0) {
         lose_game();
     }
 }

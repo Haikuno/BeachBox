@@ -2,8 +2,8 @@
 #define MAX_VOLUME 200
 #define MIN_VOLUME 0
 
-int sfxVolume = 80;
-int musicVolume = 80;
+int sfxVolume = 120;
+int musicVolume = 120;
 
 
 void update_song(void) {

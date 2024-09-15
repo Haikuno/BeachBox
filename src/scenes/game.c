@@ -38,6 +38,7 @@ void update_game_scene(void) {
     update_player();
 }
 
+
 void draw_game_over(void) {
     is_slowing_down = false;   // To turn off the inverted color effect
     current_object_speed = 5;  // To reset the object speed
@@ -58,6 +59,13 @@ void draw_game_over(void) {
     // TODO: if the A button was being held down before dying, releasing it will trigger a button
     // this can cause the player to accidentally press the buttons
     // make an exception for this case
+
+    
+
+    if (held_a_during_death && IsGamepadButtonReleased(0, A)) {
+        held_a_during_death = false;
+        return;
+    }
 
     if (do_button(play_again, true)) {
         thd_create(1, save_game, 0);

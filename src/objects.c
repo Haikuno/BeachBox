@@ -161,7 +161,11 @@ void update_objects(void) {
             if (is_teleporting || (!is_giant_pillar(objects.size[index]) && objects.is_shifted[index] != player.is_shifted)) continue;  // If the player and the pillar's "plane" do not match, skip
                                                                                                                                         // If the player is teleporting, we do not check for collisions
 
-            if (CheckCollisionRectangleV(player.pos, player.size, objects.pos[index], objects.size[index])) {
+            if ((CheckCollisionRectangleV(player.pos, player.size, objects.pos[index], objects.size[index])) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) {
+                held_a_during_death = 1;
+                lose_game();
+                break;
+            } else if((CheckCollisionRectangleV(player.pos, player.size, objects.pos[index], objects.size[index]))) {
                 lose_game();
                 break;
             }
