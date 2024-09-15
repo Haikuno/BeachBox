@@ -207,7 +207,7 @@ void draw_sfx_volume_window(void (*callback)()) {
     struct UiButton vol_back1_button = {.pos = {(conf_window_pos.x + conf_window_size.x - button_size.x - 30) - 80, (conf_window_pos.y + conf_window_size.y * 0.5f) + 40}, .size = button_size, .column = 0, .row = 1, .layer = 2, .text = "Back"};
     struct UiButton vol_back2_button = {.pos = {(conf_window_pos.x + conf_window_size.x - button_size.x - 30) - 80, (conf_window_pos.y + conf_window_size.y * 0.5f) + 40}, .size = button_size, .column = 1, .row = 1, .layer = 2, .text = "Back"};
     char text[32];
-    sprintf(text, "SFX Volume: %d", sfxVolume);
+    sprintf(text, "SFX Volume: %d / 200", sfxVolume);
     DrawText(text, (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText(text, 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
 
     static bool first_a_release = true;  // We ignore the first release of A as it is released on the first frame (since you need to release A to open this menu)
@@ -260,7 +260,7 @@ void draw_music_volume_window(void (*callback)()) {
     struct UiButton vol_back1_button = {.pos = {(conf_window_pos.x + conf_window_size.x - button_size.x - 30) - 80, (conf_window_pos.y + conf_window_size.y * 0.5f) + 40}, .size = button_size, .column = 0, .row = 1, .layer = 2, .text = "Back"};
     struct UiButton vol_back2_button = {.pos = {(conf_window_pos.x + conf_window_size.x - button_size.x - 30) - 80, (conf_window_pos.y + conf_window_size.y * 0.5f) + 40}, .size = button_size, .column = 1, .row = 1, .layer = 2, .text = "Back"};
     char textmusic[32];
-    sprintf(textmusic, "Music Volume: %d", musicVolume);
+    sprintf(textmusic, "Music Volume: %d / 200", musicVolume);
     DrawText(textmusic, (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText(textmusic, 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
 
     static bool first_a_release = true;  // We ignore the first release of A as it is released on the first frame (since you need to release A to open this menu)
