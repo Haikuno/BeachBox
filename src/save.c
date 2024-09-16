@@ -274,16 +274,7 @@ int load_game(void) {
 // This function also saves the game
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found
 int new_game(void) {
-    save.high_score = 0;
-    save.total_coins = 0;
-    save.total_runs = 0;
-    save.player_upgrade_levels.meter_level = 0;
-    save.player_upgrade_levels.player_speed_level = 0;
-    save.player_upgrade_levels.slowdown_cost_level = 0;
-    save.player_upgrade_levels.slowdown_unlocked = 0;
-    save.player_upgrade_levels.teleport_cooldown_level = 0;
-    save.player_upgrade_levels.teleport_distance_level = 0;
-    save.player_upgrade_levels.teleport_unlocked = 0;
+    memset(&save, 0, sizeof(save));
     save.hats_unlocked[HAT_NIL] = true;
     return save_game();
 }

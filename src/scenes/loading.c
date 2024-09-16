@@ -60,17 +60,14 @@ void new_game_callback(void) {
 
     switch (return_code) {
         case -1:
-            return_code = new_game();
             start_timer(&error_popup_timer, 3.0f);
             snprintf(error_text, sizeof(error_text), "NO VMU FOUND!");
             break;
         case 0:
-            return_code = new_game();
             start_timer(&error_popup_timer, 3.0f);
             snprintf(error_text, sizeof(error_text), "NOT ENOUGH SPACE IN VMU!");
             break;
         case 1:
-            return_code = new_game();
             change_scene(MAINMENU);
             break;
     }
@@ -86,7 +83,6 @@ void draw_loading_scene(void) {
         selected_layer = 1;
         selected_column = 0;
         selected_row = 0;
-        
     }
 
     if (do_button(new_game_button, true) && error_popup_timer.is_done) {
