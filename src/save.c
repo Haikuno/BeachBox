@@ -18,6 +18,9 @@ const uint16_t vmu_blue = 0b1111'0100'0110'1111;
 const uint16_t vmu_sand = 0b1111'1100'1010'0101;
 const uint16_t vmu_darksand = 0b1111'1100'0111'0010;
 const uint16_t vmu_color_blank = 0b0000'0000'0000'0000;
+const uint16_t vmu_white = 0b1111'1111'1111'1111;
+const uint16_t vmu_purple = 0b1110'1010'0001'1010;
+const uint16_t vmu_gold = 0b1111'1110'1010'0000;
 
 const uint16_t bios_save_palette[] = {
     vmu_light_blue,
@@ -38,9 +41,6 @@ const uint16_t bios_save_palette[] = {
     vmu_color_blank,
 };
 
-const uint16_t vmu_white = 0b1111'1111'1111'1111;
-const uint16_t vmu_purple = 0b1110'1010'0001'1010;
-const uint16_t vmu_gold = 0b1111'1110'1010'0000;
 
 const uint16_t bios_eyecatch_palette[] = {
     vmu_purple,
@@ -64,6 +64,7 @@ const uint16_t bios_eyecatch_palette[] = {
 // The below array contains the frames of the animation shown in the Dreamcast BIOS.
 // Each value is a nybble corresponding to a colour index in the palette above.
 // For example, 0x01 would be a light blue pixel on the left and a black pixel on the right.
+// Converted with Crayon VMU tools by Protofall
 
 const uint8_t bios_save_animation[] = {
     ///////////////////////////////////   FRAME 1    /////////////////////////////////////////////
@@ -167,7 +168,7 @@ const uint8_t bios_save_animation[] = {
     0x55, 0x55, 0x55, 0x55, 0x65, 0x55, 0x55, 0x55, 0x55, 0x56, 0x55, 0x55, 0x55, 0x55, 0x55, 0x65};
 
 
-    const uint8_t bios_eyecatch_bitmap[] = {
+const uint8_t bios_eyecatch_bitmap[] = {
   0x48, 0xf7, 0xf3, 0xff, 0x00, 0xf0, 0xff, 0xff, 0x33, 0xfa, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 
