@@ -23,7 +23,8 @@
         "arch.h": "c",
         "stddef.h": "c",
         "raymath.h": "c",
-        "newlib.h": "c"
+        "newlib.h": "c",
+        "thread.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

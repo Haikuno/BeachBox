@@ -361,15 +361,12 @@ void draw_save_popup(void) {
 }
 
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found, -2 on unknown error
-int save_game(void) {
-    if (current_scene != LOADING) start_timer(&save_popup_timer, 2.0f);
+int save_game(void *v) {
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
     if (!vmu) {
         snprintf(saved_text, sizeof(saved_text), "No VMU found!");
         return -1;
     }
-
-    snprintf(saved_text, sizeof(saved_text), "Saving...");
 
     size_t save_size = sizeof(save);
     size_t header_size = sizeof(save.vms_menu_description) +
@@ -438,5 +435,5 @@ int load_game(void) {
 int new_game(void) {
     memset(&save, 0, sizeof(save));
     save.hats_unlocked[HAT_NIL] = true;
-    return save_game();
+    return save_game(NULL);
 }

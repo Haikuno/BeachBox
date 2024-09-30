@@ -37,7 +37,6 @@ void init_game_scene(void);
 
 // Changes the current scene, and calls the corresponding init function (if needed)
 inline void change_scene(enum Scene scene) {
-    current_scene = scene;
     selected_column = 0;
     selected_row = 0;
     selected_layer = 0;
@@ -50,9 +49,16 @@ inline void change_scene(enum Scene scene) {
         case GAME:
             init_game_scene();
             break;
+        case MAINMENU:
+            if (current_scene != LOADING && current_scene != CREDITS) {
+                snprintf(saved_text, sizeof(saved_text), "Saving...");
+                start_timer(&save_popup_timer, 2.0f);
+                thd_create(1, save_game, 0);
+            }
         default:
             break;
     }
+    current_scene = scene;
 }
 
 // Moves the "cursor" when the player presses the DPAD, changing the selected UiButton

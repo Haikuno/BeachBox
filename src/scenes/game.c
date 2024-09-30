@@ -61,12 +61,12 @@ void draw_game_over(void) {
     }
 
     if (do_button(play_again, true)) {
+        snprintf(saved_text, sizeof(saved_text), "Saving...");
         thd_create(1, save_game, 0);
         init_game_scene();
     }
 
     if (do_button(main_menu_from_game, true)) {
-        thd_create(1, save_game, 0);
         change_scene(MAINMENU);
     }
 }

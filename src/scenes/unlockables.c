@@ -139,7 +139,6 @@ void draw_unlockables_scene(void) {
 
     // Draw buttons
     if (do_button(unlockables_confirm_button, is_hat_unlocked(save.hat_index))) {
-        thd_create(1, save_game, 0);
         change_scene(MAINMENU);
     }
 }

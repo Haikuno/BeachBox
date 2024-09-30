@@ -157,7 +157,6 @@ void jump_to_buy_button(void) {
 
 void return_to_main_menu(void) {
     change_scene(MAINMENU);
-    thd_create(1, save_game, 0);
 }
 
 void draw_shop_scene(void) {
