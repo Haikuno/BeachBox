@@ -35,7 +35,7 @@ struct UiArrows {
 // Forward declarations
 void init_game_scene(void);
 
-// Changes the current scene, and calls the corresponding init function (if needed)
+// Changes the current scene, and calls init / save if needed.
 inline void change_scene(enum Scene scene) {
     selected_column = 0;
     selected_row = 0;
@@ -47,6 +47,11 @@ inline void change_scene(enum Scene scene) {
             init_player();  // We init player here to set the correct player color and size for the unlockables scene
             break;
         case GAME:
+            if (current_scene == GAME) {
+                snprintf(saved_text, sizeof(saved_text), "Saving...");
+                start_timer(&save_popup_timer, 2.0f);
+                thd_create(1, save_game, 0);
+            }
             init_game_scene();
             break;
         case MAINMENU:
