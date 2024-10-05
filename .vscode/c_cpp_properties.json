@@ -15,6 +15,7 @@
             ],
             "compilerPath": "/opt/toolchains/dc/sh-elf/bin/sh-elf-gcc",
             "cStandard": "c23",
+            "cppStandard": "c++23",
             "intelliSenseMode": "linux-gcc-x64"
         }
     ],
