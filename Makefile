@@ -2,6 +2,7 @@ TARGET = bbox.elf
 OBJS = main.o romdisk.o
 KOS_ROMDISK_DIR = romdisk
 CFLAGS += -std=c2x
+KOS_CFLAGS += -I${KOS_PORTS}/include/raylib
 
 all: rm-elf $(TARGET)
 
