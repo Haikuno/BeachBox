@@ -44,7 +44,7 @@ inline void change_scene(enum Scene scene) {
 
     switch (scene) {
         case UNLOCKABLES:
-            init_player();  // We init player here to set the correct player color and size for the unlockables scene
+            // init_player();  // We init player here to set the correct player color and size for the unlockables scene
             break;
         case GAME:
             if (current_scene == GAME) {

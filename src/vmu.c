@@ -9,7 +9,7 @@ int vmu_current_frame = 0;
 #define SET_VMU_ANIMATION(animation) (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
 
 void *draw_vmu_animation(void *param) {
-    static float last_vmu_update = 0;
+    // static float last_vmu_update = 0; TODO: unused, maybe remove?
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
 
     if (!vmu) return NULL;

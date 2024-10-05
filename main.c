@@ -75,6 +75,7 @@ void init_game(void) {
     hats[HAT_F] = LoadTexture("rd/hats/f.png");
     hats[HAT_MUPRH] = LoadTexture("rd/hats/murph.png");
     hats[HAT_CROWN] = LoadTexture("rd/hats/crown.png");
+    init_player();
 }
 
 void update_game(void) {
@@ -130,7 +131,7 @@ void draw_game(void) {
     EndDrawing();
 }
 
-int main(void) {
+int main(int argc, char **argv) {
     init_game();
 
     // Main game loop
@@ -138,4 +139,6 @@ int main(void) {
         update_game();
         draw_game();
     }
+
+    return 0;
 }

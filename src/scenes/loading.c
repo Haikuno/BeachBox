@@ -56,21 +56,21 @@ void load_game_callback(void) {
 }
 
 void new_game_callback(void) {
-    int return_code = new_game();
+    new_game();
 
-    switch (return_code) {
-        case -1:
-            start_timer(&error_popup_timer, 3.0f);
-            snprintf(error_text, sizeof(error_text), "NO VMU FOUND!");
-            break;
-        case 0:
-            start_timer(&error_popup_timer, 3.0f);
-            snprintf(error_text, sizeof(error_text), "NOT ENOUGH SPACE IN VMU!");
-            break;
-        case 1:
-            change_scene(MAINMENU);
-            break;
-    }
+    // switch () {
+    //     case -1:
+    //         start_timer(&error_popup_timer, 3.0f);
+    //         snprintf(error_text, sizeof(error_text), "NO VMU FOUND!");
+    //         break;
+    //     case 0:
+    //         start_timer(&error_popup_timer, 3.0f);
+    //         snprintf(error_text, sizeof(error_text), "NOT ENOUGH SPACE IN VMU!");
+    //         break;
+    //     case 1:
+    //         change_scene(MAINMENU);
+    //         break;
+    // }
 }
 
 void draw_loading_scene(void) {

@@ -22,5 +22,5 @@ inline bool CheckCollisionRectangleV(Vector2 vec1, Vector2 pos1, Vector2 vec2, V
 }
 
 inline float sin_breathe(float time, float rate) {
-    return (sin(time * rate)) * 5;
+    return (sinf(time * rate)) * 5;
 }

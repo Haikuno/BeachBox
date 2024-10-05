@@ -342,7 +342,7 @@ const char vmu_gameover_2[] = {
 
 
 
-static const unsigned char vmu_raylib[] = {
+const char vmu_raylib[] = {
     0b11111111,    0b11111111,    0b11111111,    0b11111111,    0b11111111,    0b11111111,
     0b11111111,    0b11111111,    0b11111111,    0b11111111,    0b11111111,    0b11111111,
     0b11000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000011,
@@ -379,7 +379,7 @@ static const unsigned char vmu_raylib[] = {
 
 
 
-static const unsigned char vmu_face_frame_1[] = {
+const char vmu_face_frame_1[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -415,7 +415,7 @@ static const unsigned char vmu_face_frame_1[] = {
 };
 
 
-static const unsigned char vmu_face_frame_2[] = {
+const char vmu_face_frame_2[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -451,7 +451,7 @@ static const unsigned char vmu_face_frame_2[] = {
 };
 
 
-static const unsigned char vmu_face_frame_3[] = {
+const char vmu_face_frame_3[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -488,7 +488,7 @@ static const unsigned char vmu_face_frame_3[] = {
 
 
 
-static const unsigned char vmu_face_frame_4[] = {
+const char vmu_face_frame_4[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -525,7 +525,7 @@ static const unsigned char vmu_face_frame_4[] = {
 
 
 
-static const unsigned char vmu_knob_1[] = {
+const char vmu_knob_1[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000111,    0b11000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00011000,    0b00110000,    0b00000000,    0b00000000,
@@ -560,7 +560,7 @@ static const unsigned char vmu_knob_1[] = {
     0b00000011,    0b11100000,    0b00000111,    0b11100000,    0b00000111,    0b00000000
 };
 
-static const unsigned char vmu_knob_2[] = {
+const char vmu_knob_2[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000111,    0b11000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00011000,    0b00110000,    0b00000000,    0b00000000,
@@ -595,7 +595,7 @@ static const unsigned char vmu_knob_2[] = {
     0b00000011,    0b11100000,    0b00000111,    0b11100000,    0b00000111,    0b00000000
 };
 
-static const unsigned char vmu_knob_3[] = {
+const char vmu_knob_3[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000111,    0b11000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00011000,    0b00110000,    0b00000000,    0b00000000,
@@ -630,7 +630,7 @@ static const unsigned char vmu_knob_3[] = {
     0b00000011,    0b11100000,    0b00000111,    0b11100000,    0b00000111,    0b00000000
 };
 
-static const unsigned char vmu_shop_1[] = {
+const char vmu_shop_1[] = {
     0b00000001,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000001,
     0b00000001,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000001,
     0b00000010,    0b00111110,    0b00011001,    0b10001111,    0b10000111,    0b10000010,
@@ -664,7 +664,7 @@ static const unsigned char vmu_shop_1[] = {
     0b10101010,    0b10101010,    0b10101010,    0b10101010,    0b10101010,    0b10101010,
     0b11010101,    0b01010101,    0b01010101,    0b01010101,    0b01010101,    0b11010101
 };
-static const unsigned char vmu_unlock_1[] = {
+const char vmu_unlock_1[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -700,7 +700,7 @@ static const unsigned char vmu_unlock_1[] = {
 };
 
 
-static const unsigned char vmu_unlock_2[] = {
+const char vmu_unlock_2[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000001,    0b11111111,    0b11000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000010,    0b00000000,    0b11000000,    0b00000000,
@@ -735,7 +735,7 @@ static const unsigned char vmu_unlock_2[] = {
     0b00000000,    0b10000000,    0b00000000,    0b00000000,    0b00000000,    0b01000000
 };
 
-static const unsigned char vmu_unlock_3[] = {
+const char vmu_unlock_3[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000111,    0b11111111,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000100,    0b00000001,    0b00000000,    0b00000000,
@@ -771,7 +771,7 @@ static const unsigned char vmu_unlock_3[] = {
 };
 
 
-static const unsigned char vmu_unlock_4[] = {
+const char vmu_unlock_4[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00100000,    0b00000000,    0b00000000,
     0b00000000,    0b00000010,    0b00000000,    0b01010000,    0b00000010,    0b00000000,
@@ -878,7 +878,7 @@ const char *vmu_game_over_animation[] = {
 
 
 
-static const char fontdata_4x6[] = {
+const char fontdata_4x6[] = {
     0xee, 0xee, 0xe0, 0xee, 0xee, 0xe0, 0xee, 0xee,
     0xe0, 0xee, 0xee, 0xe0, 0xee, 0xee, 0xe0, 0xee,
     0xee, 0xe0, 0xee, 0xee, 0xe0, 0xee, 0xee, 0xe0,
@@ -977,13 +977,13 @@ static const char fontdata_4x6[] = {
     0xee, 0xe0, 0x00, 0x66, 0x00, 0xee, 0xee, 0xe0,
 };
 
-static const vmufb_font_t vmufb_font4x6 = {
+const vmufb_font_t vmufb_font4x6 = {
     .w = 4,
     .h = 6,
     .stride = 3,
     .fontdata = fontdata_4x6,
 };
-static const char message[] = "        Hello World!        ";
+const char message[] = "        Hello World!        ";
 
 
 
@@ -1000,7 +1000,7 @@ static const char message[] = "        Hello World!        ";
 
 
 
-static const unsigned char vmu_credits_frame_1[] = {
+const char vmu_credits_frame_1[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b11111000,
@@ -1035,7 +1035,7 @@ static const unsigned char vmu_credits_frame_1[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_2[] = {
+const char vmu_credits_frame_2[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b11111000,
@@ -1069,7 +1069,7 @@ static const unsigned char vmu_credits_frame_2[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
-static const unsigned char vmu_credits_frame_3[] = {
+const char vmu_credits_frame_3[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b11111000,
@@ -1104,7 +1104,7 @@ static const unsigned char vmu_credits_frame_3[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_4[] = {
+const char vmu_credits_frame_4[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b11111000,
@@ -1139,7 +1139,7 @@ static const unsigned char vmu_credits_frame_4[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_5[] = {
+const char vmu_credits_frame_5[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b11110000,
@@ -1174,7 +1174,7 @@ static const unsigned char vmu_credits_frame_5[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_6[] = {
+const char vmu_credits_frame_6[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b11100000,
@@ -1209,7 +1209,7 @@ static const unsigned char vmu_credits_frame_6[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_7[] = {
+const char vmu_credits_frame_7[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b11000000,
@@ -1244,7 +1244,7 @@ static const unsigned char vmu_credits_frame_7[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_8[] = {
+const char vmu_credits_frame_8[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b10000000,
@@ -1278,7 +1278,7 @@ static const unsigned char vmu_credits_frame_8[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
-static const unsigned char vmu_credits_frame_9[] = {
+const char vmu_credits_frame_9[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000011,    0b00000000,
@@ -1312,7 +1312,7 @@ static const unsigned char vmu_credits_frame_9[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
-static const unsigned char vmu_credits_frame_10[] = {
+const char vmu_credits_frame_10[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000010,    0b00000000,
@@ -1347,7 +1347,7 @@ static const unsigned char vmu_credits_frame_10[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_11[] = {
+const char vmu_credits_frame_11[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1382,7 +1382,7 @@ static const unsigned char vmu_credits_frame_11[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_12[] = {
+const char vmu_credits_frame_12[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1417,7 +1417,7 @@ static const unsigned char vmu_credits_frame_12[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_13[] = {
+const char vmu_credits_frame_13[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1452,7 +1452,7 @@ static const unsigned char vmu_credits_frame_13[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_14[] = {
+const char vmu_credits_frame_14[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1487,7 +1487,7 @@ static const unsigned char vmu_credits_frame_14[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_15[] = {
+const char vmu_credits_frame_15[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1522,7 +1522,7 @@ static const unsigned char vmu_credits_frame_15[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_16[] = {
+const char vmu_credits_frame_16[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1557,7 +1557,7 @@ static const unsigned char vmu_credits_frame_16[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_17[] = {
+const char vmu_credits_frame_17[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1592,7 +1592,7 @@ static const unsigned char vmu_credits_frame_17[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_18[] = {
+const char vmu_credits_frame_18[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1627,7 +1627,7 @@ static const unsigned char vmu_credits_frame_18[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_19[] = {
+const char vmu_credits_frame_19[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11111000,    0b00000000,    0b00000000,
@@ -1662,7 +1662,7 @@ static const unsigned char vmu_credits_frame_19[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_20[] = {
+const char vmu_credits_frame_20[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11110000,    0b00000000,    0b00000000,
@@ -1697,7 +1697,7 @@ static const unsigned char vmu_credits_frame_20[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_21[] = {
+const char vmu_credits_frame_21[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11100000,    0b00000000,    0b00000000,
@@ -1732,7 +1732,7 @@ static const unsigned char vmu_credits_frame_21[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_22[] = {
+const char vmu_credits_frame_22[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b11000000,    0b00000000,    0b00000000,
@@ -1767,7 +1767,7 @@ static const unsigned char vmu_credits_frame_22[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_23[] = {
+const char vmu_credits_frame_23[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b10000000,    0b00000000,    0b00000000,
@@ -1802,7 +1802,7 @@ static const unsigned char vmu_credits_frame_23[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_24[] = {
+const char vmu_credits_frame_24[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011111,    0b00000000,    0b00000000,    0b00000000,
@@ -1837,7 +1837,7 @@ static const unsigned char vmu_credits_frame_24[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_25[] = {
+const char vmu_credits_frame_25[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011110,    0b00000000,    0b00000000,    0b00000000,
@@ -1872,7 +1872,7 @@ static const unsigned char vmu_credits_frame_25[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_26[] = {
+const char vmu_credits_frame_26[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011100,    0b00000000,    0b00000000,    0b00000000,
@@ -1907,7 +1907,7 @@ static const unsigned char vmu_credits_frame_26[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_27[] = {
+const char vmu_credits_frame_27[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00011000,    0b00000000,    0b00000000,    0b00000000,
@@ -1942,7 +1942,7 @@ static const unsigned char vmu_credits_frame_27[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_28[] = {
+const char vmu_credits_frame_28[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00010000,    0b00000000,    0b00000000,    0b00000000,
@@ -1977,7 +1977,7 @@ static const unsigned char vmu_credits_frame_28[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_29[] = {
+const char vmu_credits_frame_29[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2012,7 +2012,7 @@ static const unsigned char vmu_credits_frame_29[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_30[] = {
+const char vmu_credits_frame_30[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2047,7 +2047,7 @@ static const unsigned char vmu_credits_frame_30[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_31[] = {
+const char vmu_credits_frame_31[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2082,7 +2082,7 @@ static const unsigned char vmu_credits_frame_31[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_32[] = {
+const char vmu_credits_frame_32[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2117,7 +2117,7 @@ static const unsigned char vmu_credits_frame_32[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_33[] = {
+const char vmu_credits_frame_33[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011100,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2152,7 +2152,7 @@ static const unsigned char vmu_credits_frame_33[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_34[] = {
+const char vmu_credits_frame_34[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00011000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2187,7 +2187,7 @@ static const unsigned char vmu_credits_frame_34[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_35[] = {
+const char vmu_credits_frame_35[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00010000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2222,7 +2222,7 @@ static const unsigned char vmu_credits_frame_35[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_36[] = {
+const char vmu_credits_frame_36[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2257,7 +2257,7 @@ static const unsigned char vmu_credits_frame_36[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_37[] = {
+const char vmu_credits_frame_37[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2292,7 +2292,7 @@ static const unsigned char vmu_credits_frame_37[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_38[] = {
+const char vmu_credits_frame_38[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2327,7 +2327,7 @@ static const unsigned char vmu_credits_frame_38[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_39[] = {
+const char vmu_credits_frame_39[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2362,7 +2362,7 @@ static const unsigned char vmu_credits_frame_39[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_40[] = {
+const char vmu_credits_frame_40[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2397,7 +2397,7 @@ static const unsigned char vmu_credits_frame_40[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_41[] = {
+const char vmu_credits_frame_41[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2431,7 +2431,7 @@ static const unsigned char vmu_credits_frame_41[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
-static const unsigned char vmu_credits_frame_42[] = {
+const char vmu_credits_frame_42[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2466,7 +2466,7 @@ static const unsigned char vmu_credits_frame_42[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_43[] = {
+const char vmu_credits_frame_43[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01110000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2501,7 +2501,7 @@ static const unsigned char vmu_credits_frame_43[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_44[] = {
+const char vmu_credits_frame_44[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01100000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2536,7 +2536,7 @@ static const unsigned char vmu_credits_frame_44[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_45[] = {
+const char vmu_credits_frame_45[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b01000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2571,7 +2571,7 @@ static const unsigned char vmu_credits_frame_45[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000
 };
 
-static const unsigned char vmu_credits_frame_46[] = {
+const char vmu_credits_frame_46[] = {
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
     0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,    0b00000000,
@@ -2664,9 +2664,9 @@ const char *vmu_credits_animation[] = {
 
 void MenuTextAnimation(){
         if (current_scene == MAINMENU){
-        static unsigned int timer = 0;
-        static unsigned int vmu_frame = 0;
-        static char buffer[16]; 
+        int timer = 0;
+        int vmu_frame = 0;
+        char buffer[16];
         timer++;
         if (timer == 10){
             vmu_frame++;
@@ -2675,42 +2675,42 @@ void MenuTextAnimation(){
 
         };
 
-        
+
 
         switch (vmu_frame){
             case 0:
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "Hello, and");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, "welcome!");
             break;
-            case 1: 
+            case 1:
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,2, 1, 48, 6, 2, "I hope that");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,5, 7, 48, 6, 2, "you enjoy ");
             break;
-            case 2: 
+            case 2:
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,5, 5, 48, 6, 2, "BeachBox!!");
             break;
-            case 3: 
+            case 3:
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "Check out");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, "the shop-");
             break;
-            case 4: 
+            case 4:
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "-and spend");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,3, 7, 48, 6, 2, "your money!");
             break;
-            case 5: 
+            case 5:
             snprintf(buffer, sizeof(buffer), "You have %d", save.total_coins);
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,1, 1, 48, 6, 2, buffer);
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,3, 7, 48, 6, 2, "coins left");
             break;
-            case 6: 
+            case 6:
             snprintf(buffer, sizeof(buffer), "%d times!!", save.total_runs);
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,4, 1, 48, 6, 2, "You played");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 7, 48, 6, 2, buffer);
             break;
-            case 7:  
+            case 7:
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6,8, 5, 48, 6, 2, "Congrats!");
             break;
- 
+
 
         }
 
