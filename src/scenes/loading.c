@@ -57,6 +57,9 @@ void load_game_callback(void) {
 
 void new_game_callback(void) {
     new_game();
+    start_timer(&save_popup_timer, 3.0f);
+    if (strcmp(saved_text, "Game Saved!") == 0) change_scene(MAINMENU);
+    printf("saved text: %s\n", saved_text);
 
     // switch () {
     //     case -1:
