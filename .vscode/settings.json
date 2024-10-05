@@ -24,7 +24,11 @@
         "stddef.h": "c",
         "raymath.h": "c",
         "newlib.h": "c",
-        "thread.h": "c"
+        "thread.h": "c",
+        "adx.h": "c",
+        "snddrv.h": "c",
+        "stream.h": "c",
+        "vmu_fb.h": "c"
     },
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "enabled"
 }
