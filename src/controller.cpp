@@ -10,15 +10,15 @@ enum Buttons {
     START = 15
 };
 
-enum Triggers {
+typedef enum Triggers {
     LEFT_TRIGGER = 4,
     RIGHT_TRIGGER
-};
+} Triggers;
 
 bool is_left_trigger_down = false;
 bool is_right_trigger_down = false;
 
-bool IsTriggerPressed(int gamepad, enum Triggers trigger) {
+bool IsTriggerPressed(int gamepad, Triggers trigger) {
     static const float trigger_threshold = 0.5f;
     bool *is_trigger_down = (trigger == LEFT_TRIGGER) ? &is_left_trigger_down : &is_right_trigger_down;
     float trigger_movement = GetGamepadAxisMovement(0, trigger);
@@ -44,6 +44,7 @@ void move_cursor(char);
 void update_controller(void) {
     switch (current_scene) {
         case GAME:
+        {
             if (is_game_over) {
                 if (IsGamepadButtonPressed(0, DPAD_LEFT)) {
                     move_cursor('L');
@@ -87,6 +88,7 @@ void update_controller(void) {
 
             shift_player(IsGamepadButtonDown(0, X));
             break;
+        }
 
         case RAYLOGO:
             if (IsGamepadButtonPressed(0, START)) {

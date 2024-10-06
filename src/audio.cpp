@@ -5,9 +5,6 @@
 int sfxVolume = 120;
 int musicVolume = 120;
 
-
-
-
 void update_song(void) {
     // TODO: implement songs
     switch (current_scene) {
@@ -17,7 +14,6 @@ void update_song(void) {
         case LOADING:
             //
             break;
-
 
         case SHOP:
             //
@@ -33,21 +29,15 @@ void update_song(void) {
             break;
         case MAINMENU:
             //
-            
+
         case GAME:
-            if (adx_dec("/rd/audio/gamescene.adx", 1) < 1)
-            {
-                printf("Invalid ADX file\n");
-                
-            }
-            //
-        break;
-
-
-    
+            // if (adx_dec("/rd/audio/gamescene.adx", 1) < 1) {
+            //     printf("Invalid ADX file\n");
+            // }
+            // //
+            break;
     }
-    thd_pass(); 
-    
+    // thd_pass();
 }
 
 // TODO: implement sfx

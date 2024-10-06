@@ -12,7 +12,8 @@
 #include <adx/adx.h>
 #include <adx/snddrv.h>
 #include <raylib.h>
-#include "raymath.h"
+#include <raymath.h>
+#include <array>
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -50,25 +51,25 @@ enum Hats {
     HAT_MAX
 };
 
-#include "src/audio.c"
-#include "src/helper_functions.c"
-#include "src/timer.c"
-#include "src/save.c"
-#include "src/player.c"
-#include "src/objects.c"
-#include "src/controller.c"
-#include "src/background.c"
-#include "src/vmu.c"
-#include "src/ui.c"
+#include "src/audio.cpp"
+#include "src/helper_functions.cpp"
+#include "src/timer.cpp"
+#include "src/save.cpp"
+#include "src/player.cpp"
+#include "src/objects.cpp"
+#include "src/controller.cpp"
+#include "src/background.cpp"
+#include "src/vmu.cpp"
+#include "src/ui.cpp"
 
-#include "src/scenes/raylogo.c"
-#include "src/scenes/loading.c"
-#include "src/scenes/mainmenu.c"
-#include "src/scenes/game.c"
-#include "src/scenes/shop.c"
-#include "src/scenes/unlockables.c"
-#include "src/scenes/options.c"
-#include "src/scenes/credits.c"
+#include "src/scenes/raylogo.cpp"
+#include "src/scenes/loading.cpp"
+#include "src/scenes/mainmenu.cpp"
+#include "src/scenes/game.cpp"
+#include "src/scenes/shop.cpp"
+#include "src/scenes/unlockables.cpp"
+#include "src/scenes/options.cpp"
+#include "src/scenes/credits.cpp"
 
 void init_game(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "BeachBox");
@@ -99,8 +100,8 @@ void update_game(void) {
         [CREDITS] = update_credits_scene};
 
     update_scene_functions[current_scene]();
-        
-        
+
+
 
 #ifdef DEBUG_INFINITE_COINS
     save.total_coins = 9999;

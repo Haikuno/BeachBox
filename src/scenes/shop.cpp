@@ -18,7 +18,7 @@ enum ShopOptions {
     TELEPORT_DISTANCE,
     SLOWDOWN_UNLOCK,
     SLOWDOWN_COST,
-} selected_shop_option = SPEED;
+} selected_shop_option;
 
 const uint8_t max_upgrade_levels[7] = {
     5,  // SPEED
@@ -126,7 +126,7 @@ void update_shop_scene(void) {
     row_count[1] = row_count[2] = 1;
 
     if (selected_column == 0 && selected_layer == 0) {
-        selected_shop_option = selected_row;
+        selected_shop_option = (enum ShopOptions)selected_row;
     }
 }
 
@@ -194,7 +194,7 @@ void draw_shop_scene(void) {
 
     // Purchase options
     for (int i = 0; i < 7; i++) {
-        if (do_button(shop_buttons[i], can_afford(i) && can_upgrade(i))) {
+        if (do_button(shop_buttons[i], can_afford((enum ShopOptions)i) && can_upgrade((enum ShopOptions)i))) {
             jump_to_buy_button();
         }
     }

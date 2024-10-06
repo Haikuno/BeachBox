@@ -1,4 +1,4 @@
-#include "../creditsbounce.c"
+#include "../creditsbounce.cpp"
 struct UiButton exit_credits_button = {
     .pos = {.x = 43, .y = 370},
     .size = {.x = 150, .y = 40},

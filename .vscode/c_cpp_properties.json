@@ -11,7 +11,7 @@
                 // "/opt/toolchains/dc/raylib/raylib/src/"
             ],
             "forcedInclude": [
-                "main.c"
+                "main.cpp"
             ],
             "compilerPath": "/opt/toolchains/dc/sh-elf/bin/sh-elf-gcc",
             "cStandard": "c23",

@@ -16,19 +16,19 @@ const Color ui_button_selected_color = {230, 230, 230, 222};
 struct UiButton {
     Vector2 pos;
     Vector2 size;
-    const char *text;
     uint8_t column;
     uint8_t row;
     uint8_t layer;
+    const char *text;
 };
 
 // The struct that holds the data for an arrow pair (used in unlockables scene)
 struct UiArrows {
-    Vector2 size;
-    Vector2 pos_left;
-    Vector2 pos_right;
     uint8_t column;
     uint8_t row;
+    Vector2 pos_left;
+    Vector2 pos_right;
+    Vector2 size;
     uint8_t layer;
 };
 
@@ -215,7 +215,6 @@ void draw_confirmation_window(void (*callback)()) {
 
     struct UiButton yes_button = {.pos = {conf_window_pos.x + 30, conf_window_pos.y + conf_window_size.y * 0.5f}, .size = button_size, .column = 0, .row = 0, .layer = 1, .text = "Yes"};
     struct UiButton no_button = {.pos = {conf_window_pos.x + conf_window_size.x - button_size.x - 30, conf_window_pos.y + conf_window_size.y * 0.5f}, .size = button_size, .column = 1, .row = 0, .layer = 1, .text = "No"};
-
     DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
 
     static bool first_a_release = true;  // We ignore the first release of A as it is released on the first frame (since you need to release A to open this menu)

@@ -3,7 +3,6 @@
 // Vmu animations are drawn to the vmu frame buffer, and then presented to the screen
 // Each frame is just an array of raw bits, 1bpp (see vmu_animations.h)
 
-vmufb_t vmu_fb;
 int vmu_current_frame = 0;
 
 #define SET_VMU_ANIMATION(animation) (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
@@ -23,7 +22,7 @@ void *draw_vmu_animation(void *param) {
 
     start_timer(&vmu_update_timer, 0.2f);
 
-    const char **vmu_current_animation = NULL;
+    const unsigned char **vmu_current_animation = NULL;
     int vmu_current_num_frames = 0;
 
     switch (current_scene) {
@@ -60,7 +59,7 @@ void *draw_vmu_animation(void *param) {
     if (!vmu_current_animation) return NULL;
 
     vmu_current_frame = (vmu_current_frame + 1) % vmu_current_num_frames;
-    vmufb_paint_area(&vmu_fb, 0, 0, 48, 32, vmu_current_animation[vmu_current_frame]);
+    vmufb_paint_area(&vmu_fb, 0, 0, 48, 32, reinterpret_cast<const char *>(vmu_current_animation[vmu_current_frame]));
 
     MenuTextAnimation();
 

@@ -1,7 +1,6 @@
 TARGET = bbox.elf
 OBJS = main.o romdisk.o
 KOS_ROMDISK_DIR = romdisk
-CFLAGS += -std=c2x
 KOS_CFLAGS += -I${KOS_PORTS}/include/raylib
 
 all: $(TARGET)
@@ -15,7 +14,7 @@ rm-elf:
 	-rm -f $(TARGET) romdisk.*
 
 $(TARGET): $(OBJS)
-	kos-cc -o $(TARGET) $(OBJS) -lraylib -lGL -lm -lkosutils -lADX
+	kos-c++ -o $(TARGET) $(OBJS) -lraylib -lGL -lm -lkosutils -lADX
 
 run: $(TARGET)
 	$(KOS_LOADER) $(TARGET)
