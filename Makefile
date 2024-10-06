@@ -4,7 +4,7 @@ KOS_ROMDISK_DIR = romdisk
 CFLAGS += -std=c2x
 KOS_CFLAGS += -I${KOS_PORTS}/include/raylib
 
-all: rm-elf $(TARGET)
+all: $(TARGET)
 
 include $(KOS_BASE)/Makefile.rules
 
@@ -23,3 +23,5 @@ run: $(TARGET)
 dist: $(TARGET)
 	-rm -f $(OBJS) romdisk.img
 	$(KOS_STRIP) $(TARGET)
+
+.PHONY: all clean rm-elf run dist
