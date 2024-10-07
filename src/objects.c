@@ -151,6 +151,7 @@ void update_objects(void) {
 
             if (CheckCollisionCircleRec(objects.pos[index], objects.size[index].x, (Rectangle){.x = player.pos.x, .y = player.pos.y, .width = player.size.x, .height = player.size.y})) {
                 objects_bitfield &= ~(1 << index);
+                play_sfx_coin();
                 current_coins++;
                 player.meter = MIN(player.meter + 20, player.max_meter);
             }

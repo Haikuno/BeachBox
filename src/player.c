@@ -67,6 +67,7 @@ void lose_game(void) {
 #ifndef DEBUG_GODMODE
     if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) held_a_during_death = true;
     is_game_over = true;
+    play_sfx_game_over();
     save.total_runs++;
     save.total_coins += current_coins;
     new_high_score = save.high_score < current_coins;
@@ -140,6 +141,7 @@ inline void cut_jump(void) {
 // The slowdown power
 inline void slow_down(void) {
     if (!save.player_upgrade_levels.slowdown_unlocked) return;
+    play_sfx_slowdown();
     is_slowing_down = !is_slowing_down;
 }
 
@@ -148,6 +150,7 @@ inline void teleport(void) {
     if (!save.player_upgrade_levels.teleport_unlocked) return;
     if (!teleport_cooldown_timer.is_done) return;
     if (teleport_duration_timer.is_done) {  // If the player can teleport
+        play_sfx_teleport();
         is_teleporting = true;
         start_timer(&teleport_duration_timer, 0.4);
         start_timer(&teleport_cooldown_timer, 5 - 0.5 * save.player_upgrade_levels.teleport_cooldown_level);

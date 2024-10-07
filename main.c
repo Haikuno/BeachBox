@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <kos/init.h>
 #include <kos.h>
+#include <dc/sound/sound.h>
+#include <dc/sound/sfxmgr.h>
 #include <kos/dbgio.h>
 #include <dc/sound/stream.h>
 #include <GL/gl.h>
@@ -87,7 +89,7 @@ void init_game(void) {
 void update_game(void) {
     update_controller();
     update_timer(&save_popup_timer);
-    update_song();
+    //update_song();
     static void (*update_scene_functions[])(void) = {
         [RAYLOGO] = update_raylogo_scene,
         [LOADING] = update_loading_scene,
@@ -141,6 +143,7 @@ void draw_game(void) {
 
 int main(int argc, char **argv) {
     init_game();
+    init_sounds();
 
     // Main game loop
     while (1) {
