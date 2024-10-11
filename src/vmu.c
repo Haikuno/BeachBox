@@ -23,7 +23,7 @@ int     vmu_menu_text_frame = 0;
 // The first frame is longer to give player time to look at the vmu
 bbox_timer_t vmu_menu_text_update_cooldown = { .duration = 0.5f, .is_running = true, .progress = 0 };
 
-void update_vmu_menu_text() {
+void update_vmu_menu_text(void) {
     update_timer(&vmu_menu_text_update_cooldown);
 
     char buffer[16];
@@ -71,6 +71,17 @@ void update_vmu_menu_text() {
     vmu_menu_text_frame = (vmu_menu_text_frame + 1) % 8;
 }
 
+void update_vmu_credits_animation(void) {
+    static const char data[192]   = { 0 };
+    static int        width       = 1;
+    static bool       should_grow = true;
+
+    width = (width + (should_grow ? 1 : -1)) % 49;
+    if (width == 0 || width == 48) should_grow = !should_grow;
+
+    vmufb_paint_area(&vmu_fb, 0, 0, width, 32, data);
+}
+
 void *draw_vmu_animation(void *param) {
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
 
@@ -109,10 +120,10 @@ void *draw_vmu_animation(void *param) {
             SET_VMU_ANIMATION(vmu_shop_animation);
             break;
         case UNLOCKABLES:
-            SET_VMU_ANIMATION(vmu_unlock_animation);
+            SET_VMU_ANIMATION(vmu_unlockables_animation);
             break;
         case OPTIONS:
-            SET_VMU_ANIMATION(vmu_knob_animation);
+            SET_VMU_ANIMATION(vmu_options_animation);
             break;
         case CREDITS:
             SET_VMU_ANIMATION(vmu_credits_animation);
@@ -125,6 +136,7 @@ void *draw_vmu_animation(void *param) {
     vmufb_paint_area(&vmu_fb, 0, 0, 48, 32, vmu_current_animation[vmu_current_frame]);
 
     if (current_scene == MAINMENU) update_vmu_menu_text();
+    if (current_scene == CREDITS) update_vmu_credits_animation();
 
     vmufb_present(&vmu_fb, vmu);
 
