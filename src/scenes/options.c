@@ -1,83 +1,74 @@
+#include <raylib.h>
+#include <stddef.h>
+#include "../scene.h"
+#include "../ui.h"
+#include "../config.h"
+#include "../background.h"
+#include "../save.h"
+#include "options.h"
+
+extern uint8_t     column_count[];
+extern uint8_t     row_count[];
+extern const Color ui_background_color;
+extern uint8_t     selected_layer;
+extern uint8_t     selected_column;
+extern uint8_t     selected_row;
+
 // TODO: finish options scene
 
-// TODO: replace with arrows
-struct UiButton sfx_volume_options_button = {
-    .pos = {.x = 43, .y = 100},
-    .size = {.x = 150, .y = 40},
+uibutton_t newsave_options_button = {
+    .pos    = { .x = 43,  .y = 220 },
+    .size   = { .x = 150, .y = 40  },
     .column = 0,
-    .row = 0,
-    .layer = 0,
-    .text = "SFX Volume",
+    .row    = 2,
+    .layer  = 0,
+    .text   = "New Save",
 };
 
-// TODO: replace with arrows
-struct UiButton music_volume_options_button = {
-    .pos = {.x = 43, .y = 160},
-    .size = {.x = 150, .y = 40},
+uibutton_t exit_options_button = {
+    .pos    = { .x = 43,  .y = 320 },
+    .size   = { .x = 150, .y = 40  },
     .column = 0,
-    .row = 1,
-    .layer = 0,
-    .text = "Music Volume",
+    .row    = 3,
+    .layer  = 0,
+    .text   = "Return",
 };
 
-struct UiButton newsave_options_button = {
-    .pos = {.x = 43, .y = 220},
-    .size = {.x = 150, .y = 40},
-    .column = 0,
-    .row = 2,
-    .layer = 0,
-    .text = "New Save",
-};
-
-struct UiButton exit_options_button = {
-    .pos = {.x = 43, .y = 320},
-    .size = {.x = 150, .y = 40},
-    .column = 0,
-    .row = 3,
-    .layer = 0,
-    .text = "Return",
-};
+void init_options_scene(void) {
+    row_count[0]    = 4;
+    column_count[0] = 1;
+    selected_row    = 3;
+}
 
 void update_options_scene(void) {
-    for (uint8_t i = 0; i < MAX_COLUMNS; i++) {
-        column_count[i] = 0;
-        row_count[i] = 0;
-    }
+    //
+}
 
-    row_count[0] = 4;
-    column_count[0] = 1;
+static void new_game_callback(void *user_data) {
+    new_game();
+    change_scene(MAINMENU);
+    return;
 }
 
 void draw_options_scene(void) {
     draw_background();
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
-    static void (*callback)() = NULL;
+    static void (*callback)(void *user_data) = NULL;
 
     // TODO: add options (music volume, sfx volume)
     DrawText("WIP!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
 
-    // TODO: replace with arrows
-    if (do_button(sfx_volume_options_button, true)) {
-        //
-    }
-
-    // TODO: replace with arrows
-    if (do_button(music_volume_options_button, true)) {
-        //
-    }
-
     if (do_button(newsave_options_button, true)) {
-        callback = new_game_callback;
-        selected_layer = 1;
+        callback        = new_game_callback;
+        selected_layer  = 1;
         selected_column = 0;
-        selected_row = 0;
+        selected_row    = 0;
     }
 
     if (do_button(exit_options_button, true)) {
         change_scene(MAINMENU);
     }
 
-    draw_confirmation_window(callback);
-    draw_saved_popup();
+    draw_confirmation_window(callback, NULL);
 }

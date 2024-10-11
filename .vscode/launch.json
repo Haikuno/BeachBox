@@ -2,29 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Build and launch Flycast (GDB)",
-            "type": "by-gdb",
-            "request": "launch",
-            "debuggerPath": "/usr/bin/gdb",
-            "cwd": "${workspaceRoot}",
-            "program": "bbox.elf",
-            "commandsBeforeExec": [
-                "set arch sh4",
-                "set endian little",
-                "enable pretty-printer"
-            ],
-            "remote": {
-                "enabled": true,
-                "address": ":3263",
-                "mode": "remote",
-            },
-            "preLaunchTask": "Build and Launch Flycast",
-        },
-        {
             "name": "Build and launch Flycast",
             "type": "f5anything",
             "request": "launch",
-            "command": "reset && make && flycast bbox.elf",
+            "command": "flycast build/BeachBox.elf",
+            "preLaunchTask": "CMake: build"
         }
     ]
 }

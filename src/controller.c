@@ -1,26 +1,19 @@
-enum Buttons {
-    DPAD_UP = 1,
-    DPAD_RIGHT,
-    DPAD_DOWN,
-    DPAD_LEFT,
-    Y,
-    B,
-    A,
-    X,
-    START = 15
-};
+#include <raylib.h>
+#include "controller.h"
+#include "scene.h"
+#include "ui.h"
+#include "player.h"
 
-enum Triggers {
-    LEFT_TRIGGER = 4,
-    RIGHT_TRIGGER
-};
+extern scene_t current_scene;
+extern bool    is_game_over;
+extern bool    is_game_paused;
 
-bool is_left_trigger_down = false;
-bool is_right_trigger_down = false;
+bool IsTriggerPressed(int gamepad, trigger_t trigger) {
+    static bool is_left_trigger_down;
+    static bool is_right_trigger_down;
+    const float trigger_threshold = 0.5f;
 
-bool IsTriggerPressed(int gamepad, enum Triggers trigger) {
-    static const float trigger_threshold = 0.5f;
-    bool *is_trigger_down = (trigger == LEFT_TRIGGER) ? &is_left_trigger_down : &is_right_trigger_down;
+    bool *is_trigger_down  = (trigger == LEFT_TRIGGER) ? &is_left_trigger_down : &is_right_trigger_down;
     float trigger_movement = GetGamepadAxisMovement(0, trigger);
 
     if (trigger_movement > trigger_threshold && !*is_trigger_down) {
@@ -35,12 +28,7 @@ bool IsTriggerPressed(int gamepad, enum Triggers trigger) {
     return false;
 }
 
-bool is_game_paused = false;
-
-// Forward declarations
-void change_scene(enum Scene);
-void move_cursor(char);
-
+// NOTE: This is in PascalCase to follow raylib naming conventions
 void update_controller(void) {
     switch (current_scene) {
         case GAME:
@@ -62,13 +50,13 @@ void update_controller(void) {
             float axis_movement_left_x = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
 
             if (axis_movement_left_x != 0) {
-                move_player((Vector2){.x = axis_movement_left_x, .y = 0});
+                move_player((Vector2){ .x = axis_movement_left_x, .y = 0 });
             } else {
                 if (IsGamepadButtonDown(0, DPAD_LEFT)) {
-                    move_player((Vector2){.x = -1, .y = 0});
+                    move_player((Vector2){ .x = -1, .y = 0 });
                 }
                 if (IsGamepadButtonDown(0, DPAD_RIGHT)) {
-                    move_player((Vector2){.x = 1, .y = 0});
+                    move_player((Vector2){ .x = 1, .y = 0 });
                 }
             }
 
@@ -92,6 +80,7 @@ void update_controller(void) {
             if (IsGamepadButtonPressed(0, START)) {
                 change_scene(LOADING);
             }
+
         case LOADING:
         case MAINMENU:
         case SHOP:

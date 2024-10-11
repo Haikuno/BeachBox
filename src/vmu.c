@@ -1,30 +1,92 @@
+#include <stdio.h>
+#include <dc/maple.h>
+#include <dc/vmu_fb.h>
+#include "save.h"
+#include "vmu.h"
 #include "vmu_animations.h"
+#include "timer.h"
+#include "scene.h"
+
+#define SET_VMU_ANIMATION(animation)                                                                                   \
+    (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
 
 // Vmu animations are drawn to the vmu frame buffer, and then presented to the screen
 // Each frame is just an array of raw bits, 1bpp (see vmu_animations.h)
 
-vmufb_t vmu_fb;
-int vmu_current_frame = 0;
+extern scene_t current_scene;
+extern save_t  save;
+extern bool    is_game_over;
 
-#define SET_VMU_ANIMATION(animation) (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
+vmufb_t vmu_fb;
+int     vmu_current_frame   = 0;
+int     vmu_menu_text_frame = 0;
+// The first frame is longer to give player time to look at the vmu
+bbox_timer_t vmu_menu_text_update_cooldown = { .duration = 0.5f, .is_running = true, .progress = 0 };
+
+void update_vmu_menu_text() {
+    update_timer(&vmu_menu_text_update_cooldown);
+
+    char buffer[16];
+    switch (vmu_menu_text_frame) {
+        case 0:
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "Hello, and");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 7, 48, 6, 2, "welcome!");
+            break;
+        case 1:
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 2, 1, 48, 6, 2, "I hope that");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 5, 7, 48, 6, 2, "you enjoy ");
+            break;
+        case 2:
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 5, 5, 48, 6, 2, "BeachBox!!");
+            break;
+        case 3:
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "Check out");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 7, 48, 6, 2, "the shop-");
+            break;
+        case 4:
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "-and spend");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 3, 7, 48, 6, 2, "your money!");
+            break;
+        case 5:
+            snprintf(buffer, sizeof(buffer), "You have %d", save.total_coins);
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 1, 1, 48, 6, 2, buffer);
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 3, 7, 48, 6, 2, "coins left");
+            break;
+        case 6:
+            snprintf(buffer, sizeof(buffer), "%d times!!", save.total_runs);
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "You played");
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 7, 48, 6, 2, buffer);
+            break;
+        case 7:
+            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 5, 48, 6, 2, "Congrats!");
+            break;
+    }
+
+    if (vmu_menu_text_update_cooldown.is_running) {
+        return;
+    }
+
+    start_timer(&vmu_menu_text_update_cooldown, 0.2f);
+
+    vmu_menu_text_frame = (vmu_menu_text_frame + 1) % 8;
+}
 
 void *draw_vmu_animation(void *param) {
-    // static float last_vmu_update = 0; TODO: unused, maybe remove?
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
 
     if (!vmu) return NULL;
 
-    static struct Timer vmu_update_timer = {.is_done = false};
-    update_timer(&vmu_update_timer);
+    static bbox_timer_t vmu_update_cooldown;
+    update_timer(&vmu_update_cooldown);
 
-    if (!vmu_update_timer.is_done) {
+    if (vmu_update_cooldown.is_running) {
         return NULL;
     }
 
-    start_timer(&vmu_update_timer, 0.2f);
+    start_timer(&vmu_update_cooldown, 0.2f);
 
-    const char **vmu_current_animation = NULL;
-    int vmu_current_num_frames = 0;
+    const char **vmu_current_animation  = NULL;
+    int          vmu_current_num_frames = 0;
 
     switch (current_scene) {
         case RAYLOGO:
@@ -62,7 +124,7 @@ void *draw_vmu_animation(void *param) {
     vmu_current_frame = (vmu_current_frame + 1) % vmu_current_num_frames;
     vmufb_paint_area(&vmu_fb, 0, 0, 48, 32, vmu_current_animation[vmu_current_frame]);
 
-    MenuTextAnimation();
+    if (current_scene == MAINMENU) update_vmu_menu_text();
 
     vmufb_present(&vmu_fb, vmu);
 
