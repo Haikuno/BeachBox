@@ -6,7 +6,7 @@
 
 #define FLOOR_HEIGHT 350
 
-#define GRAVITY 0.5
+#define GRAVITY 0.55
 
 // Debug settings, just comment one out to turn it on
 

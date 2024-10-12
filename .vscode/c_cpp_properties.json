@@ -9,7 +9,7 @@
                 "/opt/toolchains/dc/kos-ports/include/**"
             ],
             "compilerPath": "/opt/toolchains/dc/sh-elf/bin/sh-elf-gcc",
-            "cStandard": "c23",
+            "cStandard": "c17",
             "intelliSenseMode": "linux-gcc-x64",
             "defines": [
                 "false=0",

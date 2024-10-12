@@ -11,7 +11,7 @@
 #include "src/vmu.h"
 
 extern save_t  save;
-extern scene_t current_scene;
+// extern scene_t current_scene;
 extern uint8_t selected_column;
 extern uint8_t selected_row;
 extern uint8_t column_count[];

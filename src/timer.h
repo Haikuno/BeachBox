@@ -4,9 +4,9 @@
 #include <raylib.h>
 
 typedef struct Timer {
-    float duration;
-    float progress;
-    bool  is_running;
+        float duration;
+        float progress;
+        bool  is_running;
 } bbox_timer_t;
 
 inline void start_timer(bbox_timer_t *timer, float duration) {

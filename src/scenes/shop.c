@@ -16,7 +16,7 @@ extern const Color ui_background_color;
 extern const Color ui_button_color;
 extern const Color ui_button_selected_color;
 
-uibutton_t shop_buttons[] = {
+const uibutton_t shop_buttons[] = {
     { .pos = { 30, 50 },   .size = { 200, 40 }, .column = 0, .row = 0, .layer = 0, .text = "Movement Speed"    },
     { .pos = { 30, 110 },  .size = { 200, 40 }, .column = 0, .row = 1, .layer = 0, .text = "Max Meter"         },
     { .pos = { 30, 170 },  .size = { 200, 40 }, .column = 0, .row = 2, .layer = 0, .text = "Unlock Teleport"   },

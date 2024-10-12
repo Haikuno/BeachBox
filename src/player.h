@@ -1,7 +1,6 @@
 #ifndef BBOX_PLAYER_H
 #define BBOX_PLAYER_
 
-
 #include <raylib.h>
 
 #define PLAYER_COLORS_COUNT 17

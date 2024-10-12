@@ -19,25 +19,25 @@
 // 12-15 : Blue
 // So a value of 0b1111'0000'1111'0000 would be pure green with no transparency.
 
-const uint16_t vmu_light_blue  = 0b1111'1011'1101'1111;
-const uint16_t vmu_black       = 0b1111'0000'0000'0000;
-const uint16_t vmu_red         = 0b1111'1100'0001'0001;
-const uint16_t vmu_periwinkle  = 0b1111'1000'1001'1111;
-const uint16_t vmu_blue        = 0b1111'0100'0110'1111;
-const uint16_t vmu_sand        = 0b1111'1100'1010'0101;
-const uint16_t vmu_darksand    = 0b1111'1100'0111'0010;
-const uint16_t vmu_color_blank = 0b0000'0000'0000'0000;
-const uint16_t vmu_white       = 0b1111'1111'1111'1111;
-const uint16_t vmu_purple      = 0b1110'1010'0001'1010;
-const uint16_t vmu_gold        = 0b1111'1110'1010'0000;
+static const uint16_t vmu_light_blue  = 0b1111'1011'1101'1111;
+static const uint16_t vmu_black       = 0b1111'0000'0000'0000;
+static const uint16_t vmu_red         = 0b1111'1100'0001'0001;
+static const uint16_t vmu_periwinkle  = 0b1111'1000'1001'1111;
+static const uint16_t vmu_blue        = 0b1111'0100'0110'1111;
+static const uint16_t vmu_sand        = 0b1111'1100'1010'0101;
+static const uint16_t vmu_darksand    = 0b1111'1100'0111'0010;
+static const uint16_t vmu_color_blank = 0b0000'0000'0000'0000;
+static const uint16_t vmu_white       = 0b1111'1111'1111'1111;
+static const uint16_t vmu_purple      = 0b1110'1010'0001'1010;
+static const uint16_t vmu_gold        = 0b1111'1110'1010'0000;
 
-const uint16_t bios_save_palette[] = {
+static const uint16_t bios_save_palette[] = {
     vmu_light_blue,  vmu_black,       vmu_red,         vmu_periwinkle,  vmu_blue,        vmu_sand,
     vmu_darksand,    vmu_color_blank, vmu_color_blank, vmu_color_blank, vmu_color_blank, vmu_color_blank,
     vmu_color_blank, vmu_color_blank, vmu_color_blank, vmu_color_blank,
 };
 
-const uint16_t bios_eyecatch_palette[] = {
+static const uint16_t bios_eyecatch_palette[] = {
     vmu_purple,      vmu_gold,        vmu_black,       vmu_white,       vmu_red,         vmu_color_blank,
     vmu_color_blank, vmu_color_blank, vmu_color_blank, vmu_color_blank, vmu_color_blank, vmu_color_blank,
     vmu_color_blank, vmu_color_blank, vmu_color_blank, vmu_color_blank,
@@ -47,7 +47,7 @@ const uint16_t bios_eyecatch_palette[] = {
 // Each value is a nybble corresponding to a colour index in the palette above.
 // For example, 0x01 would be a light blue pixel on the left and a black pixel on the right.
 
-const uint8_t bios_save_animation[] = {
+static const uint8_t bios_save_animation[] = {
     ///////////////////////////////////   FRAME 1    /////////////////////////////////////////////
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -135,7 +135,7 @@ const uint8_t bios_save_animation[] = {
 };
 
 // Converted with Crayon VMU tools by Protofall
-const uint8_t bios_eyecatch_bitmap[] = {
+static const uint8_t bios_eyecatch_bitmap[] = {
     0x48, 0xf7, 0xf3, 0xff, 0x00, 0xf0, 0xff, 0xff, 0x33, 0xfa, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11,
@@ -246,7 +246,7 @@ const uint8_t bios_eyecatch_bitmap[] = {
     0x11, 0x11, 0x11, 0x00, 0x00, 0x22, 0x33, 0x33, 0x33, 0x33, 0x34, 0x33, 0x33, 0x33, 0x33
 };
 
-int calc_CRC(const unsigned char *buf, int size) {
+static int calc_CRC(const unsigned char *buf, int size) {
     int i, c, n = 0;
     for (i = 0; i < size; i++) {
         n ^= (buf[i] << 8);

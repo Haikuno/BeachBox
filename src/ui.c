@@ -22,11 +22,10 @@ void move_cursor(char direction) {
         column_count[0] = 2;
     }
 
-    bool can_move_cursor_left  = selected_column > 0 || (selected_column > 0 && row_count[selected_column - 1] > 0);
-    bool can_move_cursor_right = selected_column < column_count[selected_row] - 1
-                                 || (selected_column < MAX_COLUMNS && row_count[selected_column + 1] > 0);
-    bool can_move_cursor_up   = selected_row > 0;
-    bool can_move_cursor_down = selected_row < row_count[selected_column] - 1;
+    const bool can_move_cursor_left  = selected_column > 0 || (selected_column > 0 && row_count[selected_column - 1] > 0);
+    const bool can_move_cursor_right = selected_column < column_count[selected_row] - 1 || (selected_column < MAX_COLUMNS && row_count[selected_column + 1] > 0);
+    const bool can_move_cursor_up    = selected_row > 0;
+    const bool can_move_cursor_down  = selected_row < row_count[selected_column] - 1;
 
     switch (direction) {
         case 'L':
@@ -70,7 +69,7 @@ void move_cursor(char direction) {
     if (selected_row > MAX_ROWS) selected_row = 0;
 }
 
-bool is_button_selected(uibutton_t button) {
+static bool is_button_selected(uibutton_t button) {
     return button.column == selected_column && button.row == selected_row && button.layer == selected_layer;
 }
 
@@ -103,8 +102,7 @@ bool do_button(uibutton_t button, bool is_active) {
 
     DrawRectangleV(button.pos, button.size, button_color);
     DrawRectangleLinesV(button.pos, button.size, text_color);
-    DrawText(button.text, (int)(button.pos.x + button.size.x / 2 - MeasureText(button.text, 20) / 2),
-             (int)(button.pos.y + button.size.y / 2 - 10), 20, text_color);
+    DrawText(button.text, (int)(button.pos.x + button.size.x / 2 - MeasureText(button.text, 20) / 2), (int)(button.pos.y + button.size.y / 2 - 10), 20, text_color);
 
     if (!is_active) return false;
 
@@ -119,17 +117,17 @@ int do_arrows(uiarrows_t arrows) {
     const Color border_color     = BLACK;
 
     // Left arrow
-    Vector2 left_v1 = { .x = arrows.pos_left.x + arrows.size.x / 2, .y = arrows.pos_left.y };
-    Vector2 left_v2 = { .x = arrows.pos_left.x, .y = arrows.pos_left.y + arrows.size.y / 2 };
-    Vector2 left_v3 = { .x = arrows.pos_left.x + arrows.size.x / 2, .y = arrows.pos_left.y + arrows.size.y };
+    const Vector2 left_v1 = { .x = arrows.pos_left.x + arrows.size.x / 2, .y = arrows.pos_left.y };
+    const Vector2 left_v2 = { .x = arrows.pos_left.x, .y = arrows.pos_left.y + arrows.size.y / 2 };
+    const Vector2 left_v3 = { .x = arrows.pos_left.x + arrows.size.x / 2, .y = arrows.pos_left.y + arrows.size.y };
 
     DrawTriangle(left_v1, left_v2, left_v3, arrow_color);
     DrawTriangleLines(left_v1, left_v2, left_v3, border_color);
 
     // Right arrow
-    Vector2 right_v1 = { .x = arrows.pos_right.x + arrows.size.x, .y = arrows.pos_right.y + arrows.size.y / 2 };
-    Vector2 right_v2 = { .x = arrows.pos_right.x + arrows.size.x / 2, .y = arrows.pos_right.y };
-    Vector2 right_v3 = { .x = arrows.pos_right.x + arrows.size.x / 2, .y = arrows.pos_right.y + arrows.size.y };
+    const Vector2 right_v1 = { .x = arrows.pos_right.x + arrows.size.x, .y = arrows.pos_right.y + arrows.size.y / 2 };
+    const Vector2 right_v2 = { .x = arrows.pos_right.x + arrows.size.x / 2, .y = arrows.pos_right.y };
+    const Vector2 right_v3 = { .x = arrows.pos_right.x + arrows.size.x / 2, .y = arrows.pos_right.y + arrows.size.y };
 
     DrawTriangle(right_v1, right_v2, right_v3, arrow_color);
     DrawTriangleLines(right_v1, right_v2, right_v3, border_color);
@@ -145,34 +143,23 @@ void draw_confirmation_window(void (*callback)(void *user_data), void *user_data
     if (selected_layer == 0) return;
 
     const Vector2 conf_window_size = { SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.5f };
-    const Vector2 conf_window_pos
-        = { (SCREEN_WIDTH - conf_window_size.x) / 2.0f, (SCREEN_HEIGHT - conf_window_size.y) / 2.0f };
+    const Vector2 conf_window_pos  = { (SCREEN_WIDTH - conf_window_size.x) / 2.0f, (SCREEN_HEIGHT - conf_window_size.y) / 2.0f };
 
     DrawRectangleV(conf_window_pos, conf_window_size, ui_background_color);
 
     const Vector2 button_size = { conf_window_size.x * 0.4f, conf_window_size.y * 0.25f };
 
-    uibutton_t yes_button = {
-        .pos    = { conf_window_pos.x + 30, conf_window_pos.y + conf_window_size.y * 0.5f },
-        .size   = button_size,
-        .column = 0,
-        .row    = 0,
-        .layer  = 1,
-        .text   = "Yes"
+    const uibutton_t yes_button = {
+        .pos = { conf_window_pos.x + 30, conf_window_pos.y + conf_window_size.y * 0.5f },
+          .size = button_size, .column = 0, .row = 0, .layer = 1, .text = "Yes"
     };
 
-    uibutton_t no_button = {
-        .pos    = { conf_window_pos.x + conf_window_size.x - button_size.x - 30,
-                   conf_window_pos.y + conf_window_size.y * 0.5f },
-        .size   = button_size,
-        .column = 1,
-        .row    = 0,
-        .layer  = 1,
-        .text   = "No"
+    const uibutton_t no_button = {
+        .pos = { conf_window_pos.x + conf_window_size.x - button_size.x - 30, conf_window_pos.y + conf_window_size.y * 0.5f },
+          .size = button_size, .column = 1, .row = 0, .layer = 1, .text = "No"
     };
 
-    DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2),
-             (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
+    DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
 
     static bool first_a_release = true; // We ignore the first release of A as it is released on the first frame
                                         // (since you need to release A to open this menu)

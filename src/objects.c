@@ -10,10 +10,7 @@
 #define MAX_OBJECTS 16
 #define MAX_OBJECT_SPEED 13
 
-#define COIN_SIZE                                                                                                      \
-    (Vector2) {                                                                                                        \
-        .x = 10, .y = 10                                                                                               \
-    }
+#define COIN_SIZE 10.0f
 
 // We split the bitfield in half, the first 8 bits being the pillars and the last 8 bits being the coins
 #define PILLARS_FIRST_BIT 0
@@ -24,7 +21,7 @@
 // and a coin on the 13th bit
 
 struct Objects {
-        Vector2 size[MAX_OBJECTS];
+        Vector2 size[8]; // only 8 because all coins are the same size
         Vector2 pos[MAX_OBJECTS];
         bool    is_shifted[MAX_OBJECTS];
 } objects = { 0 };
@@ -35,18 +32,18 @@ extern bool        is_teleporting;
 extern uint16_t    current_coins;
 
 // Bitfield that keeps track of which objects are active, 0 being inactive and 1 active
-uint16_t objects_bitfield;
+static uint16_t objects_bitfield;
 
-float base_object_speed;
+static float base_object_speed;
 float current_object_speed;
 
 // Cooldown variables
-float        coin_cooldown;
-float        pillar_cooldown;
-float        giant_pillar_cooldown;
-bbox_timer_t coin_spawn_timer;
-bbox_timer_t pillar_spawn_timer;
-bbox_timer_t giant_pillar_spawn_timer;
+static float        coin_cooldown;
+static float        pillar_cooldown;
+static float        giant_pillar_cooldown;
+static bbox_timer_t coin_spawn_timer;
+static bbox_timer_t pillar_spawn_timer;
+static bbox_timer_t giant_pillar_spawn_timer;
 
 void calculate_object_cooldowns(void) {
     coin_cooldown         = 8 / current_object_speed;
@@ -113,7 +110,6 @@ void spawn_coin(void) {
 
     objects_bitfield |= (1 << index);
 
-    objects.size[index]       = COIN_SIZE;
     objects.pos[index]        = (Vector2){ .x = SCREEN_WIDTH + 100, .y = GetRandomValue(190, FLOOR_HEIGHT - 100) };
     objects.is_shifted[index] = GetRandomValue(0, 1);
 
@@ -157,10 +153,7 @@ void update_objects(void) {
                 continue; // If the player and the coin's "plane" do not match, skip
                           // If the player is teleporting, we grab the coin no matter what
 
-            if (CheckCollisionCircleRec(
-                    objects.pos[index], objects.size[index].x,
-                    (Rectangle){
-                        .x = player.pos.x, .y = player.pos.y, .width = player.size.x, .height = player.size.y })) {
+            if (CheckCollisionCircleRec(objects.pos[index], COIN_SIZE, (Rectangle){ .x = player.pos.x, .y = player.pos.y, .width = player.size.x, .height = player.size.y })) {
                 objects_bitfield &= ~(1 << index);
                 // play_sfx_coin();
                 current_coins++;
@@ -170,8 +163,7 @@ void update_objects(void) {
 
         // Pillars
         if (index >= PILLARS_FIRST_BIT && index <= PILLARS_LAST_BIT) {
-            if (is_teleporting
-                || (!is_giant_pillar(objects.size[index]) && objects.is_shifted[index] != player.is_shifted))
+            if (is_teleporting || (!is_giant_pillar(objects.size[index]) && objects.is_shifted[index] != player.is_shifted))
                 continue; // If the player and the pillar's "plane" do not match, skip
                           // If the player is teleporting, we do not check for collisions
 
@@ -209,8 +201,8 @@ void draw_objects(void) {
         }
 
         if (objects_bitfield & (1 << i)) {
-            DrawCircleV(objects.pos[i], objects.size[i].x, color);
-            DrawCircleLinesExV(objects.pos[i], objects.size[i].x, 1.25, BLACK);
+            DrawCircleV(objects.pos[i], COIN_SIZE, color);
+            DrawCircleLinesExV(objects.pos[i], COIN_SIZE, 1.25, BLACK);
         }
     }
 }

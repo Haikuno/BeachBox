@@ -2,58 +2,23 @@
 #include "../ui.h"
 #include "../scene.h"
 #include "../save.h"
+#include "../timer.h"
 #include "../helper_functions.h"
 #include "../config.h"
 #include "../background.h"
 
-extern uint8_t column_count[];
-extern uint8_t row_count[];
-extern Color   ui_background_color;
-extern save_t  save;
+extern uint8_t      column_count[];
+extern uint8_t      row_count[];
+extern Color        ui_background_color;
+extern save_t       save;
+extern bbox_timer_t save_popup_timer;
 
-uibutton_t play_button = {
-    .pos    = { .x = 43,  .y = 170 },
-    .size   = { .x = 150, .y = 40  },
-    .column = 0,
-    .row    = 0,
-    .layer  = 0,
-    .text   = "Play",
-};
-
-uibutton_t shop_button = {
-    .pos    = { .x = 43,  .y = 220 },
-    .size   = { .x = 150, .y = 40  },
-    .column = 0,
-    .row    = 1,
-    .layer  = 0,
-    .text   = "Shop",
-};
-
-uibutton_t unlockables_button = {
-    .pos    = { .x = 43,  .y = 270 },
-    .size   = { .x = 150, .y = 40  },
-    .column = 0,
-    .row    = 2,
-    .layer  = 0,
-    .text   = "Unlockables",
-};
-
-uibutton_t options_button = {
-    .pos    = { .x = 43,  .y = 320 },
-    .size   = { .x = 150, .y = 40  },
-    .column = 0,
-    .row    = 3,
-    .layer  = 0,
-    .text   = "Options",
-};
-
-uibutton_t credits_button = {
-    .pos    = { .x = 43,  .y = 370 },
-    .size   = { .x = 150, .y = 40  },
-    .column = 0,
-    .row    = 4,
-    .layer  = 0,
-    .text   = "Credits",
+const uibutton_t mainmenu_buttons[] = {
+    { .pos = { 43, 170 }, .size = { 150, 40 }, .column = 0, .row = 0, .layer = 0, .text = "Play"        },
+    { .pos = { 43, 220 }, .size = { 150, 40 }, .column = 0, .row = 1, .layer = 0, .text = "Shop"        },
+    { .pos = { 43, 270 }, .size = { 150, 40 }, .column = 0, .row = 2, .layer = 0, .text = "Unlockables" },
+    { .pos = { 43, 320 }, .size = { 150, 40 }, .column = 0, .row = 3, .layer = 0, .text = "Options"     },
+    { .pos = { 43, 370 }, .size = { 150, 40 }, .column = 0, .row = 4, .layer = 0, .text = "Credits"     }
 };
 
 void init_mainmenu_scene(void) {
@@ -62,7 +27,7 @@ void init_mainmenu_scene(void) {
 }
 
 void update_mainmenu_scene(void) {
-    //
+    update_timer(&save_popup_timer);
 }
 
 void draw_mainmenu_scene(void) {
@@ -70,19 +35,19 @@ void draw_mainmenu_scene(void) {
     DrawText("BeachBox", 100, 100, 44, BLACK);
     DrawText("BeachBox", 98, 100, 44, RAYWHITE);
 
-    if (do_button(play_button, true)) {
+    if (do_button(mainmenu_buttons[0], true)) {
         change_scene(GAME);
     }
-    if (do_button(shop_button, true)) {
+    if (do_button(mainmenu_buttons[1], true)) {
         change_scene(SHOP);
     }
-    if (do_button(unlockables_button, true)) {
+    if (do_button(mainmenu_buttons[2], true)) {
         change_scene(UNLOCKABLES);
     }
-    if (do_button(options_button, true)) {
+    if (do_button(mainmenu_buttons[3], true)) {
         change_scene(OPTIONS);
     }
-    if (do_button(credits_button, true)) {
+    if (do_button(mainmenu_buttons[4], true)) {
         change_scene(CREDITS);
     }
 

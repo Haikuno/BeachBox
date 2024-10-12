@@ -9,7 +9,7 @@ extern uint8_t     column_count[];
 extern uint8_t     row_count[];
 extern const Color ui_background_color;
 
-uibutton_t exit_credits_button = {
+const uibutton_t exit_credits_button = {
     .pos    = { .x = 43,  .y = 370 },
     .size   = { .x = 150, .y = 40  },
     .column = 0,
@@ -18,16 +18,15 @@ uibutton_t exit_credits_button = {
     .text   = "Return",
 };
 
-struct BouncingImage {
+static struct BouncingImage {
         Vector2   position;
         Vector2   speed;
         Texture2D texture;
 } images[3];
 
-void initialize_images(void) {
-    const char *paths[]
-        = { "/rd/creditspngs/koslogo.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyopslogo.png" };
-    Vector2 positions[] = {
+static void initialize_images(void) {
+    const char *paths[]     = { "/rd/creditspngs/koslogo.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyopslogo.png" };
+    Vector2     positions[] = {
         { 50,  50  },
         { 490, 250 },
         { 300, 350 }
@@ -57,10 +56,8 @@ void update_credits_scene(void) {
         images[i].position.x += images[i].speed.x;
         images[i].position.y += images[i].speed.y;
 
-        if (images[i].position.x <= 0 || images[i].position.x + images[i].texture.width >= SCREEN_WIDTH)
-            images[i].speed.x *= -1;
-        if (images[i].position.y <= 0 || images[i].position.y + images[i].texture.height >= SCREEN_HEIGHT)
-            images[i].speed.y *= -1;
+        if (images[i].position.x <= 0 || images[i].position.x + images[i].texture.width >= SCREEN_WIDTH) images[i].speed.x *= -1;
+        if (images[i].position.y <= 0 || images[i].position.y + images[i].texture.height >= SCREEN_HEIGHT) images[i].speed.y *= -1;
     }
 }
 
@@ -74,6 +71,7 @@ void draw_credits_scene(void) {
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
     // TODO: add actual credits
+
     const char *credits_text  = "Made by Psyops :)";
     const char *credits_text2 = "Thanks to KallistiOS and Raylib";
     DrawText(credits_text, (int)(SCREEN_WIDTH / 4) + 35, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);

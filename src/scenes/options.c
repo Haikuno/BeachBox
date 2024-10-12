@@ -16,35 +16,35 @@ extern uint8_t     selected_row;
 
 // TODO: finish options scene
 
-uibutton_t newsave_options_button = {
+const uibutton_t newsave_options_button = {
     .pos    = { .x = 43,  .y = 220 },
     .size   = { .x = 150, .y = 40  },
     .column = 0,
-    .row    = 2,
+    .row    = 0,
     .layer  = 0,
     .text   = "New Save",
 };
 
-uibutton_t exit_options_button = {
+const uibutton_t exit_options_button = {
     .pos    = { .x = 43,  .y = 320 },
     .size   = { .x = 150, .y = 40  },
     .column = 0,
-    .row    = 3,
+    .row    = 1,
     .layer  = 0,
     .text   = "Return",
 };
 
 void init_options_scene(void) {
-    row_count[0]    = 4;
+    row_count[0]    = 2;
     column_count[0] = 1;
-    selected_row    = 3;
+    selected_row    = 1;
 }
 
 void update_options_scene(void) {
     //
 }
 
-static void new_game_callback(void *user_data) {
+static void new_game_wrapper(void *user_data) {
     new_game();
     change_scene(MAINMENU);
     return;
@@ -60,7 +60,7 @@ void draw_options_scene(void) {
     DrawText("WIP!", (int)(SCREEN_WIDTH / 4) + 95, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
 
     if (do_button(newsave_options_button, true)) {
-        callback        = new_game_callback;
+        callback        = new_game_wrapper;
         selected_layer  = 1;
         selected_column = 0;
         selected_row    = 0;

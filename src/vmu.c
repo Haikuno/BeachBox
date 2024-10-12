@@ -7,8 +7,7 @@
 #include "timer.h"
 #include "scene.h"
 
-#define SET_VMU_ANIMATION(animation)                                                                                   \
-    (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
+#define SET_VMU_ANIMATION(animation) (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
 
 // Vmu animations are drawn to the vmu frame buffer, and then presented to the screen
 // Each frame is just an array of raw bits, 1bpp (see vmu_animations.h)
@@ -17,13 +16,13 @@ extern scene_t current_scene;
 extern save_t  save;
 extern bool    is_game_over;
 
-vmufb_t vmu_fb;
-int     vmu_current_frame   = 0;
-int     vmu_menu_text_frame = 0;
+static vmufb_t vmu_fb;
+uint8_t        vmu_current_frame   = 0;
+uint8_t        vmu_menu_text_frame = 0;
 // The first frame is longer to give player time to look at the vmu
 bbox_timer_t vmu_menu_text_update_cooldown = { .duration = 0.5f, .is_running = true, .progress = 0 };
 
-void update_vmu_menu_text(void) {
+static void update_vmu_menu_text(void) {
     update_timer(&vmu_menu_text_update_cooldown);
 
     char buffer[16];
@@ -71,15 +70,15 @@ void update_vmu_menu_text(void) {
     vmu_menu_text_frame = (vmu_menu_text_frame + 1) % 8;
 }
 
-void update_vmu_credits_animation(void) {
-    static const char data[192]   = { 0 };
-    static int        width       = 1;
-    static bool       should_grow = true;
+static void update_vmu_credits_animation(void) {
+    static const char data[192]     = { 0 };
+    static int        current_width = 1;
+    static bool       should_grow   = true;
 
-    width = (width + (should_grow ? 1 : -1)) % 49;
-    if (width == 0 || width == 48) should_grow = !should_grow;
+    current_width = (current_width + (should_grow ? 1 : -1)) % 49;
+    if (current_width == 0 || current_width == 48) should_grow = !should_grow;
 
-    vmufb_paint_area(&vmu_fb, 0, 0, width, 32, data);
+    vmufb_paint_area(&vmu_fb, 0, 0, current_width, 32, data);
 }
 
 void *draw_vmu_animation(void *param) {
