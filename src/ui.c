@@ -92,7 +92,7 @@ void draw_rotating_sun(Vector2 anchor_pos) {
 
 bool do_button(uibutton_t button, bool is_active) {
     const bool  is_selected  = is_button_selected(button);
-    const bool  is_pressed   = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
+    const bool  is_pressed   = IsGamepadButtonReleased(0, BUTTON_A);
     const Color button_color = is_selected ? ui_button_selected_color : ui_button_color;
     Color       text_color   = is_selected ? BLACK : RAYWHITE;
 
@@ -111,8 +111,8 @@ bool do_button(uibutton_t button, bool is_active) {
 
 int do_arrows(uiarrows_t arrows) {
     const bool  is_selected      = are_arrows_selected(arrows);
-    const bool  is_right_pressed = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT);
-    const bool  is_left_pressed  = IsGamepadButtonReleased(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT);
+    const bool  is_right_pressed = IsGamepadButtonReleased(0, DPAD_RIGHT);
+    const bool  is_left_pressed  = IsGamepadButtonReleased(0, DPAD_LEFT);
     const Color arrow_color      = is_selected ? ui_button_selected_color : ui_button_color;
     const Color border_color     = BLACK;
 
@@ -164,7 +164,7 @@ void draw_confirmation_window(void (*callback)(void *user_data), void *user_data
     static bool first_a_release = true; // We ignore the first release of A as it is released on the first frame
                                         // (since you need to release A to open this menu)
 
-    if (first_a_release && IsGamepadButtonReleased(0, A)) {
+    if (first_a_release && IsGamepadButtonReleased(0, BUTTON_A)) {
         first_a_release = false;
         return;
     }

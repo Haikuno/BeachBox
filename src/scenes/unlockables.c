@@ -133,7 +133,7 @@ void draw_unlockables_scene(void) {
     if (!is_hat_unlocked(save.hat_index)) {
         draw_hat_price(save.hat_index);
         const bool can_buy_hat = save.total_coins >= hat_price[save.hat_index] && selected_row != 2 && save.hat_index != HAT_CROWN;
-        if (IsGamepadButtonReleased(0, A) && can_buy_hat) {
+        if (IsGamepadButtonReleased(0, BUTTON_A) && can_buy_hat) {
             save.total_coins                   -= hat_price[save.hat_index];
             save.hats_unlocked[save.hat_index]  = true;
         }

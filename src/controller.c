@@ -8,6 +8,7 @@ extern scene_t current_scene;
 extern bool    is_game_over;
 extern bool    is_game_paused;
 
+// NOTE: This is in PascalCase to follow raylib naming conventions
 bool IsTriggerPressed(int gamepad, trigger_t trigger) {
     static bool is_left_trigger_down;
     static bool is_right_trigger_down;
@@ -28,56 +29,74 @@ bool IsTriggerPressed(int gamepad, trigger_t trigger) {
     return false;
 }
 
-// NOTE: This is in PascalCase to follow raylib naming conventions
 void update_controller(void) {
+    if (!IsGamepadAvailable(0)) return;
+
+    // pressed
+    const bool is_left_pressed      = IsGamepadButtonPressed(0, DPAD_LEFT);
+    const bool is_right_pressed     = IsGamepadButtonPressed(0, DPAD_RIGHT);
+    const bool is_up_pressed        = IsGamepadButtonPressed(0, DPAD_UP);
+    const bool is_down_pressed      = IsGamepadButtonPressed(0, DPAD_DOWN);
+    const bool is_l_trigger_pressed = IsTriggerPressed(0, LEFT_TRIGGER);
+    const bool is_r_trigger_pressed = IsTriggerPressed(0, RIGHT_TRIGGER);
+    const bool is_start_pressed     = IsGamepadButtonPressed(0, BUTTON_START);
+
+    // released
+    const bool is_a_released = IsGamepadButtonReleased(0, BUTTON_A);
+
+    // down
+    const bool is_left_down  = IsGamepadButtonDown(0, DPAD_LEFT);
+    const bool is_right_down = IsGamepadButtonDown(0, DPAD_RIGHT);
+    const bool is_a_down     = IsGamepadButtonDown(0, BUTTON_A);
+    const bool is_x_down     = IsGamepadButtonDown(0, BUTTON_X);
+
     switch (current_scene) {
         case GAME:
             if (is_game_over) {
-                if (IsGamepadButtonPressed(0, DPAD_LEFT)) {
+                if (is_left_pressed) {
                     move_cursor('L');
-                } else if (IsGamepadButtonPressed(0, DPAD_RIGHT)) {
+                } else if (is_right_pressed) {
                     move_cursor('R');
                 }
                 break;
             }
 
-            if (IsGamepadButtonPressed(0, START)) {
+            if (is_start_pressed) {
                 is_game_paused = !is_game_paused;
             }
 
             if (is_game_paused) break;
 
-            float axis_movement_left_x = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
-
+            const float axis_movement_left_x = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
             if (axis_movement_left_x != 0) {
                 move_player((Vector2){ .x = axis_movement_left_x, .y = 0 });
             } else {
-                if (IsGamepadButtonDown(0, DPAD_LEFT)) {
+                if (is_left_down) {
                     move_player((Vector2){ .x = -1, .y = 0 });
                 }
-                if (IsGamepadButtonDown(0, DPAD_RIGHT)) {
+                if (is_right_down) {
                     move_player((Vector2){ .x = 1, .y = 0 });
                 }
             }
 
-            if (IsGamepadButtonDown(0, A)) {
+            if (is_a_down) {
                 jump();
-            } else if (IsGamepadButtonReleased(0, A)) {
+            } else if (is_a_released) {
                 cut_jump();
             }
 
-            if (IsTriggerPressed(0, LEFT_TRIGGER)) {
+            if (is_l_trigger_pressed) {
                 slow_down();
             }
-            if (IsTriggerPressed(0, RIGHT_TRIGGER)) {
+            if (is_r_trigger_pressed) {
                 teleport();
             }
 
-            shift_player(IsGamepadButtonDown(0, X));
+            shift_player(is_x_down);
             break;
 
         case RAYLOGO:
-            if (IsGamepadButtonPressed(0, START)) {
+            if (is_start_pressed) {
                 change_scene(LOADING);
             }
 
@@ -87,16 +106,13 @@ void update_controller(void) {
         case UNLOCKABLES:
         case OPTIONS:
         case CREDITS:
-            if (IsGamepadButtonPressed(0, DPAD_LEFT)) {
+            if (is_left_pressed) {
                 move_cursor('L');
-            }
-            if (IsGamepadButtonPressed(0, DPAD_RIGHT)) {
+            } else if (is_right_pressed) {
                 move_cursor('R');
-            }
-            if (IsGamepadButtonPressed(0, DPAD_UP)) {
+            } else if (is_up_pressed) {
                 move_cursor('U');
-            }
-            if (IsGamepadButtonPressed(0, DPAD_DOWN)) {
+            } else if (is_down_pressed) {
                 move_cursor('D');
             }
             break;

@@ -93,7 +93,7 @@ static void draw_game_over(void) {
         change_scene(MAINMENU);
     }
 
-    if (held_a_during_death && IsGamepadButtonReleased(0, A)) {
+    if (held_a_during_death && IsGamepadButtonReleased(0, BUTTON_A)) {
         held_a_during_death = false;
     }
 }
@@ -147,7 +147,7 @@ void draw_game_scene(void) {
 }
 
 void lose_game(void) {
-    if (IsGamepadButtonDown(0, A)) held_a_during_death = true;
+    if (IsGamepadButtonDown(0, BUTTON_A)) held_a_during_death = true;
     is_game_over = true;
     // play_sfx_game_over(); TODO: audio
     save.total_runs++;
