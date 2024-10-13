@@ -89,8 +89,7 @@ void draw_sand_particles(void) {
             if (is_game_paused) continue;
             if (!sand_particle_spawn_timer.is_running && GetRandomValue(0, 300) == 0) {
                 start_timer(&sand_particle_spawn_timer, 0.15);
-                sand_particles[i].pos
-                    = (Vector2){ SCREEN_WIDTH, GetRandomValue(FLOOR_HEIGHT + 22, SCREEN_HEIGHT - 22) };
+                sand_particles[i].pos    = (Vector2){ SCREEN_WIDTH, GetRandomValue(FLOOR_HEIGHT + 22, SCREEN_HEIGHT - 22) };
                 sand_particles[i].active = true;
             }
         }

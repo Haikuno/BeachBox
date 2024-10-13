@@ -82,6 +82,7 @@ void update_current_scene(void) {
         = { [RAYLOGO] = update_raylogo_scene, [LOADING] = update_loading_scene,         [MAINMENU] = update_mainmenu_scene, [GAME] = update_game_scene,
             [SHOP] = update_shop_scene,       [UNLOCKABLES] = update_unlockables_scene, [OPTIONS] = update_options_scene,   [CREDITS] = update_credits_scene };
     update_scene_functions[current_scene]();
+    update_timer(&save_popup_timer);
 }
 
 void draw_current_scene(void) {

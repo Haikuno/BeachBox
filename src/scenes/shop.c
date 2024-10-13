@@ -89,11 +89,9 @@ inline bool can_upgrade(enum ShopOptions option) {
     switch (option) {
         case TELEPORT_COOLDOWN:
         case TELEPORT_DISTANCE:
-            return save.player_upgrade_levels.teleport_unlocked
-                   && get_upgrade_level(option) < max_upgrade_levels[option];
+            return save.player_upgrade_levels.teleport_unlocked && get_upgrade_level(option) < max_upgrade_levels[option];
         case SLOWDOWN_COST:
-            return save.player_upgrade_levels.slowdown_unlocked
-                   && get_upgrade_level(option) < max_upgrade_levels[option];
+            return save.player_upgrade_levels.slowdown_unlocked && get_upgrade_level(option) < max_upgrade_levels[option];
         default:
             return get_upgrade_level(option) < max_upgrade_levels[option];
     }
@@ -150,14 +148,11 @@ void draw_shop_description(void) {
 
     const char *description = descriptions[selected_shop_option];
     Color       cost_color  = can_afford(selected_shop_option) ? WHITE : RED;
-    Color       level_color
-        = get_upgrade_level(selected_shop_option) == max_upgrade_levels[selected_shop_option] ? DARKGREEN : WHITE;
+    Color       level_color = get_upgrade_level(selected_shop_option) == max_upgrade_levels[selected_shop_option] ? DARKGREEN : WHITE;
 
     DrawText(description, 270, 50, 20, WHITE);
     DrawText(TextFormat("Cost: %d coins", costs[selected_shop_option]), 270, 250, 20, cost_color);
-    DrawText(
-        TextFormat("Level: %d/%d", get_upgrade_level(selected_shop_option), max_upgrade_levels[selected_shop_option]),
-        270, 300, 20, level_color);
+    DrawText(TextFormat("Level: %d/%d", get_upgrade_level(selected_shop_option), max_upgrade_levels[selected_shop_option]), 270, 300, 20, level_color);
 }
 
 void jump_to_buy_button(void) {

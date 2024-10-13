@@ -55,8 +55,7 @@ void draw_raylogo_scene(void) {
             float amount       = BBOX_MIN(1, BBOX_MAX(0, time_elapsed - delay) * 2);
             float current_size = Lerp(0, RAYLOGO_SQUARE_SIZE, amount);
 
-            Vector2 pos = { .x = SCREEN_WIDTH / 2 - RAYLOGO_WIDTH / 2 + column * RAYLOGO_SQUARE_SIZE,
-                            .y = SCREEN_HEIGHT / 2 - RAYLOGO_HEIGHT / 2 + row * RAYLOGO_SQUARE_SIZE };
+            Vector2 pos = { .x = SCREEN_WIDTH / 2 - RAYLOGO_WIDTH / 2 + column * RAYLOGO_SQUARE_SIZE, .y = SCREEN_HEIGHT / 2 - RAYLOGO_HEIGHT / 2 + row * RAYLOGO_SQUARE_SIZE };
 
             DrawRectangleV(pos, (Vector2){ current_size, current_size }, BLACK);
         }

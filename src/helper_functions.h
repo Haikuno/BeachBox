@@ -21,16 +21,13 @@ inline void DrawRectangleLinesExV(Vector2 position, Vector2 size, float lineThic
 
 inline void DrawCircleLinesExV(Vector2 center, float radius, float lineThick, Color color) {
     for (int i = 0; i < 360; i += 10) {
-        DrawLineEx(
-            (Vector2){ center.x + cosf(DEG2RAD * i) * radius, center.y + sinf(DEG2RAD * i) * radius },
-            (Vector2){ center.x + cosf(DEG2RAD * (i + 10)) * radius, center.y + sinf(DEG2RAD * (i + 10)) * radius },
-            lineThick, color);
+        DrawLineEx((Vector2){ center.x + cosf(DEG2RAD * i) * radius, center.y + sinf(DEG2RAD * i) * radius },
+                   (Vector2){ center.x + cosf(DEG2RAD * (i + 10)) * radius, center.y + sinf(DEG2RAD * (i + 10)) * radius }, lineThick, color);
     }
 }
 
 inline bool CheckCollisionRectangleV(Vector2 vec1, Vector2 pos1, Vector2 vec2, Vector2 pos2) {
-    return CheckCollisionRecs((Rectangle){ vec1.x, vec1.y, pos1.x, pos1.y },
-                              (Rectangle){ vec2.x, vec2.y, pos2.x, pos2.y });
+    return CheckCollisionRecs((Rectangle){ vec1.x, vec1.y, pos1.x, pos1.y }, (Rectangle){ vec2.x, vec2.y, pos2.x, pos2.y });
 }
 
 inline void invert_color(Color *color) {

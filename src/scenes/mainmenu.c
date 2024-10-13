@@ -7,11 +7,10 @@
 #include "../config.h"
 #include "../background.h"
 
-extern uint8_t      column_count[];
-extern uint8_t      row_count[];
-extern Color        ui_background_color;
-extern save_t       save;
-extern bbox_timer_t save_popup_timer;
+extern uint8_t column_count[];
+extern uint8_t row_count[];
+extern Color   ui_background_color;
+extern save_t  save;
 
 const uibutton_t mainmenu_buttons[] = {
     { .pos = { 43, 170 }, .size = { 150, 40 }, .column = 0, .row = 0, .layer = 0, .text = "Play"        },
@@ -27,7 +26,7 @@ void init_mainmenu_scene(void) {
 }
 
 void update_mainmenu_scene(void) {
-    update_timer(&save_popup_timer);
+    //
 }
 
 void draw_mainmenu_scene(void) {

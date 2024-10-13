@@ -116,8 +116,7 @@ void teleport(void) {
 
 void update_player(void) {
     if (is_teleporting) {
-        player.velocity.y
-            = BBOX_MIN(player.velocity.y, 0); // If the player was falling down before teleporting, we set it back to 0
+        player.velocity.y = BBOX_MIN(player.velocity.y, 0); // If the player was falling down before teleporting, we set it back to 0
         update_timer(&teleport_duration_timer);
         if (!teleport_duration_timer.is_running) is_teleporting = false;
     }

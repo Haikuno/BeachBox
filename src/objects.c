@@ -35,7 +35,7 @@ extern uint16_t    current_coins;
 static uint16_t objects_bitfield;
 
 static float base_object_speed;
-float current_object_speed;
+float        current_object_speed;
 
 // Cooldown variables
 static float        coin_cooldown;

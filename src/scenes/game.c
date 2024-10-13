@@ -12,7 +12,6 @@
 #include "game.h"
 
 extern save_t       save;
-extern bbox_timer_t save_popup_timer;
 extern character_t  player;
 extern bbox_timer_t teleport_cooldown_timer;
 extern Color        ui_button_color;
@@ -67,7 +66,6 @@ void update_game_scene(void) {
     if (is_game_paused) return;
     update_objects();
     update_player();
-    update_timer(&save_popup_timer);
 }
 
 static void draw_game_over(void) {
