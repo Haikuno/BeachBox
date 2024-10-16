@@ -74,7 +74,7 @@ static bool is_button_selected(uibutton_t button) {
 }
 
 bool are_arrows_selected(uiarrows_t arrows) {
-    return arrows.column == selected_column && arrows.row == selected_row;
+    return arrows.column == selected_column && arrows.row == selected_row && arrows.layer == selected_layer;
 }
 
 void draw_rotating_sun(Vector2 anchor_pos) {

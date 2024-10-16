@@ -20,6 +20,8 @@ extern const Color ui_button_selected_color;
 extern uint8_t     column_count[];
 extern uint8_t     row_count[];
 extern uint8_t     selected_row;
+extern uint8_t     selected_column;
+extern uint8_t     selected_layer;
 
 const Vector2 buttons_size    = { .x = 200, .y = 50 };
 const float   buttons_padding = 15;
@@ -73,11 +75,22 @@ void draw_hat_price(uint8_t index) {
 
 void init_unlockables_scene(void) {
     init_player();
-    row_count[0] = 3;
+    row_count[0]    = 3;
+    column_count[0] = 1;
+}
+
+static void init_unlockables_scene_wrapper(void *user_data) {
+    init_unlockables_scene();
 }
 
 void update_unlockables_scene(void) {
     //
+}
+
+static void purchase_hat(void *user_data) {
+    save.total_coins                   -= hat_price[save.hat_index];
+    save.hats_unlocked[save.hat_index]  = true;
+    init_unlockables_scene_wrapper(NULL);
 }
 
 void draw_unlockables_scene(void) {
@@ -125,17 +138,20 @@ void draw_unlockables_scene(void) {
     const uiarrows_t hat_arrows = {
         .column    = 0,
         .row       = 0,
+        .layer     = 0,
         .pos_left  = { .x = player_pos_unlockables.x - arrows_size.x * 2,                         .y = player_pos_unlockables.y - arrows_size.y * 0.8 },
         .pos_right = { .x = player_pos_unlockables.x + player_size_unlockables.x + arrows_size.x, .y = player_pos_unlockables.y - arrows_size.y * 0.8 },
         .size      = arrows_size,
     };
 
+    static void (*callback)(void *user_data) = NULL;
+
     if (!is_hat_unlocked(save.hat_index)) {
         draw_hat_price(save.hat_index);
         const bool can_buy_hat = save.total_coins >= hat_price[save.hat_index] && selected_row != 2 && save.hat_index != HAT_CROWN;
         if (IsGamepadButtonReleased(0, BUTTON_A) && can_buy_hat) {
-            save.total_coins                   -= hat_price[save.hat_index];
-            save.hats_unlocked[save.hat_index]  = true;
+            callback       = purchase_hat;
+            selected_layer = 1;
         }
     }
 
@@ -149,6 +165,7 @@ void draw_unlockables_scene(void) {
     const uiarrows_t color_arrows = {
         .column    = 0,
         .row       = 1,
+        .layer     = 0,
         .pos_left  = { .x = player_pos_unlockables.x - arrows_size.x * 2,                         .y = player_pos_unlockables.y + arrows_size.y * 0.8 },
         .pos_right = { .x = player_pos_unlockables.x + player_size_unlockables.x + arrows_size.x, .y = player_pos_unlockables.y + arrows_size.y * 0.8 },
         .size      = arrows_size,
@@ -165,4 +182,6 @@ void draw_unlockables_scene(void) {
     if (do_button(unlockables_confirm_button, is_hat_unlocked(save.hat_index))) {
         change_scene(MAINMENU);
     }
+
+    draw_confirmation_window(callback, NULL, init_unlockables_scene_wrapper, NULL, "Buy hat?");
 }

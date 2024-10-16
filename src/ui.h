@@ -22,6 +22,7 @@ typedef struct UIArrows {
         const Vector2 pos_right;
         const uint8_t column;
         const uint8_t row;
+        const uint8_t layer;
 } uiarrows_t;
 
 // Moves the "cursor" when the player presses the D-Pad, changing the selected UI element
