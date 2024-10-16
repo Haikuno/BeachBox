@@ -1,4 +1,3 @@
-#include <raymath.h>
 #include "../ui.h"
 #include "../timer.h"
 #include "../config.h"
@@ -9,6 +8,7 @@
 #include "../helper_functions.h"
 #include "../background.h"
 #include "../objects.h"
+#include <raymath.h>
 #include "game.h"
 
 extern save_t       save;
