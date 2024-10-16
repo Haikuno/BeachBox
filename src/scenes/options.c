@@ -40,6 +40,11 @@ void init_options_scene(void) {
     selected_row    = 1;
 }
 
+// Called when "NO" is pressed when exiting, to reset column and row count
+static void init_options_scene_wrapper(void *user_data) {
+    init_options_scene();
+}
+
 void update_options_scene(void) {
     //
 }
@@ -70,5 +75,5 @@ void draw_options_scene(void) {
         change_scene(MAINMENU);
     }
 
-    draw_confirmation_window(callback, NULL);
+    draw_confirmation_window(callback, NULL, init_options_scene_wrapper, NULL, "Start a new game?");
 }

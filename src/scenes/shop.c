@@ -6,6 +6,8 @@
 #include "../config.h"
 #include "shop.h"
 
+#include <stdio.h> // TODO: remove, debug
+
 extern save_t      save;
 extern uint8_t     column_count[MAX_COLUMNS];
 extern uint8_t     row_count[MAX_ROWS];
@@ -172,6 +174,11 @@ void init_shop_scene(void) {
     row_count[1] = row_count[2] = 1;
 }
 
+// Called when "NO" is pressed when exiting, to reset column and row count
+static void init_shop_scene_wrapper(void *user_data) {
+    init_shop_scene();
+}
+
 void update_shop_scene(void) {
     if (selected_column == 0 && selected_layer == 0) {
         selected_shop_option = selected_row;
@@ -197,10 +204,7 @@ void draw_shop_scene(void) {
 
     // Buy
     if (do_button(shop_buttons[7], can_buy) && can_buy) {
-        callback        = purchase;
-        selected_layer  = 1;
-        selected_column = 0;
-        selected_row    = 0;
+        callback = purchase;
     }
 
     // Exit
@@ -218,5 +222,16 @@ void draw_shop_scene(void) {
         }
     }
 
-    draw_confirmation_window(callback, NULL);
+    if (!callback) {
+        return;
+    }
+
+    if (callback == return_to_main_menu) {
+        draw_confirmation_window(callback, NULL, init_shop_scene_wrapper, NULL, "Exit?");
+        return;
+    }
+
+    // Purchase
+    callback(NULL);
+    callback = NULL;
 }

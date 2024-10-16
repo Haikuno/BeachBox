@@ -88,17 +88,20 @@ void draw_loading_scene(void) {
     draw_background();
 
     static void (*callback)(void *user_data) = NULL;
+    static char message[50];
 
     if (do_button(load_button, true) && !error_popup_timer.is_running) {
         callback       = load_game_wrapper;
         selected_layer = 1;
+        snprintf(message, sizeof(message), "Load the game?");
     }
 
     if (do_button(new_game_button, true) && !error_popup_timer.is_running) {
         callback       = new_game_wrapper;
         selected_layer = 1;
+        snprintf(message, sizeof(message), "Start a new game?");
     }
 
-    draw_confirmation_window(callback, NULL);
+    draw_confirmation_window(callback, NULL, NULL, NULL, message);
     draw_error_popup();
 }

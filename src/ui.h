@@ -37,8 +37,9 @@ bool do_button(uibutton_t button, bool is_active);
 // Draws UIArrows. Returns 1 if right is pressed, -1 if left is pressed, 0 otherwise
 int do_arrows(uiarrows_t arrows);
 
-// Takes a function pointer to call when the action is confirmed, as well as the params to pass to that function
-void draw_confirmation_window(void (*callback)(void *user_data), void *user_data);
+// Takes two callbacks, one for confirming, other for canceling, their respective user_data params
+// Also takes a message to display
+void draw_confirmation_window(void (*callback_yes)(void *user_data), void *user_data_yes, void (*callback_no)(void *user_data), void *user_data_no, char *message);
 
 bool are_arrows_selected(uiarrows_t arrows);
 

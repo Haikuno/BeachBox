@@ -139,7 +139,7 @@ int do_arrows(uiarrows_t arrows) {
     return 0;
 }
 
-void draw_confirmation_window(void (*callback)(void *user_data), void *user_data) {
+void draw_confirmation_window(void (*callback_yes)(void *user_data), void *user_data_yes, void (*callback_no)(void *user_data), void *user_data_no, char *message) {
     if (selected_layer == 0) return;
 
     const Vector2 conf_window_size = { SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.5f };
@@ -159,7 +159,7 @@ void draw_confirmation_window(void (*callback)(void *user_data), void *user_data
           .size = button_size, .column = 1, .row = 0, .layer = 1, .text = "No"
     };
 
-    DrawText("Are you sure?", (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText("Are you sure?", 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
+    DrawText(message, (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText(message, 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
 
     static bool first_a_release = true; // We ignore the first release of A as it is released on the first frame
                                         // (since you need to release A to open this menu)
@@ -170,14 +170,19 @@ void draw_confirmation_window(void (*callback)(void *user_data), void *user_data
     }
 
     if (do_button(yes_button, true)) {
-        callback(user_data);
+        if (callback_yes) callback_yes(user_data_yes);
         selected_layer  = 0;
+        selected_column = 0;
+        selected_row    = 0;
         first_a_release = true;
         return;
     }
 
     if (do_button(no_button, true)) {
+        if (callback_no) callback_no(user_data_no);
         selected_layer  = 0;
+        selected_column = 0;
+        selected_row    = 0;
         first_a_release = true;
         return;
     }
