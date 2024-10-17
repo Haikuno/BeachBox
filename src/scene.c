@@ -28,7 +28,7 @@ extern uint8_t      vmu_menu_text_frame;
 extern bbox_timer_t vmu_menu_text_update_cooldown;
 extern bbox_timer_t save_popup_timer;
 
-scene_t current_scene;
+scene_t current_scene = RAYLOGO;
 
 static void *save_game_wrapper(void *arg) {
     save_game();

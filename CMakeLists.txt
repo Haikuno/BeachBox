@@ -4,6 +4,7 @@ set(KOS_BASE /opt/toolchains/dc/kos)
 set(KOS_CC_BASE /opt/toolchains/dc/sh-elf)
 set(KOS_SUBARCH pristine)
 set(KOS_PORTS ${KOS_BASE}/../kos-ports)
+include_directories(${KOS_PORTS}/include/raylib)
 
 include(${KOS_BASE}/utils/cmake/dreamcast.toolchain.cmake)
 
@@ -23,7 +24,7 @@ SET (SRCS main.c
     src/scenes/raylogo.c
     src/scenes/shop.c
     src/scenes/unlockables.c
-    # src/audio.c
+    src/audio.c
     src/background.c
     src/controller.c
     src/hats.c

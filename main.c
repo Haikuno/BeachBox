@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include <stdbool.h>
 #include <kos/thread.h>
+#include "src/audio.h"
 #include "src/config.h"
 #include "src/scene.h"
 #include "src/save.h"
@@ -25,7 +26,7 @@ void init_game(void) {
 
 void update_game(void) {
     update_controller();
-    // update_song();
+    update_song();
     update_current_scene();
 
 #ifdef DEBUG_INFINITE_COINS
@@ -53,7 +54,7 @@ void draw_game(void) {
 
 int main(int argc, char **argv) {
     init_game();
-    // init_sounds();
+    init_sounds();
 
     while (true) {
         update_game();
