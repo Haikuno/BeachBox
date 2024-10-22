@@ -11,7 +11,7 @@
 // Debug settings, just comment one out to turn it on
 
 // #define DEBUG_DRAW_FPS
-#define DEBUG_DRAW_CURSOR_INFO
+// #define DEBUG_DRAW_CURSOR_INFO
 // #define DEBUG_GODMODE
 // #define DEBUG_INFINITE_COINS
 
