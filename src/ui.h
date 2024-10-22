@@ -27,7 +27,7 @@ typedef struct UIArrows {
 
 // Moves the "cursor" when the player presses the D-Pad, changing the selected UI element
 // Direction is one of 'L', 'R', 'U', 'D' for left, right, up, down
-void move_cursor(char direction);
+void move_cursor(const char direction);
 
 // Draws a rotating sun around the selected UIButton
 void draw_rotating_sun(Vector2 anchor_pos);

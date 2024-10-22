@@ -8,6 +8,7 @@
 #include "../helper_functions.h"
 #include "../background.h"
 #include "../objects.h"
+#include "../audio.h"
 #include <raymath.h>
 #include "game.h"
 
@@ -149,7 +150,7 @@ void draw_game_scene(void) {
 void lose_game(void) {
     if (IsGamepadButtonDown(0, BUTTON_A)) held_a_during_death = true;
     is_game_over = true;
-    // play_sfx_game_over(); TODO: audio
+    play_sfx_game_over();
     save.total_runs++;
     save.total_coins += current_coins;
     new_high_score    = save.high_score < current_coins;

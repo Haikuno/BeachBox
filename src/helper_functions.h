@@ -6,6 +6,7 @@
 
 #define BBOX_MIN(a, b) ((a) < (b) ? (a) : (b))
 #define BBOX_MAX(a, b) ((a) > (b) ? (a) : (b))
+#define BBOX_CLAMP(a, min, max) ((a) < (min) ? (min) : ((a) > (max) ? (max) : (a)))
 
 #define BBOX_LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
 

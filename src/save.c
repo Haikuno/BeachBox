@@ -246,8 +246,8 @@ int save_game(void) {
         return -1;
     }
 
-    size_t save_size   = sizeof(save);
-    size_t header_size = sizeof(save.vms_menu_description) + sizeof(save.dc_description) + sizeof(save.app_identifier) + sizeof(save.number_icons) + sizeof(save.icon_animation_speed)
+    const size_t save_size   = sizeof(save);
+    const size_t header_size = sizeof(save.vms_menu_description) + sizeof(save.dc_description) + sizeof(save.app_identifier) + sizeof(save.number_icons) + sizeof(save.icon_animation_speed)
                          + sizeof(save.graphic_eyecatch_type) + sizeof(save.crc) + sizeof(save.bytes_after_header) + sizeof(save.header_reserved) + sizeof(save.icon_palette)
                          + sizeof(save.icon_bitmaps) + sizeof(save.eyecatch_palette) + sizeof(save.eyecatch_bitmap);
 
@@ -263,7 +263,7 @@ int save_game(void) {
     memcpy(save.eyecatch_palette, bios_eyecatch_palette, sizeof(bios_eyecatch_palette));
     memcpy(save.eyecatch_bitmap, bios_eyecatch_bitmap, sizeof(bios_eyecatch_bitmap));
 
-    int free_blocks = vmufs_free_blocks(vmu);
+    const int free_blocks = vmufs_free_blocks(vmu);
 
     if (free_blocks * 512 < save_size) {
         snprintf(save_popup_text, sizeof(save_popup_text), "Not enough space!");

@@ -8,14 +8,13 @@
 #include "audio.h"
 #include "scene.h"
 
-int sfxVolume = 120;
+int sfxVolume   = 120;
 int musicVolume = 120;
-
 
 #define MAX_VOLUME 200
 #define MIN_VOLUME 0
 
-
+extern scene_t current_scene;
 
 sfxhnd_t sfx_coin;
 sfxhnd_t sfx_slowdown;
@@ -37,36 +36,27 @@ extern void play_sfx_shop_purchase(void);
 
 struct SceneType;
 
-
 void init_sounds() {
-    
 
     snd_init();
     snd_stream_init();
     sfx_coin = snd_sfx_load("rd/audio/coin-adpcm.wav");
 
-
     sfx_teleport = snd_sfx_load("rd/audio/teleport-adpcm.wav");
     sfx_gameover = snd_sfx_load("rd/audio/gameover-adpcm.wav");
     sfx_slowdown = snd_sfx_load("rd/audio/slowdown-adpcm.wav");
-
 }
 
-
-
-
-
-int newSong = 0;
+int newSong     = 0;
 int currentSong = 0;
-
 
 void update_song() {
     switch (current_scene) {
         case RAYLOGO:
-            newSong = 2;  
+            newSong = 2;
             break;
         case LOADING:
-            newSong = 2;  
+            newSong = 2;
             break;
         case SHOP:
             newSong = 2;
@@ -78,17 +68,17 @@ void update_song() {
             newSong = 2;
             break;
         case CREDITS:
-            newSong = 2; 
+            newSong = 2;
             break;
         case MAINMENU:
         case GAME:
-            newSong = 1;  
+            newSong = 1;
             break;
     }
 
     if (newSong != currentSong) {
         currentSong = newSong;
-        
+
         switch (currentSong) {
             case 1:
                 adx_stop();
@@ -123,7 +113,7 @@ void play_sfx_game_over(void) {
 }
 
 void play_sfx_jump(void) {
-    //snd_sfx_play_chn(4, beep1, sfxVolume, 128);
+    // snd_sfx_play_chn(4, beep1, sfxVolume, 128);
 }
 
 void play_sfx_teleport(void) {
@@ -131,19 +121,19 @@ void play_sfx_teleport(void) {
 }
 
 void play_sfx_menu_move(void) {
-    //snd_sfx_play_chn(4, beep1, sfxVolume, 128);
+    // snd_sfx_play_chn(4, beep1, sfxVolume, 128);
 }
 
 void play_sfx_menu_select(void) {
-    //snd_sfx_play_chn(4, beep1, sfxVolume, 128);
+    // snd_sfx_play_chn(4, beep1, sfxVolume, 128);
 }
 
 void play_sfx_menu_exit(void) {
-    //snd_sfx_play_chn(4, beep1, sfxVolume, 128);
+    // snd_sfx_play_chn(4, beep1, sfxVolume, 128);
 }
 
 void play_sfx_menu_inactive_button(void) {
-    //snd_sfx_play_chn(4, beep1, sfxVolume, 128);
+    // snd_sfx_play_chn(4, beep1, sfxVolume, 128);
 }
 
 void play_sfx_shop_purchase(void) {

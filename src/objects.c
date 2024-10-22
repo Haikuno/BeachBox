@@ -3,6 +3,7 @@
 #include "timer.h"
 #include "config.h"
 #include "objects.h"
+#include "audio.h"
 #include "player.h"
 #include "helper_functions.h"
 #include "scenes/game.h"
@@ -155,7 +156,7 @@ void update_objects(void) {
 
             if (CheckCollisionCircleRec(objects.pos[index], COIN_SIZE, (Rectangle){ .x = player.pos.x, .y = player.pos.y, .width = player.size.x, .height = player.size.y })) {
                 objects_bitfield &= ~(1 << index);
-                // play_sfx_coin();
+                play_sfx_coin();
                 current_coins++;
                 player.meter = BBOX_MIN(player.meter + 20, player.max_meter);
             }

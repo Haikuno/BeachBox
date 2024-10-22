@@ -4,6 +4,8 @@
 #include "helper_functions.h"
 #include "ui.h"
 
+#include <stdio.h>
+
 uint8_t selected_column = 0;
 uint8_t selected_row    = 0;
 uint8_t selected_layer  = 0;
@@ -15,15 +17,15 @@ const Color ui_background_color      = { 1, 17, 35, 180 };
 const Color ui_button_color          = { 1, 35, 69, 200 };
 const Color ui_button_selected_color = { 230, 230, 230, 222 };
 
-void move_cursor(char direction) {
+void move_cursor(const char direction) {
     // All popups in this game only have two buttons on the same row, so we can assume this:
     if (selected_layer == 1) {
         row_count[0]    = 1;
         column_count[0] = 2;
     }
 
-    const bool can_move_cursor_left  = selected_column > 0 || (selected_column > 0 && row_count[selected_column - 1] > 0);
-    const bool can_move_cursor_right = selected_column < column_count[selected_row] - 1 || (selected_column < MAX_COLUMNS && row_count[selected_column + 1] > 0);
+    const bool can_move_cursor_left  = selected_column > 0;
+    const bool can_move_cursor_right = selected_column < column_count[selected_row] - 1;
     const bool can_move_cursor_up    = selected_row > 0;
     const bool can_move_cursor_down  = selected_row < row_count[selected_column] - 1;
 
@@ -31,15 +33,33 @@ void move_cursor(char direction) {
         case 'L':
             if (can_move_cursor_left) {
                 selected_column--;
+            } else {
+                // Check if there's a button above or below
+                for (int8_t offset = selected_row - MAX_ROWS; offset <= MAX_ROWS; offset++) {
+                    uint8_t new_row = selected_row + offset;
+                    if (new_row >= 0 && new_row < row_count[selected_column]) {
+                        selected_column--;
+                        selected_row = new_row;
+                        break;
+                    }
+                }
             }
-            selected_row = BBOX_MIN(selected_row, row_count[selected_column] - 1);
             break;
 
         case 'R':
             if (can_move_cursor_right) {
                 selected_column++;
+            } else {
+                // Check if there's a button above or below
+                for (int8_t offset = selected_row - MAX_ROWS; offset <= MAX_ROWS; offset++) {
+                    uint8_t new_row = selected_row + offset;
+                    if (new_row >= 0 && new_row < row_count[selected_column + 1]) {
+                        selected_column++;
+                        selected_row = new_row;
+                        break;
+                    }
+                }
             }
-            selected_row = BBOX_MIN(selected_row, row_count[selected_column] - 1);
             break;
 
         case 'U':
@@ -48,7 +68,6 @@ void move_cursor(char direction) {
             } else {
                 selected_row = row_count[selected_column] - 1; // Loop around
             }
-            selected_column = BBOX_MIN(selected_column, column_count[selected_row] - 1);
             break;
 
         case 'D':
@@ -57,16 +76,11 @@ void move_cursor(char direction) {
             } else {
                 selected_row = 0; // Loop around
             }
-            selected_column = BBOX_MIN(selected_column, column_count[selected_row] - 1);
             break;
 
         default:
             break;
     }
-
-    // Prevent overflow
-    if (selected_column > MAX_COLUMNS) selected_column = 0;
-    if (selected_row > MAX_ROWS) selected_row = 0;
 }
 
 static bool is_button_selected(uibutton_t button) {

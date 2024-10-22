@@ -5,6 +5,7 @@
 #include "hats.h"
 #include "helper_functions.h"
 #include "save.h"
+#include "audio.h"
 #include "scenes/game.h"
 
 extern save_t    save;
@@ -97,7 +98,7 @@ void cut_jump(void) {
 // The slowdown power
 void slow_down(void) {
     if (!save.player_upgrade_levels.slowdown_unlocked) return;
-    // play_sfx_slowdown();
+    play_sfx_slowdown();
     is_slowing_down = !is_slowing_down;
 }
 
@@ -107,7 +108,7 @@ void teleport(void) {
 
     if (teleport_cooldown_timer.is_running) return;
     if (!teleport_duration_timer.is_running) { // If the player can teleport
-        // play_sfx_teleport();
+        play_sfx_teleport();
         is_teleporting = true;
         start_timer(&teleport_duration_timer, 0.4);
         start_timer(&teleport_cooldown_timer, 5 - 0.5 * save.player_upgrade_levels.teleport_cooldown_level);
