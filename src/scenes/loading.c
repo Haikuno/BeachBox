@@ -47,61 +47,69 @@ static void draw_error_popup(void) {
     DrawText(error_text, (int)(SCREEN_WIDTH / 2 - MeasureText(error_text, 32) / 2), (int)(SCREEN_HEIGHT / 2 - 15), 32, RED);
 }
 
-static void load_game_wrapper(void *user_data) {
-    int return_code = load_game();
+static void load_game_callback(int option, void *user_data) {
+    if (option == 1) { // yes pressed
+        const int return_code = load_game();
 
-    switch (return_code) {
-        case -1:
-            start_timer(&error_popup_timer, 3.0f);
-            snprintf(error_text, sizeof(error_text), "NO VMU FOUND!");
-            break;
-        case 0:
-            start_timer(&error_popup_timer, 3.0f);
-            snprintf(error_text, sizeof(error_text), "NO SAVE DATA FOUND!");
-            break;
-        case 1:
-            change_scene(MAINMENU);
-            break;
+        switch (return_code) {
+            case -1:
+                start_timer(&error_popup_timer, 3.0f);
+                snprintf(error_text, sizeof(error_text), "NO VMU FOUND!");
+                break;
+            case 0:
+                start_timer(&error_popup_timer, 3.0f);
+                snprintf(error_text, sizeof(error_text), "NO SAVE DATA FOUND!");
+                break;
+            case 1:
+                change_scene(MAINMENU);
+                break;
+        }
+
+        return;
     }
 }
 
-static void new_game_wrapper(void *user_data) {
-    new_game();
-    int return_code = save_game();
+static void new_game_callback(int option, void *user_data) {
+    if (option == 1) { // yes pressed
+        new_game();
+        const int return_code = save_game();
 
-    switch (return_code) {
-        case -1:
-            start_timer(&error_popup_timer, 3.0f);
-            snprintf(error_text, sizeof(error_text), "NO VMU FOUND!");
-            break;
-        case 0:
-            start_timer(&error_popup_timer, 3.0f);
-            snprintf(error_text, sizeof(error_text), "NOT ENOUGH SPACE IN VMU!");
-            break;
-        case 1:
-            change_scene(MAINMENU);
-            break;
+        switch (return_code) {
+            case -1:
+                start_timer(&error_popup_timer, 3.0f);
+                snprintf(error_text, sizeof(error_text), "NO VMU FOUND!");
+                break;
+            case 0:
+                start_timer(&error_popup_timer, 3.0f);
+                snprintf(error_text, sizeof(error_text), "NOT ENOUGH SPACE IN VMU!");
+                break;
+            case 1:
+                change_scene(MAINMENU);
+                break;
+        }
+
+        return;
     }
 }
 
 void draw_loading_scene(void) {
     draw_background();
 
-    static void (*callback)(void *user_data) = NULL;
+    static void (*callback)(int option, void *user_data) = NULL;
     static char message[50];
 
     if (do_button(load_button, true) && !error_popup_timer.is_running) {
-        callback       = load_game_wrapper;
+        callback       = load_game_callback;
         selected_layer = 1;
         snprintf(message, sizeof(message), "Load the game?");
     }
 
     if (do_button(new_game_button, true) && !error_popup_timer.is_running) {
-        callback       = new_game_wrapper;
+        callback       = new_game_callback;
         selected_layer = 1;
         snprintf(message, sizeof(message), "Start a new game?");
     }
 
-    draw_confirmation_window(callback, NULL, NULL, NULL, message);
+    draw_confirmation_window(callback, NULL, message);
     draw_error_popup();
 }

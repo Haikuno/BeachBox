@@ -153,7 +153,13 @@ int do_arrows(uiarrows_t arrows) {
     return 0;
 }
 
-void draw_confirmation_window(void (*callback_yes)(void *user_data), void *user_data_yes, void (*callback_no)(void *user_data), void *user_data_no, char *message) {
+static void reset_selected(void) {
+    selected_layer  = 0;
+    selected_column = 0;
+    selected_row    = 0;
+}
+
+void draw_confirmation_window(void (*callback)(int option, void *user_data), void *user_data, const char *message) {
     if (selected_layer == 0) return;
 
     const Vector2 conf_window_size = { SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.5f };
@@ -184,19 +190,15 @@ void draw_confirmation_window(void (*callback_yes)(void *user_data), void *user_
     }
 
     if (do_button(yes_button, true)) {
-        if (callback_yes) callback_yes(user_data_yes);
-        selected_layer  = 0;
-        selected_column = 0;
-        selected_row    = 0;
+        if (callback) callback(1, user_data);
+        reset_selected();
         first_a_release = true;
         return;
     }
 
     if (do_button(no_button, true)) {
-        if (callback_no) callback_no(user_data_no);
-        selected_layer  = 0;
-        selected_column = 0;
-        selected_row    = 0;
+        if (callback) callback(0, user_data);
+        reset_selected();
         first_a_release = true;
         return;
     }

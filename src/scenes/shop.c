@@ -99,7 +99,7 @@ inline bool can_upgrade(enum ShopOptions option) {
     }
 }
 
-void purchase(void *user_data) {
+void purchase(void) {
     switch (selected_shop_option) {
         case SPEED:
             save.player_upgrade_levels.player_speed_level++;
@@ -132,8 +132,6 @@ void purchase(void *user_data) {
         default:
             break;
     }
-    selected_column = 0;
-    selected_row    = selected_shop_option;
 }
 
 void draw_shop_description(void) {
@@ -162,10 +160,6 @@ void jump_to_buy_button(void) {
     selected_column = 1;
 }
 
-void return_to_main_menu(void *user_data) {
-    change_scene(MAINMENU);
-}
-
 void init_shop_scene(void) {
     column_count[0] = 3;
     column_count[1] = column_count[2] = column_count[3] = column_count[4] = column_count[5] = column_count[6] = 1;
@@ -174,14 +168,20 @@ void init_shop_scene(void) {
     row_count[1] = row_count[2] = 1;
 }
 
-// Called when "NO" is pressed when exiting, to reset column and row count
-static void init_shop_scene_wrapper(void *user_data) {
-    init_shop_scene();
-}
-
 void update_shop_scene(void) {
     if (selected_column == 0 && selected_layer == 0) {
         selected_shop_option = selected_row;
+    }
+}
+
+static void exit_callback(int option, void *user_data) {
+    if (option == 1) { // yes pressed
+        change_scene(MAINMENU);
+        return;
+    }
+    if (option == 0) { // no pressed
+        init_shop_scene();
+        return;
     }
 }
 
@@ -190,7 +190,7 @@ void draw_shop_scene(void) {
     DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, ui_background_color);
     draw_shop_description();
 
-    static void (*callback)(void *user_data) = NULL;
+    static void (*callback)(int option, void *user_data) = NULL;
 
     // Draw total coins
     DrawRectangle(55, 0, 150, 40, ui_button_color);
@@ -204,12 +204,12 @@ void draw_shop_scene(void) {
 
     // Buy
     if (do_button(shop_buttons[7], can_buy) && can_buy) {
-        callback = purchase;
+        purchase();
     }
 
     // Exit
     if (do_button(shop_buttons[8], true)) {
-        callback        = return_to_main_menu;
+        callback        = exit_callback;
         selected_layer  = 1;
         selected_column = 0;
         selected_row    = 0;
@@ -222,16 +222,5 @@ void draw_shop_scene(void) {
         }
     }
 
-    if (!callback) {
-        return;
-    }
-
-    if (callback == return_to_main_menu) {
-        draw_confirmation_window(callback, NULL, init_shop_scene_wrapper, NULL, "Exit?");
-        return;
-    }
-
-    // Purchase
-    callback(NULL);
-    callback = NULL;
+    draw_confirmation_window(callback, NULL, "Exit?");
 }

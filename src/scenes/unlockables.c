@@ -79,18 +79,16 @@ void init_unlockables_scene(void) {
     column_count[0] = 1;
 }
 
-static void init_unlockables_scene_wrapper(void *user_data) {
-    init_unlockables_scene();
-}
-
 void update_unlockables_scene(void) {
     //
 }
 
-static void purchase_hat(void *user_data) {
-    save.total_coins                   -= hat_price[save.hat_index];
-    save.hats_unlocked[save.hat_index]  = true;
-    init_unlockables_scene_wrapper(NULL);
+static void purchase_hat(int option, void *user_data) {
+    init_unlockables_scene();
+    if (option == 1) {
+        save.total_coins                   -= hat_price[save.hat_index];
+        save.hats_unlocked[save.hat_index]  = true;
+    }
 }
 
 void draw_unlockables_scene(void) {
@@ -144,7 +142,7 @@ void draw_unlockables_scene(void) {
         .size      = arrows_size,
     };
 
-    static void (*callback)(void *user_data) = NULL;
+    static void (*callback)(int option, void *user_data) = NULL;
 
     if (!is_hat_unlocked(save.hat_index)) {
         draw_hat_price(save.hat_index);
@@ -183,5 +181,5 @@ void draw_unlockables_scene(void) {
         change_scene(MAINMENU);
     }
 
-    draw_confirmation_window(callback, NULL, init_unlockables_scene_wrapper, NULL, "Buy hat?");
+    draw_confirmation_window(callback, NULL, "Buy hat?");
 }
