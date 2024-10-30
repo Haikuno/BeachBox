@@ -34,6 +34,7 @@ char         error_text[50];
 void init_loading_scene(void) {
     column_count[0] = 2;
     row_count[0]    = 1;
+    row_count[1]    = 1;
 }
 
 void update_loading_scene(void) {

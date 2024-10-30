@@ -136,7 +136,7 @@ void update_objects(void) {
     current_object_speed = is_slowing_down ? base_object_speed / 1.5 : base_object_speed;
     add_objects();
 
-    for (uint8_t index = 0; index < MAX_OBJECTS; index++) {
+    for (int index = 0; index < MAX_OBJECTS; index++) {
         if (!(objects_bitfield & (1 << index))) continue; // Skip if the object is not active
         objects.pos[index].x -= current_object_speed;     // Move objects
 
@@ -178,7 +178,7 @@ void update_objects(void) {
 
 void draw_objects(void) {
     // Pillars
-    for (uint16_t i = PILLARS_FIRST_BIT; i <= PILLARS_LAST_BIT; i++) {
+    for (int i = PILLARS_FIRST_BIT; i <= PILLARS_LAST_BIT; i++) {
         if (!(objects_bitfield & (1 << i))) continue;
 
         Color color = is_giant_pillar(objects.size[i]) ? (Color){ 136, 216, 176, 255 } : (Color){ 255, 154, 49, 255 };
@@ -193,7 +193,7 @@ void draw_objects(void) {
     }
 
     // Coins
-    for (uint16_t i = COINS_FIRST_BIT; i <= COINS_LAST_BIT; i++) {
+    for (int i = COINS_FIRST_BIT; i <= COINS_LAST_BIT; i++) {
         Color color = { 224, 212, 0, 255 };
 
         if (is_slowing_down) invert_color(&color);

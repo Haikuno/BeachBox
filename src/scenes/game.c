@@ -54,7 +54,7 @@ void init_game_scene(void) {
     current_coins  = 0;
     new_high_score = false;
 
-    for (uint8_t i = 0; i < MAX_COLUMNS; i++) {
+    for (int i = 0; i < MAX_COLUMNS; i++) {
         row_count[i]    = 0;
         column_count[i] = 0;
     }

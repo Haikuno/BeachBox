@@ -1,10 +1,10 @@
-#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "controller.h"
 #include "config.h"
 #include "helper_functions.h"
 #include "ui.h"
-
-#include <stdio.h>
 
 uint8_t selected_column = 0;
 uint8_t selected_row    = 0;
@@ -20,8 +20,9 @@ const Color ui_button_selected_color = { 230, 230, 230, 222 };
 void move_cursor(const char direction) {
     // All popups in this game only have two buttons on the same row, so we can assume this:
     if (selected_layer == 1) {
-        row_count[0]    = 1;
         column_count[0] = 2;
+        row_count[0]    = 1;
+        row_count[1]    = 1;
     }
 
     const bool can_move_cursor_left  = selected_column > 0;
@@ -35,9 +36,13 @@ void move_cursor(const char direction) {
                 selected_column--;
             } else {
                 // Check if there's a button above or below
-                for (int8_t offset = selected_row - MAX_ROWS; offset <= MAX_ROWS; offset++) {
+                for (int offset = selected_row - MAX_ROWS; offset <= MAX_ROWS; offset++) {
+
+                    // Check for underflow / overflow
+                    if (abs(offset) > selected_row) continue;
+
                     uint8_t new_row = selected_row + offset;
-                    if (new_row >= 0 && new_row < row_count[selected_column]) {
+                    if (new_row >= 0 && selected_column > 0 && new_row < row_count[selected_column]) {
                         selected_column--;
                         selected_row = new_row;
                         break;
@@ -51,9 +56,13 @@ void move_cursor(const char direction) {
                 selected_column++;
             } else {
                 // Check if there's a button above or below
-                for (int8_t offset = selected_row - MAX_ROWS; offset <= MAX_ROWS; offset++) {
+                for (int offset = selected_row - MAX_ROWS; offset <= MAX_ROWS; offset++) {
+
+                    // Check for underflow / overflow
+                    if (abs(offset) > selected_row) continue;
+
                     uint8_t new_row = selected_row + offset;
-                    if (new_row >= 0 && new_row < row_count[selected_column + 1]) {
+                    if (new_row >= 0 && selected_column > 0 && new_row < row_count[selected_column + 1]) {
                         selected_column++;
                         selected_row = new_row;
                         break;
