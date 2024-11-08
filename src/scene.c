@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <kos/thread.h>
+#include <stdatomic.h>
+
 #include "audio.h"
 #include "scene.h"
 #include "ui.h"
@@ -56,7 +58,7 @@ void change_scene(scene_t scene) {
 
     switch (scene) {
         case GAME:
-            if (current_scene == GAME) {
+            if (current_scene == GAME && !save_in_progress()) {
                 start_timer(&save_popup_timer, 2.0f);
                 thd_create(1, save_game_wrapper, NULL);
             }
@@ -64,7 +66,7 @@ void change_scene(scene_t scene) {
         case MAINMENU:
             start_timer(&vmu_menu_text_update_cooldown, 0.5f); // First frame is longer to give the player time to look at the VMU
             vmu_menu_text_frame = 0;
-            if (current_scene != LOADING && current_scene != CREDITS) {
+            if (current_scene != LOADING && current_scene != CREDITS && !save_in_progress()) {
                 start_timer(&save_popup_timer, 2.0f);
                 thd_create(1, save_game_wrapper, NULL);
             }

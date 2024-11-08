@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <dc/maple.h>
 #include <dc/vmu_fb.h>
+#include <stdatomic.h>
 #include "save.h"
 #include "vmu.h"
 #include "vmu_animations.h"
@@ -82,6 +83,8 @@ static void update_vmu_credits_animation(void) {
 }
 
 void *draw_vmu_animation(void *param) {
+    if (save_in_progress()) return NULL;
+
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
 
     if (!vmu) return NULL;

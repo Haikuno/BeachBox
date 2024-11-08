@@ -4,6 +4,7 @@
 #include <kos.h>
 #include <dc/maple.h>
 #include <dc/vmufs.h>
+#include <stdatomic.h>
 
 // Most of the information in this file and the calc_CRC function was taken from:
 // https://mc.pp.se/dc/vms/fileheader.html , credits to Marcus Comstedt
@@ -238,44 +239,55 @@ void draw_save_popup(void) {
     DrawText(save_popup_text, SCREEN_WIDTH * 0.7 + SCREEN_WIDTH * 0.3 / 2 - MeasureText(save_popup_text, 22) / 2, SCREEN_HEIGHT * 0.9, 22, RAYWHITE);
 }
 
+// This prevents VMU animations from being drawn while a save is in progress
+// So that we make sure saving doesn't fail
+static atomic_bool save_in_progress_ = false;
+
+bool save_in_progress(void) {
+    return save_in_progress_;
+}
+
 int save_game(void) {
+    save_in_progress_ = true;
     snprintf(save_popup_text, sizeof(save_popup_text), "Saving...");
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
     if (!vmu) {
         snprintf(save_popup_text, sizeof(save_popup_text), "No VMU found!");
+        save_in_progress_ = false;
         return -1;
     }
 
     const size_t save_size   = sizeof(save);
-    const size_t header_size = sizeof(save.vms_menu_description) + sizeof(save.dc_description) + sizeof(save.app_identifier) + sizeof(save.number_icons) + sizeof(save.icon_animation_speed)
-                         + sizeof(save.graphic_eyecatch_type) + sizeof(save.crc) + sizeof(save.bytes_after_header) + sizeof(save.header_reserved) + sizeof(save.icon_palette)
-                         + sizeof(save.icon_bitmaps) + sizeof(save.eyecatch_palette) + sizeof(save.eyecatch_bitmap);
+    const size_t header_size = sizeof(save.header);
 
-    snprintf(save.dc_description, sizeof(save.dc_description), "BeachBox - PsyOps");
-    snprintf(save.app_identifier, sizeof(save.app_identifier), "Psyops");
-    save.number_icons          = 3;
-    save.icon_animation_speed  = 14;
-    save.graphic_eyecatch_type = 3;
-    save.crc                   = calc_CRC((unsigned char *)&save, save_size);
-    save.bytes_after_header    = (int32_t)(save_size - header_size);
-    memcpy(save.icon_palette, bios_save_palette, sizeof(bios_save_palette));
-    memcpy(save.icon_bitmaps, bios_save_animation, sizeof(bios_save_animation));
-    memcpy(save.eyecatch_palette, bios_eyecatch_palette, sizeof(bios_eyecatch_palette));
-    memcpy(save.eyecatch_bitmap, bios_eyecatch_bitmap, sizeof(bios_eyecatch_bitmap));
+    snprintf(save.header.dc_description, sizeof(save.header.dc_description), "BeachBox - PsyOps");
+    snprintf(save.header.app_identifier, sizeof(save.header.app_identifier), "Psyops");
+    save.header.number_icons          = 3;
+    save.header.icon_animation_speed  = 14;
+    save.header.graphic_eyecatch_type = 3;
+    save.header.crc                   = calc_CRC((unsigned char *)&save, save_size);
+    save.header.bytes_after_header    = (int32_t)(save_size - header_size);
+    memcpy(save.header.icon_palette, bios_save_palette, sizeof(bios_save_palette));
+    memcpy(save.header.icon_bitmaps, bios_save_animation, sizeof(bios_save_animation));
+    memcpy(save.header.eyecatch_palette, bios_eyecatch_palette, sizeof(bios_eyecatch_palette));
+    memcpy(save.header.eyecatch_bitmap, bios_eyecatch_bitmap, sizeof(bios_eyecatch_bitmap));
 
     const int free_blocks = vmufs_free_blocks(vmu);
 
     if (free_blocks * 512 < save_size) {
         snprintf(save_popup_text, sizeof(save_popup_text), "Not enough space!");
+        save_in_progress_ = false;
         return 0;
     }
 
     if (0 == vmufs_write(vmu, "BeachBox", &save, save_size, VMUFS_OVERWRITE)) {
         snprintf(save_popup_text, sizeof(save_popup_text), "Game Saved!");
+        save_in_progress_ = false;
         return 1;
     }
 
     snprintf(save_popup_text, sizeof(save_popup_text), "Failed to save!");
+    save_in_progress_ = false;
     return -2; // unknown error
 }
 
