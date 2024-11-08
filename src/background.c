@@ -22,7 +22,7 @@ struct SandParticle {
 } sand_particles[MAX_SAND_PARTICLES] = { 0 };
 
 void draw_ocean(void) {
-    Color ocean_color = { 66, 147, 255, 255 };
+    const Color ocean_color = { 66, 147, 255, 255 };
     if (is_slowing_down) invert_color(&ocean_color);
     DrawRectangle(0, 250, SCREEN_WIDTH, FLOOR_HEIGHT - 250, ocean_color);
 
@@ -39,30 +39,30 @@ void draw_ocean(void) {
         }
     }
 
-    static float slowWaveStep = 0;
-    static float fastWaveStep = 0;
+    static float slow_wave_step = 0;
+    static float fast_wave_step = 0;
 
     if (!is_game_paused) {
-        slowWaveStep += current_object_speed != 0 ? 0.002f * current_object_speed : 0.01f;
-        fastWaveStep += current_object_speed != 0 ? 0.004f * current_object_speed : 0.02f;
+        slow_wave_step += current_object_speed != 0 ? 0.002f * current_object_speed : 0.01f;
+        fast_wave_step += current_object_speed != 0 ? 0.004f * current_object_speed : 0.02f;
     }
 
-    if (fastWaveStep > 100) fastWaveStep = 0;
-    if (slowWaveStep > 100) slowWaveStep = 0;
+    if (fast_wave_step > 100) fast_wave_step = 0;
+    if (slow_wave_step > 100) slow_wave_step = 0;
 
-    static const int centerY = SCREEN_HEIGHT / 2;
+    const int center_y = SCREEN_HEIGHT / 2;
     for (int row = 0; row < 2; row++) {
-        int y = centerY + (row * SLOW_WAVE_HEIGHT);
+        int y = center_y + (row * SLOW_WAVE_HEIGHT);
         for (int x = 0; x < SCREEN_WIDTH; x += SLOW_WAVE_WIDTH) {
-            const float offsetY = sinf((x + slowWaveStep * 100) / 50.0f) * SLOW_WAVE_HEIGHT / 2;
+            const float offsetY = sinf((x + slow_wave_step * 100) / 50.0f) * SLOW_WAVE_HEIGHT / 2;
             DrawRectangle(x, y + (int)offsetY, SLOW_WAVE_WIDTH, SLOW_WAVE_HEIGHT, colors[row]);
         }
     }
 
     for (int row = 0; row < 2; row++) {
-        int y = centerY + (row * FAST_WAVE_HEIGHT);
+        int y = center_y + (row * FAST_WAVE_HEIGHT);
         for (int x = 0; x < SCREEN_WIDTH; x += FAST_WAVE_WIDTH) {
-            float offsetY = sinf((x + fastWaveStep * 100) / 50.0f) * FAST_WAVE_HEIGHT / 2 + 45;
+            float offsetY = sinf((x + fast_wave_step * 100) / 50.0f) * FAST_WAVE_HEIGHT / 2 + 45;
             DrawRectangle(x, y + (int)offsetY, FAST_WAVE_WIDTH, FAST_WAVE_HEIGHT, colors[row + 2]);
         }
     }
@@ -71,7 +71,7 @@ void draw_ocean(void) {
 void draw_sand_particles(void) {
     static bbox_timer_t sand_particle_spawn_timer;
     update_timer(&sand_particle_spawn_timer);
-    Color sand_particle_color = BROWN;
+    const Color sand_particle_color = BROWN;
     if (is_slowing_down) invert_color(&sand_particle_color);
 
     for (int i = 0; i < MAX_SAND_PARTICLES; i++) {
@@ -85,6 +85,7 @@ void draw_sand_particles(void) {
             if (sand_particles[i].pos.x < 0) {
                 sand_particles[i].active = false;
             }
+
         } else {
             if (is_game_paused) continue;
             if (!sand_particle_spawn_timer.is_running && GetRandomValue(0, 300) == 0) {
@@ -97,9 +98,9 @@ void draw_sand_particles(void) {
 }
 
 void draw_background(void) {
-    Color sky_color = { 135, 206, 250, 255 };
+    const Color sky_color = { 135, 206, 250, 255 };
     if (is_slowing_down) invert_color(&sky_color);
-    Color sand_color = { 242, 195, 68, 255 };
+    const Color sand_color = { 242, 195, 68, 255 };
     if (is_slowing_down) invert_color(&sand_color);
     DrawRectangle(0, 0, SCREEN_WIDTH, FLOOR_HEIGHT, sky_color); // Draw sky
     draw_ocean();
