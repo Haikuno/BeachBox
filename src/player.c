@@ -98,7 +98,10 @@ void cut_jump(void) {
 // The slowdown power
 void slow_down(void) {
     if (!save.player_upgrade_levels.slowdown_unlocked) return;
-    play_sfx_slowdown();
+
+    if (!is_slowing_down) play_sfx_slowdown();
+    else play_sfx_slowdown_back();
+
     is_slowing_down = !is_slowing_down;
 }
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "audio.h"
 #include "controller.h"
 #include "config.h"
 #include "helper_functions.h"
@@ -34,19 +35,20 @@ void move_cursor(const char direction) {
         case 'L':
             if (can_move_cursor_left) {
                 selected_column--;
-            } else {
-                // Check if there's a button above or below
-                for (int offset = selected_row - MAX_ROWS; offset <= MAX_ROWS; offset++) {
+            } else if (selected_column != 0) {
+                // Check if there's a button above or below selected_column - 1
+                for (int offset = -MAX_ROWS; offset <= row_count[selected_column]; offset++) {
+                    const int new_row = selected_row + offset;
 
-                    // Check for underflow / overflow
-                    if (abs(offset) > selected_row) continue;
+                    const bool row_exists = new_row >= 0 && new_row < row_count[selected_column];
+                    if (!row_exists) continue;
 
-                    uint8_t new_row = selected_row + offset;
-                    if (new_row >= 0 && selected_column > 0 && new_row < row_count[selected_column]) {
-                        selected_column--;
-                        selected_row = new_row;
-                        break;
-                    }
+                    const bool column_exists = column_count[new_row] > 0 && column_count[new_row] > selected_column - 1;
+                    if (!column_exists) continue;
+
+                    selected_column--;
+                    selected_row = new_row;
+                    break;
                 }
             }
             break;
@@ -54,19 +56,20 @@ void move_cursor(const char direction) {
         case 'R':
             if (can_move_cursor_right) {
                 selected_column++;
-            } else {
-                // Check if there's a button above or below
-                for (int offset = selected_row - MAX_ROWS; offset <= MAX_ROWS; offset++) {
+            } else if (selected_column != UINT8_MAX) {
+                // Check if there's a button above or below selected_column + 1
+                for (int offset = -MAX_ROWS; offset <= row_count[selected_column]; offset++) {
+                    const int new_row = selected_row + offset;
 
-                    // Check for underflow / overflow
-                    if (abs(offset) > selected_row) continue;
+                    const bool row_exists = new_row >= 0 && new_row < row_count[selected_column];
+                    if (!row_exists) continue;
 
-                    uint8_t new_row = selected_row + offset;
-                    if (new_row >= 0 && selected_column > 0 && new_row < row_count[selected_column + 1]) {
-                        selected_column++;
-                        selected_row = new_row;
-                        break;
-                    }
+                    const bool column_exists = column_count[new_row] > 0 && column_count[new_row] > selected_column + 1;
+                    if (!column_exists) continue;
+
+                    selected_column++;
+                    selected_row = new_row;
+                    break;
                 }
             }
             break;
@@ -90,6 +93,8 @@ void move_cursor(const char direction) {
         default:
             break;
     }
+
+    play_sfx_menu_move();
 }
 
 static bool is_button_selected(uibutton_t button) {
@@ -115,21 +120,29 @@ void draw_rotating_sun(Vector2 anchor_pos) {
 
 bool do_button(uibutton_t button, bool is_active) {
     const bool  is_selected  = is_button_selected(button);
-    const bool  is_pressed   = IsGamepadButtonReleased(0, BUTTON_A);
+    const bool  is_pressed   = is_selected && IsGamepadButtonReleased(0, BUTTON_A);
     const Color button_color = is_selected ? ui_button_selected_color : ui_button_color;
     Color       text_color   = is_selected ? BLACK : RAYWHITE;
 
     if (!is_active) text_color = (Color){ 30, 30, 30, 150 };
 
-    if (is_selected) draw_rotating_sun(button.pos);
-
     DrawRectangleV(button.pos, button.size, button_color);
     DrawRectangleLinesV(button.pos, button.size, text_color);
-    DrawText(button.text, (int)(button.pos.x + button.size.x / 2 - MeasureText(button.text, 20) / 2), (int)(button.pos.y + button.size.y / 2 - 10), 20, text_color);
 
-    if (!is_active) return false;
+    if (is_selected) draw_rotating_sun(button.pos);
 
-    return is_selected && is_pressed;
+    const int text_x = (int)(button.pos.x + button.size.x / 2 - MeasureText(button.text, 20) / 2);
+    const int text_y = (int)(button.pos.y + button.size.y / 2 - 10);
+    DrawText(button.text, text_x, text_y, 20, text_color);
+
+    if (!is_active) {
+        if (is_pressed) play_sfx_menu_error();
+        return false;
+    }
+
+    if (is_pressed) play_sfx_menu_select();
+
+    return is_pressed;
 }
 
 int do_arrows(uiarrows_t arrows) {
@@ -188,7 +201,10 @@ void draw_confirmation_window(void (*callback)(int option, void *user_data), voi
           .size = button_size, .column = 1, .row = 0, .layer = 1, .text = "No"
     };
 
-    DrawText(message, (int)(conf_window_pos.x + conf_window_size.x / 2 - MeasureText(message, 20) / 2), (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10), 20, RAYWHITE);
+    const int message_width = MeasureText(message, 20);
+    const int message_x     = (int)(conf_window_pos.x + conf_window_size.x / 2 - message_width / 2);
+    const int message_y     = (int)(conf_window_pos.y + conf_window_size.y * 0.25f - 10);
+    DrawText(message, message_x, message_y, 20, RAYWHITE);
 
     static bool first_a_release = true; // We ignore the first release of A as it is released on the first frame
                                         // (since you need to release A to open this menu)
@@ -199,14 +215,14 @@ void draw_confirmation_window(void (*callback)(int option, void *user_data), voi
     }
 
     if (do_button(yes_button, true)) {
-        if (callback) callback(1, user_data);
+        if (callback) callback(true, user_data);
         reset_selected();
         first_a_release = true;
         return;
     }
 
     if (do_button(no_button, true)) {
-        if (callback) callback(0, user_data);
+        if (callback) callback(false, user_data);
         reset_selected();
         first_a_release = true;
         return;

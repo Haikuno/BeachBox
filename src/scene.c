@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <kos/thread.h>
+#include "audio.h"
 #include "scene.h"
 #include "ui.h"
 #include "save.h"
@@ -75,6 +76,7 @@ void change_scene(scene_t scene) {
     }
     init_scene_functions[scene]();
     current_scene = scene;
+    update_song();
 }
 
 void update_current_scene(void) {

@@ -12,21 +12,20 @@
 #include "src/vmu.h"
 
 extern save_t  save;
-// extern scene_t current_scene;
 extern uint8_t selected_column;
 extern uint8_t selected_row;
 extern uint8_t column_count[];
 extern uint8_t row_count[];
 
-void init_game(void) {
-    change_scene(RAYLOGO);
+static void init_game(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "BeachBox");
+    init_sounds();
     load_hats();
+    change_scene(RAYLOGO);
 }
 
-void update_game(void) {
+static void update_game(void) {
     update_controller();
-    update_song();
     update_current_scene();
 
 #ifdef DEBUG_INFINITE_COINS
@@ -34,7 +33,7 @@ void update_game(void) {
 #endif
 }
 
-void draw_game(void) {
+static void draw_game(void) {
     BeginDrawing();
     draw_current_scene();
 #ifdef DEBUG_DRAW_FPS
@@ -54,7 +53,6 @@ void draw_game(void) {
 
 int main(int argc, char **argv) {
     init_game();
-    init_sounds();
 
     while (true) {
         update_game();
