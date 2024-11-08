@@ -47,9 +47,6 @@ void draw_ocean(void) {
         fast_wave_step += current_object_speed != 0 ? 0.004f * current_object_speed : 0.02f;
     }
 
-    if (fast_wave_step > 100) fast_wave_step = 0;
-    if (slow_wave_step > 100) slow_wave_step = 0;
-
     const int center_y = SCREEN_HEIGHT / 2;
     for (int row = 0; row < 2; row++) {
         int y = center_y + (row * SLOW_WAVE_HEIGHT);
@@ -62,7 +59,7 @@ void draw_ocean(void) {
     for (int row = 0; row < 2; row++) {
         int y = center_y + (row * FAST_WAVE_HEIGHT);
         for (int x = 0; x < SCREEN_WIDTH; x += FAST_WAVE_WIDTH) {
-            float offsetY = sinf((x + fast_wave_step * 100) / 50.0f) * FAST_WAVE_HEIGHT / 2 + 45;
+            const float offsetY = sinf((x + fast_wave_step * 100) / 50.0f) * FAST_WAVE_HEIGHT / 2 + 45;
             DrawRectangle(x, y + (int)offsetY, FAST_WAVE_WIDTH, FAST_WAVE_HEIGHT, colors[row + 2]);
         }
     }

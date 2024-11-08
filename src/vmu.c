@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <dc/maple.h>
 #include <dc/vmu_fb.h>
-#include <stdatomic.h>
 #include "save.h"
 #include "vmu.h"
 #include "vmu_animations.h"
