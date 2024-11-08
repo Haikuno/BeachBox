@@ -125,7 +125,7 @@ void add_objects(void) {
     spawn_coin();
 }
 
-inline bool is_giant_pillar(Vector2 size) {
+static inline bool is_giant_pillar(Vector2 size) {
     return size.y >= FLOOR_HEIGHT;
 }
 

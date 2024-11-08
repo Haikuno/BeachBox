@@ -61,11 +61,11 @@ const uint8_t costs[7] = {
     30, // SLOWDOWN_COST
 };
 
-inline bool can_afford(enum ShopOptions option) {
+static inline bool can_afford(enum ShopOptions option) {
     return costs[option] <= save.total_coins;
 }
 
-inline uint8_t get_upgrade_level(enum ShopOptions option) {
+static inline uint8_t get_upgrade_level(enum ShopOptions option) {
     switch (option) {
         case SPEED:
             return save.player_upgrade_levels.player_speed_level;
@@ -87,7 +87,7 @@ inline uint8_t get_upgrade_level(enum ShopOptions option) {
     return false;
 }
 
-inline bool can_upgrade(enum ShopOptions option) {
+static inline bool can_upgrade(enum ShopOptions option) {
     switch (option) {
         case TELEPORT_COOLDOWN:
         case TELEPORT_DISTANCE:

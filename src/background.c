@@ -22,7 +22,7 @@ struct SandParticle {
 } sand_particles[MAX_SAND_PARTICLES] = { 0 };
 
 void draw_ocean(void) {
-    const Color ocean_color = { 66, 147, 255, 255 };
+    Color ocean_color = { 66, 147, 255, 255 };
     if (is_slowing_down) invert_color(&ocean_color);
     DrawRectangle(0, 250, SCREEN_WIDTH, FLOOR_HEIGHT - 250, ocean_color);
 
@@ -71,7 +71,7 @@ void draw_ocean(void) {
 void draw_sand_particles(void) {
     static bbox_timer_t sand_particle_spawn_timer;
     update_timer(&sand_particle_spawn_timer);
-    const Color sand_particle_color = BROWN;
+    Color sand_particle_color = BROWN;
     if (is_slowing_down) invert_color(&sand_particle_color);
 
     for (int i = 0; i < MAX_SAND_PARTICLES; i++) {
@@ -98,9 +98,9 @@ void draw_sand_particles(void) {
 }
 
 void draw_background(void) {
-    const Color sky_color = { 135, 206, 250, 255 };
+    Color sky_color = { 135, 206, 250, 255 };
     if (is_slowing_down) invert_color(&sky_color);
-    const Color sand_color = { 242, 195, 68, 255 };
+    Color sand_color = { 242, 195, 68, 255 };
     if (is_slowing_down) invert_color(&sand_color);
     DrawRectangle(0, 0, SCREEN_WIDTH, FLOOR_HEIGHT, sky_color); // Draw sky
     draw_ocean();

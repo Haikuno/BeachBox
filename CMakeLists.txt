@@ -4,6 +4,7 @@ set(KOS_BASE /opt/toolchains/dc/kos)
 set(KOS_CC_BASE /opt/toolchains/dc/sh-elf)
 set(KOS_SUBARCH pristine)
 set(KOS_PORTS ${KOS_BASE}/../kos-ports)
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
 include_directories(${KOS_PORTS}/include/raylib)
 
 include(${KOS_BASE}/utils/cmake/dreamcast.toolchain.cmake)

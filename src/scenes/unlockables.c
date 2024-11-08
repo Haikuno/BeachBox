@@ -48,7 +48,7 @@ const uint8_t hat_price[HAT_MAX] = {
     0,   // Crown (not purchaseable)
 };
 
-inline bool is_hat_unlocked(uint8_t index) {
+static inline bool is_hat_unlocked(uint8_t index) {
     return save.hats_unlocked[index];
 }
 
