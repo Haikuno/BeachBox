@@ -1,12 +1,12 @@
 // TODO: implement audio
-#include <stdio.h>
-#include <dc/sound/sound.h>
-#include <dc/sound/sfxmgr.h>
-#include <dc/sound/stream.h>
-#include <adx/adx.h>
-#include <adx/snddrv.h>
 #include "audio.h"
 #include "scene.h"
+#include <adx/adx.h>
+#include <adx/snddrv.h>
+#include <dc/sound/sfxmgr.h>
+#include <dc/sound/sound.h>
+#include <dc/sound/stream.h>
+#include <stdio.h>
 
 // TODO: make volume changeable
 
@@ -19,22 +19,18 @@ static int sfxVolume   = 120;
 static int musicVolume = 12; // roughly 50%
 
 int BBgetMusicVolume(void) {
-  return musicVolume;
+    return musicVolume;
 }
 
 void BBsetMusicVolume(int new_value) {
-  musicVolume += new_value;
-  
+    musicVolume += new_value;
 }
 int BBgetSfxVolume(void) {
-  return (sfxVolume / 10);
+    return (sfxVolume / 10);
 }
 void BBsetSfxVolume(int new_value) {
-  sfxVolume += (new_value * 10);
+    sfxVolume += (new_value * 10);
 }
-
-
-
 
 static sfxhnd_t sfx_menu_move;
 static sfxhnd_t sfx_menu_select;
@@ -149,24 +145,24 @@ void update_song(void) {
 
     if (prev_song != current_song) {
         play_song();
-        thd_sleep(10); // Wait for ADX to load
+
+        // Wait for the song to start
+        while (snddrv.drv_status != SNDDRV_STATUS_STREAMING) {
+            thd_sleep(1);
+        }
 
         if (snddrv.drv_status != SNDDRV_STATUS_NULL) {
             // First, set the volume to 0
             for (int i = 0; i < 25; i++) {
-                printf("SNDDRV: Volume set to %i\n", (int)(snddrv_volume_down() * 100 / 255)); // SNDDRV volume is 0-255
-                
-                
+                snddrv_volume_down();
             }
 
-            if(!musicVolume == 0){
+            if (!musicVolume == 0) {
                 // Then, set the volume to musicVolume
                 for (int i = 0; i < musicVolume; i++) {
-                    printf("SNDDRV: Volume set to %i\n", (int)(snddrv_volume_up() * 100 / 255));
-                    
+                    snddrv_volume_up();
                 }
             }
         }
-        
     }
 }
