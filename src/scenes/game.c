@@ -148,6 +148,7 @@ void draw_game_scene(void) {
 }
 
 void lose_game(void) {
+#ifndef DEBUG_GODMODE
     if (IsGamepadButtonDown(0, BUTTON_A)) held_a_during_death = true;
     is_game_over = true;
     play_sfx_game_over();
@@ -157,4 +158,5 @@ void lose_game(void) {
     if (current_coins >= 100) {
         save.hats_unlocked[HAT_CROWN] = true; // Unlock crown
     }
+#endif
 }

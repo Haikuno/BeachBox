@@ -141,9 +141,16 @@ void update_objects(void) {
         objects.pos[index].x -= current_object_speed;     // Move objects
 
         // Remove objects that are off the screen
-        if (objects.pos[index].x < -objects.size[index].x) {
-            objects_bitfield &= ~(1 << index);
-            continue;
+        if (index >= COINS_FIRST_BIT && index <= COINS_LAST_BIT) {
+            if (objects.pos[index].x < -COIN_SIZE) {
+                objects_bitfield &= ~(1 << index);
+                continue;
+            }
+        } else {
+            if (objects.pos[index].x < -objects.size[index].x) {
+                objects_bitfield &= ~(1 << index);
+                continue;
+            }
         }
 
         // Check for collisions with the player
