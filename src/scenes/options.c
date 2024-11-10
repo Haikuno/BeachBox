@@ -6,6 +6,8 @@
 #include "../background.h"
 #include "../save.h"
 #include "../audio.h"
+#include <adx/snddrv.h>
+#include <adx/adx.h>
 #include "options.h"
 #include <string.h>
 
@@ -24,7 +26,7 @@ const uibutton_t music_volume_options_button = {
     .column = 0,
     .row    = 0,
     .layer  = 0,
-    .text   = "Game volume",
+    .text   = "Music volume",
 };
 
 const uibutton_t sfx_volume_options_button = {
@@ -77,30 +79,6 @@ static void new_game_callback(int option, void *user_data) {
         return;
     }
 }
-
-static void music_volume_callback(int option, void *user_data) {
-    if (option == 1) { // yes pressed
-        new_game();
-        change_scene(MAINMENU);
-        return;
-    }
-    if (option == 0) { // no pressed
-        init_options_scene();
-        return;
-    }
-}
-
-static void sfx_volume_callback(int option, void *user_data) {
-    if (option == 1) { // yes pressed
-        new_game();
-        change_scene(MAINMENU);
-        return;
-    }
-    if (option == 0) { // no pressed
-        init_options_scene();
-        return;
-    }
-}
 static void DrawRectangleBars(int count, int posX, int posY) {
     const int BAR_WIDTH = 10;
     const int SPACING = 15;
@@ -126,25 +104,18 @@ static void DrawRectangleBars(int count, int posX, int posY) {
             BLUE  
         );
     }
-
-
-
-    
-
 }
 
 void draw_options_scene(void) {
     draw_background();
+
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
 
-
     static void (*callback)(int option, void *user_data) = NULL;
-    DrawRectangleBars(getSfxVolumeBB(), 230, 180 );
-    DrawRectangleBars(getMusicVolumeBB(), 230, 60 );
-
 
     
+
 
 
     // For volume
@@ -169,36 +140,49 @@ void draw_options_scene(void) {
     static char dialogue_text_[24] = "";
 
 
-
-
     const int music_arrows_return_code = do_arrows(music_volume_arrows_);
     if (are_arrows_selected(music_volume_arrows_) && music_arrows_return_code != 0) {
-        setMusicVolumeBB(music_arrows_return_code);
-        if (getMusicVolumeBB() > 24){ setMusicVolumeBB(-1);}; 
-        if (getMusicVolumeBB() < 0){ setMusicVolumeBB(2);};
+        if(music_arrows_return_code == 1){
+            snddrv_volume_up();
+        } else if(music_arrows_return_code == -1){
+
+            snddrv_volume_down();
+        }
+        if(BBgetMusicVolume() <= 0){
+            adx_pause();
+        }
+
+        if(BBgetMusicVolume() >= 1){
+            
+                adx_resume();
+        }
+
+        
+        BBsetMusicVolume(music_arrows_return_code);
+        if (BBgetMusicVolume() > 24){ BBsetMusicVolume(-1);}; 
+        if (BBgetMusicVolume() < 0){ BBsetMusicVolume(1);};
     }
 
     const int sfx_arrows_return_code = do_arrows(sfx_volume_arrows_);
     if (are_arrows_selected(sfx_volume_arrows_) && sfx_arrows_return_code != 0) {
-        setSfxVolumeBB(sfx_arrows_return_code);
-        if (getSfxVolumeBB() > 24){ setSfxVolumeBB(-1);}; 
-        if (getSfxVolumeBB() < 0){ setSfxVolumeBB(1);};
+        BBsetSfxVolume(sfx_arrows_return_code);
+        if (BBgetSfxVolume() > 24){ BBsetSfxVolume(-1);}; 
+        if (BBgetSfxVolume() < 0){ BBsetSfxVolume(1);};
     }
 
-
     if (do_button(music_volume_options_button, true)) {
-        callback        = music_volume_callback;
-        selected_layer  = 1;
+        callback        = NULL;
+        selected_layer  = 0;
         selected_column = 0;
         selected_row    = 0;
         strcpy(dialogue_text_, "Change music volume?");
     }
 
     if (do_button(sfx_volume_options_button, true)) {
-        callback        = sfx_volume_callback;
-        selected_layer  = 1;
+        callback        = NULL;
+        selected_layer  = 0;
         selected_column = 0;
-        selected_row    = 0;
+        selected_row    = 1;
         strcpy(dialogue_text_, "Change sfx volume?");
     }
 
@@ -214,6 +198,10 @@ void draw_options_scene(void) {
     if (do_button(exit_options_button, true)) {
         change_scene(MAINMENU);
     }
+
+    DrawRectangleBars(BBgetMusicVolume() + 1, 230, 60 );
+    DrawRectangleBars(BBgetSfxVolume(), 230, 180 );
+    
 
     draw_confirmation_window(callback, NULL, dialogue_text_);
 }
