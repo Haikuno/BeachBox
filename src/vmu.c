@@ -82,7 +82,7 @@ static void update_vmu_credits_animation(void) {
 }
 
 void *draw_vmu_animation(void *param) {
-    if (save_in_progress()) return NULL;
+    if (save_in_progress() || load_in_progress()) return NULL;
 
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
 

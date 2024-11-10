@@ -69,4 +69,7 @@ void new_game(void);
 // Returns true if a save is in progress
 bool save_in_progress(void);
 
+// Returns true if a load is in progress
+bool load_in_progress(void);
+
 #endif

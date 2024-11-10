@@ -291,9 +291,19 @@ int save_game(void) {
     return -2; // unknown error
 }
 
+// This prevents VMU animations from being drawn while a load is in progress
+// So that we make sure loading doesn't fail
+static atomic_bool load_in_progress_ = false;
+
+bool load_in_progress(void) {
+    return load_in_progress_;
+}
+
 int load_game(void) {
+    load_in_progress_ = true;
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
     if (!vmu) {
+        load_in_progress_ = false;
         return -1;
     }
     void *save_buffer = malloc(sizeof(save));
@@ -301,9 +311,11 @@ int load_game(void) {
     if (vmufs_read(vmu, "BeachBox", &save_buffer, NULL) == 0) { // If loading was successful
         memcpy(&save, save_buffer, sizeof(save));
         free(save_buffer);
+        load_in_progress_ = false;
         return 1;
     }
     free(save_buffer);
+    load_in_progress_ = false;
     return -1;
 }
 
