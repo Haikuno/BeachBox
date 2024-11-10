@@ -15,8 +15,8 @@
 
 extern scene_t current_scene;
 
-static int sfxVolume   = 120;
-static int musicVolume = 120;
+static int sfxVolume   = 100;
+static int musicVolume = 12; // roughly 50%
 
 static sfxhnd_t sfx_menu_move;
 static sfxhnd_t sfx_menu_select;
@@ -30,8 +30,6 @@ static sfxhnd_t sfx_gameover;
 struct SceneType;
 
 void init_sounds(void) {
-
-    snd_init();
     snd_stream_init();
 
     sfx_menu_move     = snd_sfx_load("rd/audio/menu_move.wav");
@@ -107,8 +105,6 @@ static void play_song(void) {
         default:
             break;
     }
-
-    thd_pass();
 }
 
 void update_song(void) {
@@ -135,5 +131,17 @@ void update_song(void) {
 
     if (prev_song != current_song) {
         play_song();
+        thd_sleep(10); // Wait for ADX to load
+
+        if (snddrv.drv_status != SNDDRV_STATUS_NULL) {
+            // First, set the volume to 0
+            for (int i = 0; i < 25; i++) {
+                printf("SNDDRV: Volume set to %i\n", (int)(snddrv_volume_down() * 100 / 255)); // SNDDRV volume is 0-255
+            }
+            // Then, set the volume to musicVolume
+            for (int i = 0; i < musicVolume; i++) {
+                printf("SNDDRV: Volume set to %i\n", (int)(snddrv_volume_up() * 100 / 255));
+            }
+        }
     }
 }
