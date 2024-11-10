@@ -15,8 +15,21 @@
 
 extern scene_t current_scene;
 
-static int sfxVolume   = 100;
+static int sfxVolume   = 120;
 static int musicVolume = 12; // roughly 50%
+
+int getMusicVolumeBB(void) {
+  return musicVolume;
+}
+void setMusicVolumeBB(int new_value) {
+  musicVolume += new_value;
+}
+int getSfxVolumeBB(void) {
+  return (sfxVolume / 10);
+}
+void setSfxVolumeBB(int new_value) {
+  sfxVolume += (new_value * 10);
+}
 
 static sfxhnd_t sfx_menu_move;
 static sfxhnd_t sfx_menu_select;
@@ -138,10 +151,14 @@ void update_song(void) {
             for (int i = 0; i < 25; i++) {
                 printf("SNDDRV: Volume set to %i\n", (int)(snddrv_volume_down() * 100 / 255)); // SNDDRV volume is 0-255
             }
-            // Then, set the volume to musicVolume
-            for (int i = 0; i < musicVolume; i++) {
-                printf("SNDDRV: Volume set to %i\n", (int)(snddrv_volume_up() * 100 / 255));
+
+            if(!musicVolume == 0){
+                // Then, set the volume to musicVolume
+                for (int i = 0; i < musicVolume; i++) {
+                    printf("SNDDRV: Volume set to %i\n", (int)(snddrv_volume_up() * 100 / 255));
+                }
             }
         }
+        
     }
 }

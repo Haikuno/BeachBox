@@ -17,4 +17,10 @@ void play_sfx_menu_select(void);
 void play_sfx_menu_error(void);
 void play_sfx_purchase(void);
 
+
+int getMusicVolumeBB(void);
+void setMusicVolumeBB(int new_value);
+int getSfxVolumeBB(void);
+void setSfxVolumeBB(int new_value);
+
 #endif

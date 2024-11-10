@@ -17,6 +17,7 @@ extern uint8_t selected_row;
 extern uint8_t column_count[];
 extern uint8_t row_count[];
 
+
 static void init_game(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "BeachBox");
     init_sounds();
@@ -39,6 +40,9 @@ static void draw_game(void) {
 #ifdef DEBUG_DRAW_FPS
     DrawRectangle(0, 440, 130, 50, (Color){ 22, 22, 22, 200 });
     DrawFPS(27, 450);
+#endif
+#ifdef DEBUG_OPTIONS
+    DrawText(TextFormat("music: %d, sfx: %d", getMusicVolumeBB(), getSfxVolumeBB()), 395, 40, 20, RED);
 #endif
 
 #ifdef DEBUG_DRAW_CURSOR_INFO
