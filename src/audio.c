@@ -15,8 +15,8 @@
 
 extern scene_t current_scene;
 
-static int sfxVolume   = 130;
-static int musicVolume = 13; // roughly 50%
+static int sfxVolume   = 120;
+static int musicVolume = 12; // roughly 50%
 
 int BBgetMusicVolume(void) {
   return musicVolume;
