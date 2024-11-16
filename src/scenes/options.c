@@ -99,8 +99,8 @@ void draw_options_scene(void) {
 
     static void (*callback)(int option, void *user_data) = nullptr;
 
-    DrawRectangleBars(BBgetMusicVolume(), 230, 60);
-    DrawRectangleBars(BBgetSfxVolume(), 230, 180);
+    DrawRectangleBars(BB_get_music_volume(), 230, 60);
+    DrawRectangleBars(BB_get_sfx_volume(), 230, 180);
 
     // For volume
     const Vector2    arrows_size_         = (Vector2){ .x = 24, .y = 24 };
@@ -125,12 +125,12 @@ void draw_options_scene(void) {
 
     const int music_arrows_return_code = do_arrows(music_volume_arrows_);
     if (are_arrows_selected(music_volume_arrows_) && music_arrows_return_code != 0) {
-        BBsetMusicVolume(music_arrows_return_code);
-        if (BBgetMusicVolume() > 24) {
-            BBsetMusicVolume(-1);
+        BB_set_music_volume(music_arrows_return_code);
+        if (BB_get_music_volume() > 24) {
+            BB_set_music_volume(-1);
         };
-        if (BBgetMusicVolume() < 0) {
-            BBsetMusicVolume(1);
+        if (BB_get_music_volume() < 0) {
+            BB_set_music_volume(1);
         };
 
         if (music_arrows_return_code == 1) {
@@ -139,11 +139,11 @@ void draw_options_scene(void) {
 
             snddrv_volume_down();
         }
-        if (BBgetMusicVolume() <= 0) {
+        if (BB_get_music_volume() <= 0) {
             adx_pause();
         }
 
-        if (BBgetMusicVolume() >= 1) {
+        if (BB_get_music_volume() >= 1) {
 
             adx_resume();
         }
@@ -151,12 +151,12 @@ void draw_options_scene(void) {
 
     const int sfx_arrows_return_code = do_arrows(sfx_volume_arrows_);
     if (are_arrows_selected(sfx_volume_arrows_) && sfx_arrows_return_code != 0) {
-        BBsetSfxVolume(sfx_arrows_return_code);
-        if (BBgetSfxVolume() > 24) {
-            BBsetSfxVolume(-1);
+        BB_set_sfx_volume(sfx_arrows_return_code);
+        if (BB_get_sfx_volume() > 24) {
+            BB_set_sfx_volume(-1);
         };
-        if (BBgetSfxVolume() < 0) {
-            BBsetSfxVolume(1);
+        if (BB_get_sfx_volume() < 0) {
+            BB_set_sfx_volume(1);
         };
     }
 

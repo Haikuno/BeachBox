@@ -12,8 +12,6 @@ void update_current_scene(void);
 // Draws the current scene
 void draw_current_scene(void);
 
-void get_current_scene(void);
-
-void set_current_scene(void);
+scene_t get_current_scene(void);
 
 #endif

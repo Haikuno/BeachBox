@@ -1,4 +1,3 @@
-// TODO: implement audio
 #include "audio.h"
 #include "scene.h"
 #include <adx/adx.h>
@@ -8,26 +7,23 @@
 #include <dc/sound/stream.h>
 #include <stdio.h>
 
-// TODO: make volume changeable
 
-#define MAX_VOLUME 200
-#define MIN_VOLUME 0
-
-
+// Starting volume should be roughly 50% for both
 static int sfxVolume   = 120;
-static int musicVolume = 12; // roughly 50%
+// Adx, which we're using for the music, works between 1-24, so half would be 12
+static int musicVolume = 12; 
 
-int BBgetMusicVolume(void) {
+
+int BB_get_music_volume(void) {
     return musicVolume;
 }
-
-void BBsetMusicVolume(int new_value) {
+void BB_set_music_volume(int new_value) {
     musicVolume += new_value;
 }
-int BBgetSfxVolume(void) {
+int BB_get_sfx_volume(void) {
     return (sfxVolume / 10);
 }
-void BBsetSfxVolume(int new_value) {
+void BB_set_sfx_volume(int new_value) {
     sfxVolume += (new_value * 10);
 }
 
@@ -94,7 +90,7 @@ void play_sfx_purchase(void) {
 static enum Song { NIL_SONG, MENU_SONG, GAME_SONG, CREDITS_SONG } current_song = NIL_SONG;
 
 static void play_song(void) {
-    switch (get_current_song) {
+    switch (current_song) {
         case NIL_SONG:
             break;
         case MENU_SONG:
@@ -122,7 +118,8 @@ static void play_song(void) {
 
 void update_song(void) {
     const enum Song prev_song = current_song;
-
+    static scene_t current_scene;
+    current_scene = get_current_scene();
     switch (current_scene) {
         case RAYLOGO:
             current_song = NIL_SONG;

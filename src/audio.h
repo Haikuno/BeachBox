@@ -24,12 +24,12 @@ void play_sfx_menu_error(void);
 void play_sfx_purchase(void);
 
 // Gets the music volume
-int BBgetMusicVolume(void);
+int BB_get_music_volume(void);
 // Sets the music volume
-void BBsetMusicVolume(int new_value);
+void BB_set_music_volume(int new_value);
 // Gets sfx volume
-int BBgetSfxVolume(void);
+int BB_get_sfx_volume(void);
 // Sets sfx volume
-void BBsetSfxVolume(int new_value);
+void BB_set_sfx_volume(int new_value);
 
 #endif

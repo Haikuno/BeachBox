@@ -39,7 +39,7 @@ static void draw_game(void) {
     DrawFPS(27, 450);
 #endif
 #ifdef DEBUG_OPTIONS
-    DrawText(TextFormat("music: %d, sfx: %d", BBgetMusicVolume(), BBgetSfxVolume()), 395, 40, 20, RED);
+    DrawText(TextFormat("music: %d, sfx: %d", BB_get_music_volume(), BB_get_sfx_volume()), 395, 40, 20, RED);
 #endif
 
 #ifdef DEBUG_DRAW_CURSOR_INFO

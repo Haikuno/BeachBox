@@ -13,6 +13,6 @@
 // #define DEBUG_DRAW_FPS
 // #define DEBUG_DRAW_CURSOR_INFO
 // #define DEBUG_GODMODE
-#define DEBUG_INFINITE_COINS
+// #define DEBUG_INFINITE_COINS
 
 #endif

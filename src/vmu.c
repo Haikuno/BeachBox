@@ -98,7 +98,8 @@ void *draw_vmu_animation(void *param) {
 
     const char **vmu_current_animation  = nullptr;
     int          vmu_current_num_frames = 0;
-
+    static scene_t current_scene;
+    current_scene = get_current_scene();
     switch (current_scene) {
         case RAYLOGO:
             SET_VMU_ANIMATION(vmu_raylib_animation);

@@ -31,19 +31,16 @@ extern uint8_t      vmu_menu_text_frame;
 extern bbox_timer_t vmu_menu_text_update_cooldown;
 
 
-get_current_scene(void){
+
+
+
+
+static scene_t current_scene = RAYLOGO;
+
+
+scene_t get_current_scene(void){
     return current_scene;
-
 }
-
-set_current_scene(scene_t Scene){
-    current_scene = Scene;
-
-}
-
-
-
-scene_t             current_scene = RAYLOGO;
 
 void change_scene(const scene_t scene) {
     static const void (*init_scene_functions[])(void) = { [RAYLOGO] = init_raylogo_scene, [LOADING] = init_loading_scene,         [MAINMENU] = init_mainmenu_scene, [GAME] = init_game_scene,
