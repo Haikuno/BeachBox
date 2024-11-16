@@ -12,7 +12,6 @@
 // Vmu animations are drawn to the vmu frame buffer, and then presented to the screen
 // Each frame is just an array of raw bits, 1bpp (see vmu_animations.h)
 
-extern scene_t current_scene;
 extern bool    is_game_over;
 
 static vmufb_t vmu_fb;
@@ -98,9 +97,8 @@ void *draw_vmu_animation(void *param) {
 
     const char **vmu_current_animation  = nullptr;
     int          vmu_current_num_frames = 0;
-    static scene_t current_scene;
-    current_scene = get_current_scene();
-    switch (current_scene) {
+
+    switch (get_current_scene()) {
         case RAYLOGO:
             SET_VMU_ANIMATION(vmu_raylib_animation);
             break;
@@ -136,8 +134,8 @@ void *draw_vmu_animation(void *param) {
     vmu_current_frame = (vmu_current_frame + 1) % vmu_current_num_frames;
     vmufb_paint_area(&vmu_fb, 0, 0, 48, 32, vmu_current_animation[vmu_current_frame]);
 
-    if (current_scene == MAINMENU) update_vmu_menu_text();
-    if (current_scene == CREDITS) update_vmu_credits_animation();
+    if (get_current_scene() == MAINMENU) update_vmu_menu_text();
+    if (get_current_scene() == CREDITS) update_vmu_credits_animation();
 
     vmufb_present(&vmu_fb, vmu);
 

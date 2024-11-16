@@ -118,9 +118,7 @@ static void play_song(void) {
 
 void update_song(void) {
     const enum Song prev_song = current_song;
-    static scene_t current_scene;
-    current_scene = get_current_scene();
-    switch (current_scene) {
+    switch (get_current_scene()) {
         case RAYLOGO:
             current_song = NIL_SONG;
             break;

@@ -4,7 +4,6 @@
 #include "ui.h"
 #include "player.h"
 
-extern scene_t current_scene;
 extern bool    is_game_over;
 extern bool    is_game_paused;
 
@@ -49,9 +48,8 @@ void update_controller(void) {
     const bool is_right_down = IsGamepadButtonDown(0, DPAD_RIGHT);
     const bool is_a_down     = IsGamepadButtonDown(0, BUTTON_A);
     const bool is_x_down     = IsGamepadButtonDown(0, BUTTON_X);
-    static scene_t current_scene;
-    current_scene = get_current_scene();
-    switch (current_scene) {
+
+    switch (get_current_scene()) {
         case GAME:
             if (is_game_over) {
                 if (is_left_pressed) {
