@@ -19,8 +19,6 @@ struct Objects {
 
 // TODO: none of this should be externed
 extern character_t player;
-extern bool        is_slowing_down;
-extern bool        is_teleporting;
 extern uint16_t    current_coins;
 
 // Bitfield that keeps track of which objects are active, 0 being inactive and 1 active
@@ -136,7 +134,7 @@ void update_objects(void) {
     update_timer(&coin_spawn_timer);
     update_timer(&pillar_spawn_timer);
     update_timer(&giant_pillar_spawn_timer);
-    current_object_speed = is_slowing_down ? base_object_speed / 1.5 : base_object_speed;
+    current_object_speed = get_is_slowing_down() ? base_object_speed / 1.5 : base_object_speed;
     add_objects();
 
     for (int index = 0; index < max_objects; index++) {
@@ -160,7 +158,7 @@ void update_objects(void) {
 
         // Coins
         if (index >= coins_first_bit && index <= coins_last_bit) {
-            if ((objects_shifted_bitfield & (1 << index)) != player.is_shifted && !is_teleporting)
+            if ((objects_shifted_bitfield & (1 << index)) != player.is_shifted && !get_is_teleporting())
                 continue; // If the player and the coin's "dimension" do not match, skip
                           // If the player is teleporting, we grab the coin no matter what
 
@@ -174,7 +172,7 @@ void update_objects(void) {
 
         // Pillars
         if (index >= pillars_fist_bit && index <= pillars_last_bit) {
-            if (is_teleporting || (!is_giant_pillar(objects.size[index]) && (objects_shifted_bitfield & (1 << index)) != player.is_shifted))
+            if (get_is_teleporting() || (!is_giant_pillar(objects.size[index]) && (objects_shifted_bitfield & (1 << index)) != player.is_shifted))
                 continue; // If the player and the pillar's "dimension" do not match, skip
                           // If the player is teleporting, we do not check for collisions
 
@@ -193,7 +191,7 @@ void draw_objects(void) {
 
         Color color = is_giant_pillar(objects.size[index]) ? (Color){ 136, 216, 176, 255 } : (Color){ 255, 154, 49, 255 };
 
-        if (is_slowing_down) invert_color(&color);
+        if (get_is_slowing_down()) invert_color(&color);
         if (objects_shifted_bitfield & (1 << index)) {
             color.a = 50;
         }
@@ -206,7 +204,7 @@ void draw_objects(void) {
     for (int index = coins_first_bit; index <= coins_last_bit; index++) {
         Color color = { 224, 212, 0, 255 };
 
-        if (is_slowing_down) invert_color(&color);
+        if (get_is_slowing_down()) invert_color(&color);
         if (objects_shifted_bitfield & (1 << index)) {
             color.a = 100;
         }

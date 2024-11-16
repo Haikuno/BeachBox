@@ -51,7 +51,7 @@ void init_player(void) {
 }
 
 void move_player(Vector2 direction) {
-    if (is_teleporting) return; // If the player is teleporting, we don't let the player move
+    if (get_is_teleporting()) return; // If the player is teleporting, we don't let the player move
     player.velocity.x += direction.x * player.speed;
 }
 
@@ -60,12 +60,12 @@ void shift_player(bool is_holding_down_x) {
 }
 
 void update_player_pos(void) {
-    player.pos.x += is_teleporting ? 8.5 + 0.5 * get_upgrade_level(UPGRADE_TELEPORT_DISTANCE) : player.velocity.x;
+    player.pos.x += get_is_teleporting() ? 8.5 + 0.5 * get_upgrade_level(UPGRADE_TELEPORT_DISTANCE) : player.velocity.x;
     if (player.pos.x < 0) player.pos.x = 0;
     if (player.pos.x > SCREEN_WIDTH - player.size.x) player.pos.x = SCREEN_WIDTH - player.size.x;
     player.velocity.x = 0;
 
-    if (is_teleporting) return; // If the player is teleporting, we skip falling down
+    if (get_is_teleporting()) return; // If the player is teleporting, we skip falling down
     player.velocity.y += player.velocity.y < 0 ? GRAVITY : GRAVITY * 1.5;
     player.pos.y      += player.velocity.y;
 
@@ -97,10 +97,10 @@ void cut_jump(void) {
 void slow_down(void) {
     if (!get_upgrade_level(UPGRADE_SLOWDOWN_UNLOCK)) return;
 
-    if (!is_slowing_down) play_sfx_slowdown();
+    if (!get_is_slowing_down()) play_sfx_slowdown();
     else play_sfx_slowdown_back();
 
-    is_slowing_down = !is_slowing_down;
+    set_is_slowing_down(!get_is_slowing_down());
 }
 
 // The teleport power
@@ -110,23 +110,23 @@ void teleport(void) {
     if (teleport_cooldown_timer.is_running) return;
     if (!teleport_duration_timer.is_running) { // If the player can teleport
         play_sfx_teleport();
-        is_teleporting = true;
+        set_is_teleporting(true);
         start_timer(&teleport_duration_timer, 0.4);
         start_timer(&teleport_cooldown_timer, 5 - 0.5 * get_upgrade_level(UPGRADE_TELEPORT_COOLDOWN));
     }
 }
 
 void update_player(void) {
-    if (is_teleporting) {
+    if (get_is_teleporting()) {
         player.velocity.y = BBOX_MIN(player.velocity.y, 0); // If the player was falling down before teleporting, we set it back to 0
         update_timer(&teleport_duration_timer);
-        if (!teleport_duration_timer.is_running) is_teleporting = false;
+        if (!teleport_duration_timer.is_running) set_is_teleporting(false);
     }
     update_timer(&teleport_cooldown_timer);
 
     update_player_pos();
     player.meter -= 0.16;
-    if (is_slowing_down) player.meter -= 0.22 / (1 + get_upgrade_level(UPGRADE_SLOWDOWN_DRAIN) / 4);
+    if (get_is_slowing_down()) player.meter -= 0.22 / (1 + get_upgrade_level(UPGRADE_SLOWDOWN_DRAIN) / 4);
 
     if (player.meter <= 0) {
         lose_game();
@@ -137,10 +137,10 @@ void draw_player(void) {
     const Color transparent        = { 0, 0, 0, 0 };
     const Color hat_teleport_color = { 0, 0, 0, 120 };
 
-    Color current_player_color = is_teleporting ? transparent : player.color;
+    Color current_player_color = get_is_teleporting() ? transparent : player.color;
     current_player_color.a     = player.is_shifted ? 140 : current_player_color.a;
 
-    Color hat_color = is_teleporting ? hat_teleport_color : WHITE;
+    Color hat_color = get_is_teleporting() ? hat_teleport_color : WHITE;
     hat_color.a     = player.is_shifted ? 140 : hat_color.a;
 
     DrawRectangleV(player.pos, player.size, current_player_color);
