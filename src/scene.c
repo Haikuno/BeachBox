@@ -29,6 +29,20 @@ extern uint8_t column_count[];
 extern uint8_t      vmu_current_frame;
 extern uint8_t      vmu_menu_text_frame;
 extern bbox_timer_t vmu_menu_text_update_cooldown;
+
+
+get_current_scene(void){
+    return current_scene;
+
+}
+
+set_current_scene(scene_t Scene){
+    current_scene = Scene;
+
+}
+
+
+
 scene_t             current_scene = RAYLOGO;
 
 void change_scene(const scene_t scene) {

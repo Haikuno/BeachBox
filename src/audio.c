@@ -13,7 +13,6 @@
 #define MAX_VOLUME 200
 #define MIN_VOLUME 0
 
-extern scene_t current_scene;
 
 static int sfxVolume   = 120;
 static int musicVolume = 12; // roughly 50%
@@ -95,7 +94,7 @@ void play_sfx_purchase(void) {
 static enum Song { NIL_SONG, MENU_SONG, GAME_SONG, CREDITS_SONG } current_song = NIL_SONG;
 
 static void play_song(void) {
-    switch (current_song) {
+    switch (get_current_song) {
         case NIL_SONG:
             break;
         case MENU_SONG:
