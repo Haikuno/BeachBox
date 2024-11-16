@@ -2,6 +2,7 @@
 #define BBOX_TIMER_H
 
 #include <raylib.h>
+#include <time.h>
 
 typedef struct Timer {
         float duration;

@@ -96,7 +96,7 @@ static void new_game_callback(int option, void *user_data) {
 void draw_loading_scene(void) {
     draw_background();
 
-    static void (*callback)(int option, void *user_data) = NULL;
+    static void (*callback)(int option, void *user_data) = nullptr;
     static char message[50];
 
     if (do_button(load_button, true) && !error_popup_timer.is_running) {
@@ -111,6 +111,6 @@ void draw_loading_scene(void) {
         snprintf(message, sizeof(message), "Start a new game?");
     }
 
-    draw_confirmation_window(callback, NULL, message);
+    draw_confirmation_window(callback, nullptr, message);
     draw_error_popup();
 }

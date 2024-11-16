@@ -11,7 +11,6 @@
 #include "options.h"
 #include <string.h>
 
-
 extern uint8_t     column_count[];
 extern uint8_t     row_count[];
 extern const Color ui_background_color;
@@ -23,7 +22,7 @@ extern uint8_t     selected_row;
 
 const uibutton_t music_volume_options_button = {
     .pos    = { .x = 40,  .y = 60 },
-    .size   = { .x = 150, .y = 40  },
+    .size   = { .x = 150, .y = 40 },
     .column = 0,
     .row    = 0,
     .layer  = 0,
@@ -57,8 +56,6 @@ const uibutton_t exit_options_button = {
     .text   = "Return",
 };
 
-
-
 const void init_options_scene(void) {
     row_count[0]    = 4;
     column_count[0] = 1;
@@ -81,29 +78,17 @@ static void new_game_callback(int option, void *user_data) {
     }
 }
 static void DrawRectangleBars(int count, int posX, int posY) {
-    const int BAR_WIDTH = 10;
-    const int SPACING = 15;
+    const int BAR_WIDTH   = 10;
+    const int SPACING     = 15;
     const int BASE_HEIGHT = 40;
 
     for (int i = 0; i < 24; i++) {
 
-        DrawRectangle(
-            posX + i * SPACING,
-            posY,
-            BAR_WIDTH,
-            BASE_HEIGHT,
-            SKYBLUE         
-        );
+        DrawRectangle(posX + i * SPACING, posY, BAR_WIDTH, BASE_HEIGHT, SKYBLUE);
     }
     for (int i = 0; i < count; i++) {
 
-        DrawRectangle(
-            posX + i * SPACING,
-            posY,
-            BAR_WIDTH,
-            BASE_HEIGHT,
-            BLUE  
-        );
+        DrawRectangle(posX + i * SPACING, posY, BAR_WIDTH, BASE_HEIGHT, BLUE);
     }
 }
 
@@ -112,70 +97,71 @@ void draw_options_scene(void) {
 
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
 
+    static void (*callback)(int option, void *user_data) = nullptr;
 
-    static void (*callback)(int option, void *user_data) = NULL;
-
-    DrawRectangleBars(BBgetMusicVolume(), 230, 60 );
-    DrawRectangleBars(BBgetSfxVolume(), 230, 180 );
-
-
+    DrawRectangleBars(BBgetMusicVolume(), 230, 60);
+    DrawRectangleBars(BBgetSfxVolume(), 230, 180);
 
     // For volume
-    const Vector2 arrows_size_ = (Vector2){ .x = 24, .y = 24 };
+    const Vector2    arrows_size_         = (Vector2){ .x = 24, .y = 24 };
     const uiarrows_t music_volume_arrows_ = {
-        .column = 0,
-        .row = 0,
-        .layer = 0,
-        .pos_left = {18, 65},
-        .pos_right = {187, 65},
-        .size = arrows_size_,
+        .column    = 0,
+        .row       = 0,
+        .layer     = 0,
+        .pos_left  = { 18,  65 },
+        .pos_right = { 187, 65 },
+        .size      = arrows_size_,
     };
 
     const uiarrows_t sfx_volume_arrows_ = {
-        .column = 0,
-        .row = 1,
-        .layer = 0,
-        .pos_left = {18, 185},
-        .pos_right = {187, 185},
-        .size = arrows_size_,
+        .column    = 0,
+        .row       = 1,
+        .layer     = 0,
+        .pos_left  = { 18,  185 },
+        .pos_right = { 187, 185 },
+        .size      = arrows_size_,
     };
     static char dialogue_text_[24] = "";
-
 
     const int music_arrows_return_code = do_arrows(music_volume_arrows_);
     if (are_arrows_selected(music_volume_arrows_) && music_arrows_return_code != 0) {
         BBsetMusicVolume(music_arrows_return_code);
-        if (BBgetMusicVolume() > 24){ BBsetMusicVolume(-1);}; 
-        if (BBgetMusicVolume() < 0){ BBsetMusicVolume(1);};
+        if (BBgetMusicVolume() > 24) {
+            BBsetMusicVolume(-1);
+        };
+        if (BBgetMusicVolume() < 0) {
+            BBsetMusicVolume(1);
+        };
 
-        if(music_arrows_return_code == 1){
+        if (music_arrows_return_code == 1) {
             snddrv_volume_up();
-        } else if(music_arrows_return_code == -1){
+        } else if (music_arrows_return_code == -1) {
 
             snddrv_volume_down();
         }
-        if(BBgetMusicVolume() <= 0){
+        if (BBgetMusicVolume() <= 0) {
             adx_pause();
         }
 
-        if(BBgetMusicVolume() >= 1){
+        if (BBgetMusicVolume() >= 1) {
 
-                adx_resume();
+            adx_resume();
         }
-
-        
-
     }
 
     const int sfx_arrows_return_code = do_arrows(sfx_volume_arrows_);
     if (are_arrows_selected(sfx_volume_arrows_) && sfx_arrows_return_code != 0) {
         BBsetSfxVolume(sfx_arrows_return_code);
-        if (BBgetSfxVolume() > 24){ BBsetSfxVolume(-1);}; 
-        if (BBgetSfxVolume() < 0){ BBsetSfxVolume(1);};
+        if (BBgetSfxVolume() > 24) {
+            BBsetSfxVolume(-1);
+        };
+        if (BBgetSfxVolume() < 0) {
+            BBsetSfxVolume(1);
+        };
     }
 
     if (do_button(music_volume_options_button, true)) {
-        callback        = NULL;
+        callback        = nullptr;
         selected_layer  = 0;
         selected_column = 0;
         selected_row    = 0;
@@ -183,7 +169,7 @@ void draw_options_scene(void) {
     }
 
     if (do_button(sfx_volume_options_button, true)) {
-        callback        = NULL;
+        callback        = nullptr;
         selected_layer  = 0;
         selected_column = 0;
         selected_row    = 1;
@@ -196,14 +182,11 @@ void draw_options_scene(void) {
         selected_column = 0;
         selected_row    = 0;
         strcpy(dialogue_text_, "Start a new game?");
-        
     }
 
     if (do_button(exit_options_button, true)) {
         change_scene(MAINMENU);
     }
 
-
-
-    draw_confirmation_window(callback, NULL, dialogue_text_);
+    draw_confirmation_window(callback, nullptr, dialogue_text_);
 }

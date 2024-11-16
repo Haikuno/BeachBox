@@ -1,7 +1,6 @@
-#include <raylib.h>
 #include "hats.h"
 
-Texture2D hats[HAT_MAX];
+static Texture2D hats[HAT_COUNT];
 
 void load_hats(void) {
     hats[HAT_SLIME_RED]  = LoadTexture("rd/hats/slime_red.png");
@@ -13,4 +12,14 @@ void load_hats(void) {
     hats[HAT_F]          = LoadTexture("rd/hats/f.png");
     hats[HAT_MUPRH]      = LoadTexture("rd/hats/murph.png");
     hats[HAT_CROWN]      = LoadTexture("rd/hats/crown.png");
+}
+
+void unload_hats(void) {
+    for (int i = 0; i < HAT_COUNT; i++) {
+        UnloadTexture(hats[i]);
+    }
+}
+
+const Texture2D *get_hat_texture(const hat_t hat) {
+    return &hats[hat];
 }

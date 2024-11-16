@@ -3,7 +3,13 @@
 
 typedef enum Scene { RAYLOGO, LOADING, MAINMENU, GAME, SHOP, UNLOCKABLES, OPTIONS, CREDITS } scene_t;
 
-void change_scene(scene_t scene);
+// Changes the current scene to the given scene, initializing it and switching the song if needed
+void change_scene(const scene_t scene);
+
+// Updates the current scene
 void update_current_scene(void);
+
+// Draws the current scene
 void draw_current_scene(void);
+
 #endif

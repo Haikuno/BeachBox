@@ -8,25 +8,16 @@
 #include "helper_functions.h"
 #include "scenes/game.h"
 
-#define MAX_OBJECTS 16
-#define MAX_OBJECT_SPEED 13
-
-#define COIN_SIZE 10.0f
-
-// We split the bitfield in half, the first 8 bits being the pillars and the last 8 bits being the coins
-#define PILLARS_FIRST_BIT 0
-#define PILLARS_LAST_BIT 7
-#define COINS_FIRST_BIT 8
-#define COINS_LAST_BIT 15
-// So for example, a value of 0b00010000'00000001 would mean there's a pillar occupying the first bit,
-// and a coin on the 13th bit
+constexpr uint8_t max_objects      = 16; // 16 is the limit since we are using a 16-bit bitfield
+constexpr float   max_object_speed = 13;
+constexpr float   coin_size        = 10.0f;
 
 struct Objects {
-        Vector2 size[8]; // only 8 because all coins are the same size
-        Vector2 pos[MAX_OBJECTS];
-        bool    is_shifted[MAX_OBJECTS];
-} objects = { 0 };
+        Vector2 size[max_objects / 2]; // half because all coins are the same size
+        Vector2 pos[max_objects];
+} static objects = { 0 };
 
+// TODO: none of this should be externed
 extern character_t player;
 extern bool        is_slowing_down;
 extern bool        is_teleporting;
@@ -35,8 +26,20 @@ extern uint16_t    current_coins;
 // Bitfield that keeps track of which objects are active, 0 being inactive and 1 active
 static uint16_t objects_bitfield;
 
+// We split the bitfield in half, the first 8 bits being the pillars and the last 8 bits being the coins
+constexpr uint8_t pillars_fist_bit = 0;
+constexpr uint8_t pillars_last_bit = 7;
+constexpr uint8_t coins_first_bit  = 8;
+constexpr uint8_t coins_last_bit   = 15;
+
+// So for example, a value of 0b00010000'00000001 would mean there's a pillar occupying the first bit,
+// and a coin on the 13th bit
+
+// Bitfield that keeps track of which objects are shifted, 0 being not shifted and 1 shifted
+static uint16_t objects_shifted_bitfield;
+
 static float base_object_speed;
-float        current_object_speed;
+float        current_object_speed; // TODO: getter for this
 
 // Cooldown variables
 static float        coin_cooldown;
@@ -46,7 +49,7 @@ static bbox_timer_t coin_spawn_timer;
 static bbox_timer_t pillar_spawn_timer;
 static bbox_timer_t giant_pillar_spawn_timer;
 
-void calculate_object_cooldowns(void) {
+static void calculate_object_cooldowns(void) {
     coin_cooldown         = 8 / current_object_speed;
     pillar_cooldown       = 15 / current_object_speed;
     giant_pillar_cooldown = 70 / current_object_speed;
@@ -60,11 +63,11 @@ void init_objects(void) {
     start_timer(&giant_pillar_spawn_timer, 30); // The first giant pillar spawns later in the run
 }
 
-void spawn_pillar(void) {
+static void spawn_pillar(void) {
     if (pillar_spawn_timer.is_running) return;
 
     uint16_t index;
-    for (index = PILLARS_FIRST_BIT; index <= PILLARS_LAST_BIT; index++) {
+    for (index = pillars_fist_bit; index <= pillars_last_bit; index++) {
         if (!(objects_bitfield & (1 << index))) {
             break;
         }
@@ -76,7 +79,7 @@ void spawn_pillar(void) {
     if (!giant_pillar_spawn_timer.is_running) {
         objects.size[index]       = (Vector2){ .x = 200, .y = FLOOR_HEIGHT };
         objects.pos[index]        = (Vector2){ .x = SCREEN_WIDTH + 100, .y = FLOOR_HEIGHT - objects.size[index].y };
-        objects.is_shifted[index] = false;
+        objects_shifted_bitfield &= ~(1 << index);
 
         // We start both timers to avoid spawning two pillars on top of each other
         start_timer(&giant_pillar_spawn_timer, giant_pillar_cooldown);
@@ -94,16 +97,16 @@ void spawn_pillar(void) {
         objects.pos[index].y  = -5;
     }
 
-    objects.is_shifted[index] = GetRandomValue(0, 1);
+    objects_shifted_bitfield |= (1 << index) & GetRandomValue(0, 1);
     start_timer(&pillar_spawn_timer, pillar_cooldown);
     return;
 }
 
 // This function is also responsible of increasing the object speed each time a coin is spawned
-void spawn_coin(void) {
+static void spawn_coin(void) {
     if (coin_spawn_timer.is_running) return;
     uint16_t index;
-    for (index = COINS_FIRST_BIT; index <= COINS_LAST_BIT; index++) {
+    for (index = coins_first_bit; index <= coins_last_bit; index++) {
         if (!(objects_bitfield & (1 << index))) {
             break;
         }
@@ -112,15 +115,15 @@ void spawn_coin(void) {
     objects_bitfield |= (1 << index);
 
     objects.pos[index]        = (Vector2){ .x = SCREEN_WIDTH + 100, .y = GetRandomValue(190, FLOOR_HEIGHT - 100) };
-    objects.is_shifted[index] = GetRandomValue(0, 1);
+    objects_shifted_bitfield |= (1 << index) & GetRandomValue(0, 1);
 
-    base_object_speed = BBOX_MIN(base_object_speed + 0.09, MAX_OBJECT_SPEED);
+    base_object_speed = BBOX_MIN(base_object_speed + 0.09, max_object_speed);
     calculate_object_cooldowns();
     start_timer(&coin_spawn_timer, coin_cooldown);
 }
 
-void add_objects(void) {
-    if (objects_bitfield == MAX_OBJECTS) return;
+static void add_objects(void) {
+    if (objects_bitfield == max_objects) return;
     spawn_pillar();
     spawn_coin();
 }
@@ -136,13 +139,13 @@ void update_objects(void) {
     current_object_speed = is_slowing_down ? base_object_speed / 1.5 : base_object_speed;
     add_objects();
 
-    for (int index = 0; index < MAX_OBJECTS; index++) {
+    for (int index = 0; index < max_objects; index++) {
         if (!(objects_bitfield & (1 << index))) continue; // Skip if the object is not active
         objects.pos[index].x -= current_object_speed;     // Move objects
 
         // Remove objects that are off the screen
-        if (index >= COINS_FIRST_BIT && index <= COINS_LAST_BIT) {
-            if (objects.pos[index].x < -COIN_SIZE) {
+        if (index >= coins_first_bit && index <= coins_last_bit) {
+            if (objects.pos[index].x < -coin_size) {
                 objects_bitfield &= ~(1 << index);
                 continue;
             }
@@ -156,12 +159,12 @@ void update_objects(void) {
         // Check for collisions with the player
 
         // Coins
-        if (index >= COINS_FIRST_BIT && index <= COINS_LAST_BIT) {
-            if (objects.is_shifted[index] != player.is_shifted && !is_teleporting)
-                continue; // If the player and the coin's "plane" do not match, skip
+        if (index >= coins_first_bit && index <= coins_last_bit) {
+            if ((objects_shifted_bitfield & (1 << index)) != player.is_shifted && !is_teleporting)
+                continue; // If the player and the coin's "dimension" do not match, skip
                           // If the player is teleporting, we grab the coin no matter what
 
-            if (CheckCollisionCircleRec(objects.pos[index], COIN_SIZE, (Rectangle){ .x = player.pos.x, .y = player.pos.y, .width = player.size.x, .height = player.size.y })) {
+            if (CheckCollisionCircleRec(objects.pos[index], coin_size, (Rectangle){ .x = player.pos.x, .y = player.pos.y, .width = player.size.x, .height = player.size.y })) {
                 objects_bitfield &= ~(1 << index);
                 play_sfx_coin();
                 current_coins++;
@@ -170,9 +173,9 @@ void update_objects(void) {
         }
 
         // Pillars
-        if (index >= PILLARS_FIRST_BIT && index <= PILLARS_LAST_BIT) {
-            if (is_teleporting || (!is_giant_pillar(objects.size[index]) && objects.is_shifted[index] != player.is_shifted))
-                continue; // If the player and the pillar's "plane" do not match, skip
+        if (index >= pillars_fist_bit && index <= pillars_last_bit) {
+            if (is_teleporting || (!is_giant_pillar(objects.size[index]) && (objects_shifted_bitfield & (1 << index)) != player.is_shifted))
+                continue; // If the player and the pillar's "dimension" do not match, skip
                           // If the player is teleporting, we do not check for collisions
 
             if ((CheckCollisionRectangleV(player.pos, player.size, objects.pos[index], objects.size[index]))) {
@@ -185,32 +188,32 @@ void update_objects(void) {
 
 void draw_objects(void) {
     // Pillars
-    for (int i = PILLARS_FIRST_BIT; i <= PILLARS_LAST_BIT; i++) {
-        if (!(objects_bitfield & (1 << i))) continue;
+    for (int index = pillars_fist_bit; index <= pillars_last_bit; index++) {
+        if (!(objects_bitfield & (1 << index))) continue;
 
-        Color color = is_giant_pillar(objects.size[i]) ? (Color){ 136, 216, 176, 255 } : (Color){ 255, 154, 49, 255 };
+        Color color = is_giant_pillar(objects.size[index]) ? (Color){ 136, 216, 176, 255 } : (Color){ 255, 154, 49, 255 };
 
         if (is_slowing_down) invert_color(&color);
-        if (objects.is_shifted[i]) {
+        if (objects_shifted_bitfield & (1 << index)) {
             color.a = 50;
         }
 
-        DrawRectangleV(objects.pos[i], objects.size[i], color);
-        DrawRectangleLinesExV(objects.pos[i], objects.size[i], 2, BLACK);
+        DrawRectangleV(objects.pos[index], objects.size[index], color);
+        DrawRectangleLinesExV(objects.pos[index], objects.size[index], 2, BLACK);
     }
 
     // Coins
-    for (int i = COINS_FIRST_BIT; i <= COINS_LAST_BIT; i++) {
+    for (int index = coins_first_bit; index <= coins_last_bit; index++) {
         Color color = { 224, 212, 0, 255 };
 
         if (is_slowing_down) invert_color(&color);
-        if (objects.is_shifted[i]) {
+        if (objects_shifted_bitfield & (1 << index)) {
             color.a = 100;
         }
 
-        if (objects_bitfield & (1 << i)) {
-            DrawCircleV(objects.pos[i], COIN_SIZE, color);
-            DrawCircleLinesExV(objects.pos[i], COIN_SIZE, 1.25, BLACK);
+        if (objects_bitfield & (1 << index)) {
+            DrawCircleV(objects.pos[index], coin_size, color);
+            DrawCircleLinesExV(objects.pos[index], coin_size, 1.25, BLACK);
         }
     }
 }

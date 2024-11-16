@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.21)
 
 set(KOS_BASE /opt/toolchains/dc/kos)
 set(KOS_CC_BASE /opt/toolchains/dc/sh-elf)
 set(KOS_SUBARCH pristine)
 set(KOS_PORTS ${KOS_BASE}/../kos-ports)
-set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
+# set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
 include_directories(${KOS_PORTS}/include/raylib)
 
 include(${KOS_BASE}/utils/cmake/dreamcast.toolchain.cmake)
@@ -13,8 +13,9 @@ include(${KOS_BASE}/utils/cmake/dreamcast.toolchain.cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(BeachBox C)
-
 set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
 
 SET (SRCS main.c
     src/scenes/credits.c

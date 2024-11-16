@@ -13,7 +13,6 @@
 // Each frame is just an array of raw bits, 1bpp (see vmu_animations.h)
 
 extern scene_t current_scene;
-extern save_t  save;
 extern bool    is_game_over;
 
 static vmufb_t vmu_fb;
@@ -47,12 +46,12 @@ static void update_vmu_menu_text(void) {
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 3, 7, 48, 6, 2, "your money!");
             break;
         case 5:
-            snprintf(buffer, sizeof(buffer), "You have %d", save.total_coins);
+            snprintf(buffer, sizeof(buffer), "You have %d", get_total_coins());
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 1, 1, 48, 6, 2, buffer);
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 3, 7, 48, 6, 2, "coins left");
             break;
         case 6:
-            snprintf(buffer, sizeof(buffer), "%d times!!", save.total_runs);
+            snprintf(buffer, sizeof(buffer), "%d times!!", get_total_runs());
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "You played");
             vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 7, 48, 6, 2, buffer);
             break;
@@ -82,22 +81,22 @@ static void update_vmu_credits_animation(void) {
 }
 
 void *draw_vmu_animation(void *param) {
-    if (save_in_progress() || load_in_progress()) return NULL;
+    if (is_save_in_progress() || is_load_in_progress()) return nullptr;
 
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
 
-    if (!vmu) return NULL;
+    if (!vmu) return nullptr;
 
     static bbox_timer_t vmu_update_cooldown;
     update_timer(&vmu_update_cooldown);
 
     if (vmu_update_cooldown.is_running) {
-        return NULL;
+        return nullptr;
     }
 
     start_timer(&vmu_update_cooldown, 0.2f);
 
-    const char **vmu_current_animation  = NULL;
+    const char **vmu_current_animation  = nullptr;
     int          vmu_current_num_frames = 0;
 
     switch (current_scene) {
@@ -131,7 +130,7 @@ void *draw_vmu_animation(void *param) {
             break;
     }
 
-    if (!vmu_current_animation) return NULL;
+    if (!vmu_current_animation) return nullptr;
 
     vmu_current_frame = (vmu_current_frame + 1) % vmu_current_num_frames;
     vmufb_paint_area(&vmu_fb, 0, 0, 48, 32, vmu_current_animation[vmu_current_frame]);
@@ -141,5 +140,5 @@ void *draw_vmu_animation(void *param) {
 
     vmufb_present(&vmu_fb, vmu);
 
-    return NULL;
+    return nullptr;
 };

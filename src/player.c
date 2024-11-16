@@ -8,9 +8,7 @@
 #include "audio.h"
 #include "scenes/game.h"
 
-extern save_t    save;
-extern Texture2D hats[];
-
+// TODO: this is shit
 const Color player_colors[PLAYER_COLORS_COUNT] = {
     RED,
     ORANGE,
@@ -31,22 +29,22 @@ const Color player_colors[PLAYER_COLORS_COUNT] = {
     DARKGRAY,
 };
 
-character_t  player                  = { 0 };
-bbox_timer_t teleport_duration_timer = { 0 };
-bbox_timer_t teleport_cooldown_timer = { 0 };
-bool         is_slowing_down         = false;
-bool         is_teleporting          = false;
-bool         held_a_during_death     = false;
+character_t         player                  = { 0 }; // TODO: make static
+static bbox_timer_t teleport_duration_timer = { 0 };
+bbox_timer_t        teleport_cooldown_timer = { 0 }; // TODO: make static
+bool                is_slowing_down         = false; // TODO: make static
+bool                is_teleporting          = false; // TODO: make static
+bool                held_a_during_death     = false; // TODO: make static
 
 void init_player(void) {
     player.size       = (Vector2){ 32.0f, 32.0f };
     player.pos        = (Vector2){ .x = 100, .y = FLOOR_HEIGHT - player.size.y };
     player.velocity   = (Vector2){ 0.0f, 0.0f };
-    player.speed      = 6.5 + 0.5 * save.player_upgrade_levels.player_speed_level;
-    player.max_meter  = 100 + 10 * save.player_upgrade_levels.meter_level;
+    player.speed      = 6.5 + 0.5 * get_upgrade_level(UPGRADE_SPEED);
+    player.max_meter  = 100 + 10 * get_upgrade_level(UPGRADE_METER);
     player.meter      = player.max_meter;
     player.is_shifted = false;
-    player.color      = player_colors[save.color_index];
+    player.color      = player_colors[get_player_current_color()];
 
     is_slowing_down = false;
     is_teleporting  = false;
@@ -62,7 +60,7 @@ void shift_player(bool is_holding_down_x) {
 }
 
 void update_player_pos(void) {
-    player.pos.x += is_teleporting ? 8.5 + 0.5 * save.player_upgrade_levels.teleport_distance_level : player.velocity.x;
+    player.pos.x += is_teleporting ? 8.5 + 0.5 * get_upgrade_level(UPGRADE_TELEPORT_DISTANCE) : player.velocity.x;
     if (player.pos.x < 0) player.pos.x = 0;
     if (player.pos.x > SCREEN_WIDTH - player.size.x) player.pos.x = SCREEN_WIDTH - player.size.x;
     player.velocity.x = 0;
@@ -97,7 +95,7 @@ void cut_jump(void) {
 
 // The slowdown power
 void slow_down(void) {
-    if (!save.player_upgrade_levels.slowdown_unlocked) return;
+    if (!get_upgrade_level(UPGRADE_SLOWDOWN_UNLOCK)) return;
 
     if (!is_slowing_down) play_sfx_slowdown();
     else play_sfx_slowdown_back();
@@ -107,14 +105,14 @@ void slow_down(void) {
 
 // The teleport power
 void teleport(void) {
-    if (!save.player_upgrade_levels.teleport_unlocked) return;
+    if (!get_upgrade_level(UPGRADE_TELEPORT_UNLOCK)) return;
 
     if (teleport_cooldown_timer.is_running) return;
     if (!teleport_duration_timer.is_running) { // If the player can teleport
         play_sfx_teleport();
         is_teleporting = true;
         start_timer(&teleport_duration_timer, 0.4);
-        start_timer(&teleport_cooldown_timer, 5 - 0.5 * save.player_upgrade_levels.teleport_cooldown_level);
+        start_timer(&teleport_cooldown_timer, 5 - 0.5 * get_upgrade_level(UPGRADE_TELEPORT_COOLDOWN));
     }
 }
 
@@ -128,7 +126,7 @@ void update_player(void) {
 
     update_player_pos();
     player.meter -= 0.16;
-    if (is_slowing_down) player.meter -= 0.22 / (1 + save.player_upgrade_levels.slowdown_cost_level / 4);
+    if (is_slowing_down) player.meter -= 0.22 / (1 + get_upgrade_level(UPGRADE_SLOWDOWN_DRAIN) / 4);
 
     if (player.meter <= 0) {
         lose_game();
@@ -148,27 +146,30 @@ void draw_player(void) {
     DrawRectangleV(player.pos, player.size, current_player_color);
     DrawRectangleLinesExV(player.pos, player.size, 2, BLACK);
 
-    if (save.hat_index != HAT_NIL) {
+    const hat_t current_hat_index = get_current_hat_type();
+
+    if (current_hat_index != HAT_NIL) {
         float x_pos = player.pos.x + player.size.x / 4;
 
         // F and Murph need +2 X alignment
-        if (save.hat_index == HAT_F || save.hat_index == HAT_MUPRH) {
+        if (current_hat_index == HAT_F || current_hat_index == HAT_MUPRH) {
             x_pos += 2;
-        } else if (save.hat_index == HAT_CROWN) {
+        } else if (current_hat_index == HAT_CROWN) {
             x_pos -= 2; // Crown needs -2
         }
 
         float y_pos = player.pos.y - 16;
 
         // M and L need +6 Y alignment, Z needs +3, Crown needs +2
-        if (save.hat_index == HAT_M || save.hat_index == HAT_L) {
+        if (current_hat_index == HAT_M || current_hat_index == HAT_L) {
             y_pos += 6;
-        } else if (save.hat_index == HAT_Z) {
+        } else if (current_hat_index == HAT_Z) {
             y_pos += 3;
-        } else if (save.hat_index == HAT_CROWN) {
+        } else if (current_hat_index == HAT_CROWN) {
             y_pos += 2;
         }
 
-        DrawTextureV(hats[save.hat_index], (Vector2){ x_pos, y_pos }, hat_color);
+        const Texture2D *current_hat_texture = get_hat_texture(current_hat_index);
+        DrawTextureV(*current_hat_texture, (Vector2){ x_pos, y_pos }, hat_color);
     }
 }

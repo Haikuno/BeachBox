@@ -29,16 +29,9 @@ extern uint8_t column_count[];
 extern uint8_t      vmu_current_frame;
 extern uint8_t      vmu_menu_text_frame;
 extern bbox_timer_t vmu_menu_text_update_cooldown;
-extern bbox_timer_t save_popup_timer;
+scene_t             current_scene = RAYLOGO;
 
-scene_t current_scene = RAYLOGO;
-
-static void *save_game_wrapper(void *arg) {
-    save_game();
-    return NULL;
-}
-
-void change_scene(scene_t scene) {
+void change_scene(const scene_t scene) {
     static const void (*init_scene_functions[])(void) = { [RAYLOGO] = init_raylogo_scene, [LOADING] = init_loading_scene,         [MAINMENU] = init_mainmenu_scene, [GAME] = init_game_scene,
                                                           [SHOP] = init_shop_scene,       [UNLOCKABLES] = init_unlockables_scene, [OPTIONS] = init_options_scene,   [CREDITS] = init_credits_scene };
 
@@ -56,21 +49,20 @@ void change_scene(scene_t scene) {
 
     vmu_current_frame = 0;
 
+    const scene_t previous_scene = current_scene;
+
     switch (scene) {
         case GAME:
-            if (current_scene == GAME && !save_in_progress()) {
-                start_timer(&save_popup_timer, 2.0f);
-                thd_create(1, save_game_wrapper, NULL);
+            if (previous_scene == GAME && !is_save_in_progress()) {
+                save_game_async();
             }
             break;
         case MAINMENU:
             start_timer(&vmu_menu_text_update_cooldown, 0.5f); // First frame is longer to give the player time to look at the VMU
             vmu_menu_text_frame = 0;
-            if (current_scene != LOADING && current_scene != CREDITS && !save_in_progress()) {
-                start_timer(&save_popup_timer, 2.0f);
-                thd_create(1, save_game_wrapper, NULL);
-            }
-            if (current_scene == CREDITS) {
+            if (previous_scene != LOADING && previous_scene != CREDITS && !is_save_in_progress()) {
+                save_game_async();
+            } else if (previous_scene == CREDITS) {
                 unload_credits_images();
             }
         default:
@@ -86,7 +78,7 @@ void update_current_scene(void) {
         = { [RAYLOGO] = update_raylogo_scene, [LOADING] = update_loading_scene,         [MAINMENU] = update_mainmenu_scene, [GAME] = update_game_scene,
             [SHOP] = update_shop_scene,       [UNLOCKABLES] = update_unlockables_scene, [OPTIONS] = update_options_scene,   [CREDITS] = update_credits_scene };
     update_scene_functions[current_scene]();
-    update_timer(&save_popup_timer);
+    update_save_game_timer();
 }
 
 void draw_current_scene(void) {

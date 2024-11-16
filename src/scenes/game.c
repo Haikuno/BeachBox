@@ -12,7 +12,6 @@
 #include <raymath.h>
 #include "game.h"
 
-extern save_t       save;
 extern character_t  player;
 extern bbox_timer_t teleport_cooldown_timer;
 extern Color        ui_button_color;
@@ -72,13 +71,13 @@ void update_game_scene(void) {
 static void draw_game_over(void) {
     is_slowing_down      = false; // To turn off the inverted color effect
     current_object_speed = 5;     // To reset the object speed
-    if (new_high_score) save.high_score = current_coins;
+    if (new_high_score) set_high_score(current_coins);
 
     DrawRectangleV((Vector2){ SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4 }, (Vector2){ SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5 }, ui_button_color);
     DrawText("You lost", SCREEN_WIDTH / 2 - MeasureText("You lost", 30) / 2, SCREEN_HEIGHT / 4 + 20, 30, RAYWHITE);
 
     const char *coins_text      = TextFormat("Score: %d", current_coins);
-    const char *high_score_text = TextFormat("High Score: %d", save.high_score);
+    const char *high_score_text = TextFormat("High Score: %d", get_high_score());
 
     DrawText(coins_text, SCREEN_WIDTH / 2 - MeasureText(coins_text, 20) / 2, SCREEN_HEIGHT / 4 + 75, 20, RAYWHITE);
     DrawText(high_score_text, SCREEN_WIDTH / 2 - MeasureText(high_score_text, 20) / 2, SCREEN_HEIGHT / 4 + 95, 20, RAYWHITE);
@@ -152,11 +151,14 @@ void lose_game(void) {
     if (IsGamepadButtonDown(0, BUTTON_A)) held_a_during_death = true;
     is_game_over = true;
     play_sfx_game_over();
-    save.total_runs++;
-    save.total_coins += current_coins;
-    new_high_score    = save.high_score < current_coins;
-    if (current_coins >= 100) {
-        save.hats_unlocked[HAT_CROWN] = true; // Unlock crown
+
+    increment_total_runs();
+
+    add_coins(current_coins);
+    new_high_score = get_high_score() < current_coins;
+
+    if (get_total_coins() >= 100) {
+        unlock_hat(HAT_CROWN);
     }
 #endif
 }
