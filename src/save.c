@@ -504,24 +504,34 @@ void unlock_hat(hat_t hat) {
     switch (hat) {
         case HAT_NIL:
             save.unlocked_hats.nil = true;
+            break;
         case HAT_SLIME_RED:
             save.unlocked_hats.slime_red = true;
+            break;
         case HAT_SLIME_BLUE:
             save.unlocked_hats.slime_blue = true;
+            break;
         case HAT_BOX:
             save.unlocked_hats.box = true;
+            break;
         case HAT_M:
             save.unlocked_hats.m = true;
+            break;
         case HAT_L:
             save.unlocked_hats.l = true;
+            break;
         case HAT_Z:
             save.unlocked_hats.z = true;
+            break;
         case HAT_F:
             save.unlocked_hats.f = true;
+            break;
         case HAT_MUPRH:
             save.unlocked_hats.muprh = true;
+            break;
         case HAT_CROWN:
             save.unlocked_hats.crown = true;
+            break;
         default:
             assert_msg(false, "Invalid hat passed to unlock_hat");
             break;
