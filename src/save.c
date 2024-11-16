@@ -408,7 +408,7 @@ const uint8_t get_upgrade_level(const player_upgrade_t upgrade) {
             break;
     }
 
-    assert("Invalid upgrade passed to get_upgrade_level");
+    assert_msg(false, "Invalid upgrade passed to get_upgrade_level");
     return -1;
 }
 
@@ -491,7 +491,7 @@ const bool is_hat_unlocked(hat_t hat) {
         case HAT_CROWN:
             return save.unlocked_hats.crown;
         default:
-            assert("Invalid hat passed to is_hat_unlocked");
+            assert_msg(false, "Invalid hat passed to is_hat_unlocked");
             break;
     }
 
@@ -523,7 +523,7 @@ void unlock_hat(hat_t hat) {
         case HAT_CROWN:
             save.unlocked_hats.crown = true;
         default:
-            assert("Invalid hat passed to unlock_hat");
+            assert_msg(false, "Invalid hat passed to unlock_hat");
             break;
     }
 }
