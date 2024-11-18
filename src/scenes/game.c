@@ -14,48 +14,14 @@
 
 extern character_t  player;
 extern bbox_timer_t teleport_cooldown_timer;
-
-
-static float current_object_speed;
-
-float get_current_object_speed(void){
-    return current_object_speed;
-}
-void set_current_object_speed(float newSpeed){
-    current_object_speed = newSpeed;
-}
-
-
-static bool         is_slowing_down;
-bool  get_is_slowing_down(void){
-    return is_slowing_down;
-}
-void set_is_slowing_down(bool newBool){
-    is_slowing_down = newBool;
-}
-
-static bool         held_a_during_death;
-bool get_held_a_during_death(void){
-    return held_a_during_death;
-}
-void set_held_a_during_death(bool newBool){
-    held_a_during_death = newBool;
-}
-
-
-static bool         is_teleporting;
-bool get_is_teleporting(void){
-    return is_teleporting;
-}
-void set_is_teleporting(bool newBool){
-    is_teleporting = !is_teleporting;
-}
-
-
-extern uint8_t      row_count[];
-extern uint8_t      column_count[];
 extern Color        ui_button_color;
 extern Color        ui_background_color;
+extern float        current_object_speed;
+extern uint8_t      row_count[];
+extern uint8_t      column_count[];
+extern bool         is_slowing_down;
+extern bool         held_a_during_death;
+extern bool         is_teleporting;
 
 bool     is_game_over;
 bool     is_game_paused;
@@ -103,8 +69,8 @@ void update_game_scene(void) {
 }
 
 static void draw_game_over(void) {
-    set_is_slowing_down(false); // To turn off the inverted color effect
-    set_current_object_speed(5);     // To reset the object speed
+    is_slowing_down      = false; // To turn off the inverted color effect
+    current_object_speed = 5;     // To reset the object speed
     if (new_high_score) set_high_score(current_coins);
 
     DrawRectangleV((Vector2){ SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4 }, (Vector2){ SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5 }, ui_button_color);
@@ -119,16 +85,16 @@ static void draw_game_over(void) {
         DrawText("New High Score!", SCREEN_WIDTH / 2 - MeasureText("New High Score!", 20) / 2, SCREEN_HEIGHT / 4 + 115, 20, RAYWHITE);
     }
 
-    if (do_button(play_again, true) && !get_held_a_during_death()) {
+    if (do_button(play_again, true) && !held_a_during_death) {
         change_scene(GAME);
     }
 
-    if (do_button(main_menu_from_game, true) && !get_held_a_during_death()) {
+    if (do_button(main_menu_from_game, true) && !held_a_during_death) {
         change_scene(MAINMENU);
     }
 
-    if (get_held_a_during_death() && IsGamepadButtonReleased(0, BUTTON_A)) {
-        set_held_a_during_death(false);
+    if (held_a_during_death && IsGamepadButtonReleased(0, BUTTON_A)) {
+        held_a_during_death = false;
     }
 }
 
@@ -165,7 +131,7 @@ void draw_game_scene(void) {
     }
 
     // We change the draw order of the objects if the player is shifted / teleporting or not
-    if (player.is_shifted || get_is_teleporting()) {
+    if (player.is_shifted || is_teleporting) {
         draw_objects();
         draw_player();
     } else {
@@ -182,7 +148,7 @@ void draw_game_scene(void) {
 
 void lose_game(void) {
 #ifndef DEBUG_GODMODE
-    if (IsGamepadButtonDown(0, BUTTON_A)) get_held_a_during_death();
+    if (IsGamepadButtonDown(0, BUTTON_A)) held_a_during_death = true;
     is_game_over = true;
     play_sfx_game_over();
 

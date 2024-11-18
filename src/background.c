@@ -4,7 +4,6 @@
 #include "helper_functions.h"
 #include "config.h"
 #include "timer.h"
-#include "scenes/game.h"
 
 #define MAX_SAND_PARTICLES 20
 #define SAND_SPAWN_RATE 0.15 // in seconds, lower is faster
@@ -14,6 +13,8 @@
 #define FAST_WAVE_WIDTH 15
 
 extern bool  is_game_paused;
+extern bool  is_slowing_down;
+extern float current_object_speed;
 
 struct SandParticle {
         Vector2 pos;
@@ -22,7 +23,7 @@ struct SandParticle {
 
 void draw_ocean(void) {
     Color ocean_color = { 66, 147, 255, 255 };
-    if (get_is_slowing_down()) invert_color(&ocean_color);
+    if (is_slowing_down) invert_color(&ocean_color);
     DrawRectangle(0, 250, SCREEN_WIDTH, FLOOR_HEIGHT - 250, ocean_color);
 
     Color colors[4] = {
@@ -32,7 +33,7 @@ void draw_ocean(void) {
         { 70,  130, 180, 255 },
     };
 
-    if (get_is_slowing_down()) {
+    if (is_slowing_down) {
         for (int i = 0; i < 4; i++) {
             invert_color(&colors[i]);
         }
@@ -42,8 +43,8 @@ void draw_ocean(void) {
     static float fast_wave_step = 0;
 
     if (!is_game_paused) {
-        slow_wave_step += get_current_object_speed() != 0 ? 0.002f * get_current_object_speed() : 0.01f;
-        fast_wave_step += get_current_object_speed() != 0 ? 0.004f * get_current_object_speed() : 0.02f;
+        slow_wave_step += current_object_speed != 0 ? 0.002f * current_object_speed : 0.01f;
+        fast_wave_step += current_object_speed != 0 ? 0.004f * current_object_speed : 0.02f;
     }
 
     const int center_y = SCREEN_HEIGHT / 2;
@@ -68,7 +69,7 @@ void draw_sand_particles(void) {
     static bbox_timer_t sand_particle_spawn_timer;
     update_timer(&sand_particle_spawn_timer);
     Color sand_particle_color = BROWN;
-    if (get_is_slowing_down()) invert_color(&sand_particle_color);
+    if (is_slowing_down) invert_color(&sand_particle_color);
 
     for (int i = 0; i < MAX_SAND_PARTICLES; i++) {
         if (sand_particles[i].active) {
@@ -76,7 +77,7 @@ void draw_sand_particles(void) {
 
             if (is_game_paused) continue;
 
-            sand_particles[i].pos.x -= get_current_object_speed() != 0 ? get_current_object_speed() : 5;
+            sand_particles[i].pos.x -= current_object_speed != 0 ? current_object_speed : 5;
 
             if (sand_particles[i].pos.x < 0) {
                 sand_particles[i].active = false;
@@ -95,9 +96,9 @@ void draw_sand_particles(void) {
 
 void draw_background(void) {
     Color sky_color = { 135, 206, 250, 255 };
-    if (get_is_slowing_down()) invert_color(&sky_color);
+    if (is_slowing_down) invert_color(&sky_color);
     Color sand_color = { 242, 195, 68, 255 };
-    if (get_is_slowing_down()) invert_color(&sand_color);
+    if (is_slowing_down) invert_color(&sand_color);
     DrawRectangle(0, 0, SCREEN_WIDTH, FLOOR_HEIGHT, sky_color); // Draw sky
     draw_ocean();
     DrawRectangle(0, FLOOR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FLOOR_HEIGHT, sand_color); // Draw sand
