@@ -6,138 +6,136 @@
 #include "vmu_animations.h"
 #include "timer.h"
 #include "scene.h"
+#include "scenes/game.h"
 
 #define SET_VMU_ANIMATION(animation) (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
 
 // Vmu animations are drawn to the vmu frame buffer, and then presented to the screen
 // Each frame is just an array of raw bits, 1bpp (see vmu_animations.h)
 
-extern bool    is_game_over;
-
-static vmufb_t vmu_fb;
-uint8_t        vmu_current_frame   = 0;
-uint8_t        vmu_menu_text_frame = 0;
-// The first frame is longer to give player time to look at the vmu
-bbox_timer_t vmu_menu_text_update_cooldown = { .duration = 0.5f, .is_running = true, .progress = 0 };
+static vmufb_t      fb_;
+static uint8_t      current_frame_       = 0;
+static uint8_t      mainmenu_text_frame_ = 0;
+static bbox_timer_t mainmenu_text_update_cooldown_;
+static int          credits_bar_width_       = 1;
+static bool         credits_bar_should_grow_ = true;
 
 static void update_vmu_menu_text(void) {
-    update_timer(&vmu_menu_text_update_cooldown);
+    update_timer(&mainmenu_text_update_cooldown_);
 
     char buffer[16];
-    switch (vmu_menu_text_frame) {
+    switch (mainmenu_text_frame_) {
         case 0:
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "Hello, and");
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 7, 48, 6, 2, "welcome!");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 4, 1, 48, 6, 2, "Hello, and");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 8, 7, 48, 6, 2, "welcome!");
             break;
         case 1:
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 2, 1, 48, 6, 2, "I hope that");
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 5, 7, 48, 6, 2, "you enjoy ");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 2, 1, 48, 6, 2, "I hope that");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 5, 7, 48, 6, 2, "you enjoy ");
             break;
         case 2:
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 5, 5, 48, 6, 2, "BeachBox!!");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 5, 5, 48, 6, 2, "BeachBox!!");
             break;
         case 3:
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "Check out");
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 7, 48, 6, 2, "the shop-");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 4, 1, 48, 6, 2, "Check out");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 8, 7, 48, 6, 2, "the shop-");
             break;
         case 4:
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "-and spend");
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 3, 7, 48, 6, 2, "your money!");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 4, 1, 48, 6, 2, "-and spend");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 3, 7, 48, 6, 2, "your money!");
             break;
         case 5:
             snprintf(buffer, sizeof(buffer), "You have %d", get_total_coins());
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 1, 1, 48, 6, 2, buffer);
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 3, 7, 48, 6, 2, "coins left");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 1, 1, 48, 6, 2, buffer);
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 3, 7, 48, 6, 2, "coins left");
             break;
         case 6:
             snprintf(buffer, sizeof(buffer), "%d times!!", get_total_runs());
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 4, 1, 48, 6, 2, "You played");
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 7, 48, 6, 2, buffer);
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 4, 1, 48, 6, 2, "You played");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 8, 7, 48, 6, 2, buffer);
             break;
         case 7:
-            vmufb_print_string_into(&vmu_fb, &vmufb_font4x6, 8, 5, 48, 6, 2, "Congrats!");
+            vmufb_print_string_into(&fb_, &vmufb_font4x6, 8, 5, 48, 6, 2, "Congrats!");
             break;
     }
 
-    if (vmu_menu_text_update_cooldown.is_running) {
+    if (mainmenu_text_update_cooldown_.is_running) {
         return;
     }
 
-    start_timer(&vmu_menu_text_update_cooldown, 0.2f);
+    start_timer(&mainmenu_text_update_cooldown_, 0.15f);
 
-    vmu_menu_text_frame = (vmu_menu_text_frame + 1) % 8;
+    mainmenu_text_frame_ = (mainmenu_text_frame_ + 1) % 8;
 }
 
 static void update_vmu_credits_animation(void) {
-    static const char data[192]     = { 0 };
-    static int        current_width = 1;
-    static bool       should_grow   = true;
+    static const char data[192] = { 0 };
 
-    current_width = (current_width + (should_grow ? 1 : -1)) % 49;
-    if (current_width == 0 || current_width == 48) should_grow = !should_grow;
+    credits_bar_width_ = (credits_bar_width_ + (credits_bar_should_grow_ ? 1 : -1)) % 49;
+    if (credits_bar_width_ == 0 || credits_bar_width_ == 48) credits_bar_should_grow_ = !credits_bar_should_grow_;
 
-    vmufb_paint_area(&vmu_fb, 0, 0, current_width, 32, data);
+    vmufb_paint_area(&fb_, 0, 0, credits_bar_width_, 32, data);
+}
+
+void reset_vmu_animation(void) {
+    current_frame_       = 0;
+    mainmenu_text_frame_ = 0;
+    start_timer(&mainmenu_text_update_cooldown_, 0.3f);
+    credits_bar_width_       = 1;
+    credits_bar_should_grow_ = true;
 }
 
 void *draw_vmu_animation(void *param) {
-    if (is_save_in_progress() || is_load_in_progress()) return nullptr;
+    while (true) {
+        thd_sleep(250);
+        if (is_save_in_progress() || is_load_in_progress()) continue;
+        maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
+        if (!vmu) continue;
 
-    maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
+        const char **vmu_current_animation  = nullptr;
+        int          vmu_current_num_frames = 0;
 
-    if (!vmu) return nullptr;
+        switch (get_current_scene()) {
+            case RAYLOGO:
+                SET_VMU_ANIMATION(vmu_raylib_animation);
+                break;
+            case LOADING:
+                SET_VMU_ANIMATION(vmu_loading_animation);
+                break;
+            case MAINMENU:
+                SET_VMU_ANIMATION(vmu_face_animation);
+                break;
+            case GAME:
+                if (is_game_over()) {
+                    SET_VMU_ANIMATION(vmu_game_over_animation);
+                } else {
+                    SET_VMU_ANIMATION(vmu_game_scene_animation);
+                }
+                break;
+            case SHOP:
+                SET_VMU_ANIMATION(vmu_shop_animation);
+                break;
+            case UNLOCKABLES:
+                SET_VMU_ANIMATION(vmu_unlockables_animation);
+                break;
+            case OPTIONS:
+                SET_VMU_ANIMATION(vmu_options_animation);
+                break;
+            case CREDITS:
+                SET_VMU_ANIMATION(vmu_credits_animation);
+                break;
+        }
 
-    static bbox_timer_t vmu_update_cooldown;
-    update_timer(&vmu_update_cooldown);
+        if (!vmu_current_animation) continue;
 
-    if (vmu_update_cooldown.is_running) {
-        return nullptr;
+        current_frame_ = (current_frame_ + 1) % vmu_current_num_frames;
+        vmufb_paint_area(&fb_, 0, 0, 48, 32, vmu_current_animation[current_frame_]);
+
+        if (get_current_scene() == MAINMENU) update_vmu_menu_text();
+        if (get_current_scene() == CREDITS) update_vmu_credits_animation();
+
+        vmufb_present(&fb_, vmu);
     }
-
-    start_timer(&vmu_update_cooldown, 0.2f);
-
-    const char **vmu_current_animation  = nullptr;
-    int          vmu_current_num_frames = 0;
-
-    switch (get_current_scene()) {
-        case RAYLOGO:
-            SET_VMU_ANIMATION(vmu_raylib_animation);
-            break;
-        case LOADING:
-            SET_VMU_ANIMATION(vmu_loading_animation);
-            break;
-        case MAINMENU:
-            SET_VMU_ANIMATION(vmu_face_animation);
-            break;
-        case GAME:
-            if (is_game_over) {
-                SET_VMU_ANIMATION(vmu_game_over_animation);
-            } else {
-                SET_VMU_ANIMATION(vmu_game_scene_animation);
-            }
-            break;
-        case SHOP:
-            SET_VMU_ANIMATION(vmu_shop_animation);
-            break;
-        case UNLOCKABLES:
-            SET_VMU_ANIMATION(vmu_unlockables_animation);
-            break;
-        case OPTIONS:
-            SET_VMU_ANIMATION(vmu_options_animation);
-            break;
-        case CREDITS:
-            SET_VMU_ANIMATION(vmu_credits_animation);
-            break;
-    }
-
-    if (!vmu_current_animation) return nullptr;
-
-    vmu_current_frame = (vmu_current_frame + 1) % vmu_current_num_frames;
-    vmufb_paint_area(&vmu_fb, 0, 0, 48, 32, vmu_current_animation[vmu_current_frame]);
-
-    if (get_current_scene() == MAINMENU) update_vmu_menu_text();
-    if (get_current_scene() == CREDITS) update_vmu_credits_animation();
-
-    vmufb_present(&vmu_fb, vmu);
 
     return nullptr;
 };

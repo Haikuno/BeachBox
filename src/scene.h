@@ -12,6 +12,7 @@ void update_current_scene(void);
 // Draws the current scene
 void draw_current_scene(void);
 
-scene_t get_current_scene(void);
+// Returns the current scene
+const scene_t get_current_scene(void);
 
 #endif

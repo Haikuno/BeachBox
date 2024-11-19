@@ -7,10 +7,6 @@
 #include "../config.h"
 #include "../background.h"
 
-extern uint8_t column_count[];
-extern uint8_t row_count[];
-extern Color   ui_background_color;
-
 static const uibutton_t mainmenu_buttons[] = {
     { .pos = { 40, 170 }, .size = { 150, 40 }, .column = 0, .row = 0, .layer = 0, .text = "Play"        },
     { .pos = { 40, 220 }, .size = { 150, 40 }, .column = 0, .row = 1, .layer = 0, .text = "Shop"        },
@@ -20,8 +16,12 @@ static const uibutton_t mainmenu_buttons[] = {
 };
 
 void init_mainmenu_scene(void) {
-    row_count[0]    = 5;
-    column_count[0] = 1;
+    set_row_count(0, 5);
+    set_column_count(0, 1);
+    set_column_count(1, 1);
+    set_column_count(2, 1);
+    set_column_count(3, 1);
+    set_column_count(4, 1);
 }
 
 void update_mainmenu_scene(void) {
@@ -53,7 +53,7 @@ void draw_mainmenu_scene(void) {
         change_scene(CREDITS);
     }
 
-    DrawRectangle(380, 80, 200, 100, ui_background_color);
+    DrawRectangle(380, 80, 200, 100, get_background_color());
     DrawText(TextFormat("Coins: %d", get_total_coins()), 400, 100, 20, RAYWHITE);
     DrawText(TextFormat("Runs: %d", get_total_runs()), 400, 120, 20, RAYWHITE);
     DrawText(TextFormat("High score: %d", get_high_score()), 400, 140, 20, RAYWHITE);

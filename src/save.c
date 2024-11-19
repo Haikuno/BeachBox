@@ -1,13 +1,14 @@
-#include "save.h"
-#include "timer.h"
-#include "config.h"
+#include <assert.h>
 #include <kos.h>
 #include <dc/maple.h>
 #include <dc/vmufs.h>
 #include <stdatomic.h>
-#include "assert.h"
 
-// TODO: maybe save volume as well?
+#include "audio.h"
+#include "config.h"
+#include "player.h"
+#include "save.h"
+#include "timer.h"
 
 // Most of the information in this file and the calc_CRC function was taken from:
 // https://mc.pp.se/dc/vms/fileheader.html , credits to Marcus Comstedt
@@ -274,6 +275,9 @@ const int save_game(void) {
     memcpy(save.header.eyecatch_palette, bios_eyecatch_palette, sizeof(bios_eyecatch_palette));
     memcpy(save.header.eyecatch_bitmap, bios_eyecatch_bitmap, sizeof(bios_eyecatch_bitmap));
 
+    save.music_volume = get_music_volume();
+    save.sfx_volume   = get_sfx_volume();
+
     const int free_blocks = vmufs_free_blocks(vmu);
 
     if (free_blocks * 512 < save_size) {
@@ -333,6 +337,9 @@ const int load_game(void) {
             assert_msg(get_upgrade_level(i) <= get_max_upgrade_level(i), "Invalid upgrade level, save is probably corrupted");
         }
 
+        set_music_volume(save.music_volume);
+        set_sfx_volume(save.sfx_volume);
+
         return 1;
     }
 
@@ -344,6 +351,8 @@ const int load_game(void) {
 void new_game(void) {
     memset(&save, 0, sizeof(save));
     save.unlocked_hats.nil = true;
+    save.music_volume      = 12;
+    save.sfx_volume        = 12;
 }
 
 const uint16_t get_total_coins(void) {
@@ -360,6 +369,8 @@ void add_coins(const uint16_t n) {
     if (total_coins_ + n > UINT16_MAX) {
         n_ = UINT16_MAX - total_coins_;
     }
+
+    assert_msg(n_ >= 0, "Tried to spend more coins than available");
 
     save.total_coins += n_;
 }
@@ -538,16 +549,14 @@ void unlock_hat(hat_t hat) {
     }
 }
 
-const uint8_t get_player_current_color(void) {
+const uint8_t get_player_current_color_index(void) {
     return save.color_index;
 }
 
-constexpr const uint8_t player_color_count = 17; // TODO: <<< THIS IS REEST
-
 void increment_player_color_index(void) {
-    save.color_index = (save.color_index + 1) % player_color_count;
+    save.color_index = (save.color_index + 1) % get_player_color_count();
 }
 
 void decrement_player_color_index(void) {
-    save.color_index = (save.color_index - 1 + player_color_count) % player_color_count;
+    save.color_index = (save.color_index - 1 + get_player_color_count()) % get_player_color_count();
 }

@@ -10,30 +10,19 @@
 #include "../scene.h"
 #include "unlockables.h"
 
-// TODO: this is some serious reest
-extern const Color player_colors[PLAYER_COLORS_COUNT];
-extern const Color ui_background_color;
-extern const Color ui_button_color;
-extern const Color ui_button_selected_color;
-extern uint8_t     column_count[];
-extern uint8_t     row_count[];
-extern uint8_t     selected_row;
-extern uint8_t     selected_column;
-extern uint8_t     selected_layer;
+constexpr Vector2 button_size_    = { .x = 200, .y = 50 };
+constexpr float   button_padding_ = 15;
 
-const Vector2 buttons_size    = { .x = 200, .y = 50 };
-const float   buttons_padding = 15;
-
-const uibutton_t unlockables_confirm_button = {
-    .pos    = { .x = SCREEN_WIDTH / 2 - buttons_size.x / 2, .y = SCREEN_HEIGHT - buttons_size.y / 2 - buttons_padding * 2 },
-    .size   = buttons_size,
+const uibutton_t confirm_button_ = {
+    .pos    = { .x = SCREEN_WIDTH / 2 - button_size_.x / 2, .y = SCREEN_HEIGHT - button_size_.y / 2 - button_padding_ * 2 },
+    .size   = button_size_,
     .column = 0,
     .row    = 2,
     .layer  = 0,
     .text   = "Confirm",
 };
 
-const uint8_t hat_price[HAT_COUNT] = {
+constexpr uint8_t hat_prices_[HAT_COUNT] = {
     0,   // No hat
     50,  // Red Slime
     50,  // Blue Slime
@@ -46,17 +35,17 @@ const uint8_t hat_price[HAT_COUNT] = {
     0,   // Crown (not purchaseable)
 };
 
-void draw_hat_price(uint8_t index) {
+void draw_hat_price(const uint8_t index) {
     Vector2 size = { 400, 130 };
     Vector2 pos  = { .x = SCREEN_WIDTH / 2 - size.x / 2, .y = FLOOR_HEIGHT - size.y * 2 };
-    DrawRectangleV(pos, size, ui_background_color);
+    DrawRectangleV(pos, size, get_background_color());
 
     DrawText("Locked!", pos.x + size.x / 2 - MeasureText("Locked!", 20) / 2, pos.y + size.y / 2 - 50, 20, RED);
 
     if (index != 9) { // if not crown
-        const char *price_text = TextFormat("Price: %d", hat_price[index]);
+        const char *price_text = TextFormat("Price: %d", hat_prices_[index]);
         DrawText(price_text, pos.x + size.x / 2 - MeasureText(price_text, 20) / 2, pos.y + size.y / 2 - 20, 20, WHITE);
-        if (selected_row == 2) return; // if on confirm button
+        if (get_selected_row() == 2) return; // if on confirm button
         DrawText("Press A to buy", pos.x + size.x / 2 - MeasureText("Press A to buy", 20) / 2, pos.y + size.y / 2 + 30, 20, WHITE);
         return;
     }
@@ -67,8 +56,8 @@ void draw_hat_price(uint8_t index) {
 }
 
 void init_unlockables_scene(void) {
-    row_count[0]    = 3;
-    column_count[0] = 1;
+    set_row_count(0, 3);
+    set_column_count(0, 1);
 }
 
 void update_unlockables_scene(void) {
@@ -78,7 +67,7 @@ void update_unlockables_scene(void) {
 static void purchase_hat(int option, void *user_data) {
     init_unlockables_scene();
     if (option == 1) {
-        add_coins(-hat_price[get_current_hat_type()]);
+        add_coins(-hat_prices_[get_current_hat_type()]);
         unlock_hat(get_current_hat_type());
     }
 }
@@ -87,15 +76,15 @@ void draw_unlockables_scene(void) {
     draw_background();
 
     // Draw total coins
-    DrawRectangle(245, 0, 150, 40, ui_button_color);
-    DrawRectangleLines(245, 0, 150, 40, ui_button_selected_color);
+    DrawRectangle(245, 0, 150, 40, get_button_color());
+    DrawRectangleLines(245, 0, 150, 40, get_button_selected_color());
     const char *coins_text = TextFormat("Coins: %d", get_total_coins());
-    DrawText(coins_text, 245 + (150 - MeasureText(coins_text, 20)) / 2, 10, 20, ui_button_selected_color);
+    DrawText(coins_text, 245 + (150 - MeasureText(coins_text, 20)) / 2, 10, 20, get_button_selected_color());
 
     // Draw player
     constexpr Vector2 player_size  = (Vector2){ .x = 64, .y = 64 };
     constexpr Vector2 player_pos   = (Vector2){ .x = SCREEN_WIDTH / 2 - player_size.x / 2, .y = FLOOR_HEIGHT - player_size.y };
-    const Color       player_color = player_colors[get_player_current_color()];
+    const Color       player_color = get_player_color(get_player_current_color_index());
 
     DrawRectangleV(player_pos, player_size, player_color);
     DrawRectangleLinesExV(player_pos, player_size, 2, BLACK);
@@ -142,10 +131,10 @@ void draw_unlockables_scene(void) {
 
     if (!is_hat_unlocked(current_hat_type)) {
         draw_hat_price(current_hat_type);
-        const bool can_buy_hat = get_total_coins() >= hat_price[current_hat_type] && selected_row != 2 && current_hat_type != HAT_CROWN;
+        const bool can_buy_hat = get_total_coins() >= hat_prices_[current_hat_type] && get_selected_row() != 2 && current_hat_type != HAT_CROWN;
         if (IsGamepadButtonReleased(0, BUTTON_A) && can_buy_hat) {
             callback       = purchase_hat;
-            selected_layer = 1;
+            set_selected_layer(1);
         }
     }
 
@@ -179,7 +168,7 @@ void draw_unlockables_scene(void) {
     }
 
     // Draw buttons
-    if (do_button(unlockables_confirm_button, is_hat_unlocked(current_hat_type))) {
+    if (do_button(confirm_button_, is_hat_unlocked(current_hat_type))) {
         change_scene(MAINMENU);
     }
 

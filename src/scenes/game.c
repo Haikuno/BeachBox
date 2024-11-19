@@ -12,23 +12,13 @@
 #include <raymath.h>
 #include "game.h"
 
-extern character_t  player;
-extern bbox_timer_t teleport_cooldown_timer;
-extern Color        ui_button_color;
-extern Color        ui_background_color;
-extern float        current_object_speed;
-extern uint8_t      row_count[];
-extern uint8_t      column_count[];
-extern bool         is_slowing_down;
-extern bool         held_a_during_death;
-extern bool         is_teleporting;
+static bool     is_game_over_;
+static bool     is_game_paused_;
+static bool     is_new_high_score_;
+static bool     held_a_during_death_;
+static uint16_t current_coins_ = 0; // The coins earned in the current run
 
-bool     is_game_over;
-bool     is_game_paused;
-bool     new_high_score;
-uint16_t current_coins = 0; // The coins earned in the current run
-
-const uibutton_t play_again = {
+static const uibutton_t play_again = {
     .pos    = { .x = 170, .y = SCREEN_HEIGHT * 0.6 },
     .size   = { .x = 140, .y = 50                  },
     .column = 0,
@@ -37,7 +27,7 @@ const uibutton_t play_again = {
     .text   = "Play Again",
 };
 
-const uibutton_t main_menu_from_game = {
+static const uibutton_t main_menu_from_game = {
     .pos    = { .x = 330, .y = SCREEN_HEIGHT * 0.6 },
     .size   = { .x = 140, .y = 50                  },
     .column = 1,
@@ -49,68 +39,65 @@ const uibutton_t main_menu_from_game = {
 void init_game_scene(void) {
     init_player();
     init_objects();
-    is_game_over   = false;
-    current_coins  = 0;
-    new_high_score = false;
+    is_game_over_      = false;
+    current_coins_     = 0;
+    is_new_high_score_ = false;
 
-    for (int i = 0; i < MAX_COLUMNS; i++) {
-        row_count[i]    = 0;
-        column_count[i] = 0;
-    }
-
-    column_count[0] = 2;
+    set_column_count(0, 2);
+    set_row_count(0, 1);
 }
 
 void update_game_scene(void) {
-    if (is_game_over) return;
-    if (is_game_paused) return;
+    if (is_game_over_) return;
+    if (is_game_paused_) return;
     update_objects();
     update_player();
 }
 
 static void draw_game_over(void) {
-    is_slowing_down      = false; // To turn off the inverted color effect
-    current_object_speed = 5;     // To reset the object speed
-    if (new_high_score) set_high_score(current_coins);
+    turn_slowdown_off(); // To turn off the inverted color effect
+    reset_object_speed();
+    if (is_new_high_score_) set_high_score(current_coins_);
 
-    DrawRectangleV((Vector2){ SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4 }, (Vector2){ SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5 }, ui_button_color);
+    DrawRectangleV((Vector2){ SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4 }, (Vector2){ SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5 }, get_button_color());
     DrawText("You lost", SCREEN_WIDTH / 2 - MeasureText("You lost", 30) / 2, SCREEN_HEIGHT / 4 + 20, 30, RAYWHITE);
 
-    const char *coins_text      = TextFormat("Score: %d", current_coins);
+    const char *coins_text      = TextFormat("Score: %d", current_coins_);
     const char *high_score_text = TextFormat("High Score: %d", get_high_score());
 
     DrawText(coins_text, SCREEN_WIDTH / 2 - MeasureText(coins_text, 20) / 2, SCREEN_HEIGHT / 4 + 75, 20, RAYWHITE);
     DrawText(high_score_text, SCREEN_WIDTH / 2 - MeasureText(high_score_text, 20) / 2, SCREEN_HEIGHT / 4 + 95, 20, RAYWHITE);
-    if (new_high_score) {
+    if (is_new_high_score_) {
         DrawText("New High Score!", SCREEN_WIDTH / 2 - MeasureText("New High Score!", 20) / 2, SCREEN_HEIGHT / 4 + 115, 20, RAYWHITE);
     }
 
-    if (do_button(play_again, true) && !held_a_during_death) {
+    if (do_button(play_again, true) && !held_a_during_death_) {
         change_scene(GAME);
     }
 
-    if (do_button(main_menu_from_game, true) && !held_a_during_death) {
+    if (do_button(main_menu_from_game, true) && !held_a_during_death_) {
         change_scene(MAINMENU);
     }
 
-    if (held_a_during_death && IsGamepadButtonReleased(0, BUTTON_A)) {
-        held_a_during_death = false;
+    if (held_a_during_death_ && IsGamepadButtonReleased(0, BUTTON_A)) {
+        held_a_during_death_ = false;
     }
 }
 
 static void draw_player_ui(void) {
-    DrawRectangle(10, 10, 180, 80, ui_background_color);
+    DrawRectangle(10, 10, 180, 80, get_background_color());
 
-    // Draw current coint count
-    const char *coins_text = TextFormat("Coins: %d", current_coins);
+    // Current coint count
+    const char *coins_text = TextFormat("Coins: %d", current_coins_);
     DrawText(coins_text, 100 - MeasureText(coins_text, 20) / 2, 20, 20, RAYWHITE);
 
     // Meter
-    DrawRectangleV((Vector2){ .x = 25, .y = 50 }, (Vector2){ .x = 150, .y = 15 }, ui_button_color);
-    DrawRectangleV((Vector2){ .x = 25, .y = 50 }, (Vector2){ .x = Lerp(0, 150, player.meter / player.max_meter), .y = 15 }, BLUE);
+    DrawRectangleV((Vector2){ .x = 25, .y = 50 }, (Vector2){ .x = 150, .y = 15 }, get_button_color());
+    DrawRectangleV((Vector2){ .x = 25, .y = 50 }, (Vector2){ .x = Lerp(0, 150, get_player_meter() / get_player_max_meter()), .y = 15 }, BLUE);
     DrawRectangleLinesV((Vector2){ .x = 25, .y = 50 }, (Vector2){ .x = 150, .y = 15 }, BLACK);
 
     // Teleport cooldown
+    const bbox_timer_t teleport_cooldown_timer = get_teleport_cooldown_timer();
     if (teleport_cooldown_timer.is_running) {
         DrawRectangleV((Vector2){ .x = 25, .y = 75 }, (Vector2){ .x = 150, .y = 8 }, RAYWHITE);
         DrawRectangleV((Vector2){ .x = 25, .y = 75 }, (Vector2){ .x = 150 * Lerp(0, 1, (teleport_cooldown_timer.progress / teleport_cooldown_timer.duration)), .y = 8 }, DARKGRAY);
@@ -119,19 +106,19 @@ static void draw_player_ui(void) {
 }
 
 static void draw_pause_menu(void) {
-    DrawRectangleV((Vector2){ SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3 }, (Vector2){ SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.20 }, ui_button_color);
+    DrawRectangleV((Vector2){ SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3 }, (Vector2){ SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.20 }, get_button_color());
     DrawText("Game Paused!", SCREEN_WIDTH / 2 - MeasureText("Game Paused!", 30) / 2, SCREEN_HEIGHT / 3 + 30, 30, RAYWHITE);
 }
 
 void draw_game_scene(void) {
     draw_background();
-    if (is_game_over) {
+    if (is_game_over_) {
         draw_game_over();
         return;
     }
 
     // We change the draw order of the objects if the player is shifted / teleporting or not
-    if (player.is_shifted || is_teleporting) {
+    if (is_player_shifted() || is_player_teleporting()) {
         draw_objects();
         draw_player();
     } else {
@@ -141,24 +128,48 @@ void draw_game_scene(void) {
 
     draw_player_ui();
 
-    if (is_game_paused) {
+    if (is_game_paused_) {
         draw_pause_menu();
     }
 }
 
-void lose_game(void) {
+void end_game(void) {
 #ifndef DEBUG_GODMODE
-    if (IsGamepadButtonDown(0, BUTTON_A)) held_a_during_death = true;
-    is_game_over = true;
+    if (IsGamepadButtonDown(0, BUTTON_A)) held_a_during_death_ = true;
+    is_game_over_ = true;
     play_sfx_game_over();
 
     increment_total_runs();
 
-    add_coins(current_coins);
-    new_high_score = get_high_score() < current_coins;
+    add_coins(current_coins_);
+    is_new_high_score_ = get_high_score() < current_coins_;
+#endif
 
-    if (get_total_coins() >= 100) {
+    if (current_coins_ >= 100) {
         unlock_hat(HAT_CROWN);
     }
-#endif
+}
+
+const bool is_game_over(void) {
+    return is_game_over_;
+}
+
+const bool is_game_paused(void) {
+    return is_game_paused_;
+}
+
+void toggle_pause(void) {
+    is_game_paused_ = !is_game_paused_;
+}
+
+const bool is_new_high_score(void) {
+    return is_new_high_score_;
+}
+
+const uint16_t get_current_coins(void) {
+    return current_coins_;
+}
+
+void add_coin(void) {
+    current_coins_++;
 }

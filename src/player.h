@@ -2,8 +2,7 @@
 #define BBOX_PLAYER_
 
 #include <raylib.h>
-
-#define PLAYER_COLORS_COUNT 17
+#include "timer.h"
 
 typedef struct Character {
         Vector2 size;
@@ -16,18 +15,65 @@ typedef struct Character {
         Color   color;
 } character_t;
 
+// Initializes the player
 void init_player(void);
+
+// Updates the player
 void update_player(void);
+
+// Draws the player
 void draw_player(void);
 
-void move_player(Vector2 direction);
-void shift_player(bool should_shift);
+// Moves the player towards the given direction
+void move_player(const Vector2 direction);
 
+// Sets the player's 'dimension' to the given value
+// False being normal, true being shifted
+void shift_player(const bool should_shift);
+
+// Makes the player jump
 void jump(void);
+
 // This function gets called when the player lets go of the jump button, cutting the jump short
 void cut_jump(void);
 
-void slow_down(void);
+// Toggles the slowdown power on / off (if it's available)
+void toggle_slowdown(void);
+
+// Turns the slowdown power off
+void turn_slowdown_off(void);
+
+// Teleports the player forward (if it's available)
 void teleport(void);
+
+// Returns true if the slowdown power is active
+const bool is_slowdown_active(void);
+
+// Returns true if the teleport power is active
+const bool is_player_teleporting(void);
+
+// Returns true if the player is shifted
+const bool is_player_shifted(void);
+
+// Returns a Rectangle representing the player's position and size
+const Rectangle get_player_rect(void);
+
+// Returns the player's current meter
+const float get_player_meter(void);
+
+// Returns the player's max meter
+const float get_player_max_meter(void);
+
+// Adds the given amount to the player's meter
+void refill_player_meter(const float amount);
+
+// Returns the teleport cooldown timer
+const bbox_timer_t get_teleport_cooldown_timer(void);
+
+// Returns the color at the given index on the player colors array
+const Color get_player_color(const int index);
+
+// Returns the size of the player colors array
+const int get_player_color_count(void);
 
 #endif

@@ -1,15 +1,10 @@
-#include <raylib.h>
-#include "../scene.h"
-#include "../ui.h"
-#include "../config.h"
-#include "../background.h"
 #include "credits.h"
+#include "../background.h"
+#include "../config.h"
+#include "../ui.h"
+#include "../scene.h"
 
-extern uint8_t     column_count[];
-extern uint8_t     row_count[];
-extern const Color ui_background_color;
-
-const uibutton_t exit_credits_button = {
+static const uibutton_t exit_button_ = {
     .pos    = { .x = 43,  .y = 370 },
     .size   = { .x = 150, .y = 40  },
     .column = 0,
@@ -25,8 +20,9 @@ static struct BouncingImage {
 } images[3];
 
 static void initialize_images(void) {
-    const char *paths[]     = { "/rd/creditspngs/koslogo.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyopslogo.png" };
-    Vector2     positions[] = {
+    const char *paths[] = { "/rd/creditspngs/koslogo.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyopslogo.png" };
+
+    constexpr Vector2 positions[] = {
         { 50,  50  },
         { 490, 250 },
         { 300, 350 }
@@ -39,15 +35,15 @@ static void initialize_images(void) {
     }
 }
 
-void unload_credits_images(void) {
+static void unload_credits_images(void) {
     for (int i = 0; i < 3; i++) {
         UnloadTexture(images[i].texture);
     }
 }
 
 void init_credits_scene(void) {
-    row_count[0]    = 1;
-    column_count[0] = 1;
+    set_row_count(0, 1);
+    set_column_count(0, 1);
     initialize_images();
 }
 
@@ -68,7 +64,7 @@ void draw_credits_scene(void) {
         DrawTexture(images[i].texture, (int)images[i].position.x, (int)images[i].position.y, WHITE);
     }
 
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ui_background_color);
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, get_background_color());
 
     // TODO: add actual credits
 
@@ -77,7 +73,7 @@ void draw_credits_scene(void) {
     DrawText(credits_text, (int)(SCREEN_WIDTH / 4) + 35, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
     DrawText(credits_text2, (int)(SCREEN_WIDTH / 4) - 80, (int)(SCREEN_HEIGHT / 4) + 65, 30, RAYWHITE);
 
-    if (do_button(exit_credits_button, true)) {
+    if (do_button(exit_button_, true)) {
         unload_credits_images();
         change_scene(MAINMENU);
     }

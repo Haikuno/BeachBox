@@ -1,25 +1,14 @@
 #include <string.h>
+#include "shop.h"
 #include "../ui.h"
 #include "../scene.h"
 #include "../save.h"
 #include "../background.h"
 #include "../config.h"
-#include "shop.h"
 
-#include <stdio.h> // TODO: remove, debug
+static player_upgrade_t selected_shop_option_;
 
-extern uint8_t     column_count[MAX_COLUMNS];
-extern uint8_t     row_count[MAX_ROWS];
-extern uint8_t     selected_column;
-extern uint8_t     selected_row;
-extern uint8_t     selected_layer;
-extern const Color ui_background_color;
-extern const Color ui_button_color;
-extern const Color ui_button_selected_color;
-
-static player_upgrade_t selected_shop_option;
-
-static const uibutton_t shop_buttons[] = {
+static const uibutton_t shop_buttons_[] = {
     { .pos = { 30, 50 },   .size = { 200, 40 }, .column = 0, .row = 0, .layer = 0, .text = "Movement Speed"    },
     { .pos = { 30, 110 },  .size = { 200, 40 }, .column = 0, .row = 1, .layer = 0, .text = "Max Meter"         },
     { .pos = { 30, 170 },  .size = { 200, 40 }, .column = 0, .row = 2, .layer = 0, .text = "Unlock Teleport"   },
@@ -31,7 +20,7 @@ static const uibutton_t shop_buttons[] = {
     { .pos = { 460, 400 }, .size = { 100, 40 }, .column = 2, .row = 0, .layer = 0, .text = "Exit"              },
 };
 
-static const uint8_t costs[UPGRADE_COUNT] = {
+constexpr uint8_t costs_[UPGRADE_COUNT] = {
     20, // SPEED
     20, // MAX_METER
     50, // TELEPORT_UNLOCK
@@ -41,17 +30,17 @@ static const uint8_t costs[UPGRADE_COUNT] = {
     30, // SLOWDOWN_DRAIN
 };
 
-static inline bool can_afford(player_upgrade_t option) {
-    return costs[option] <= get_total_coins();
+static inline bool can_afford(const player_upgrade_t option) {
+    return costs_[option] <= get_total_coins();
 }
 
-static inline bool can_upgrade(player_upgrade_t option) {
+static inline bool can_upgrade(const player_upgrade_t option) {
     return get_upgrade_level(option) < get_max_upgrade_level(option);
 }
 
 static inline void purchase(void) {
-    increment_upgrade_level(selected_shop_option);
-    add_coins(-costs[selected_shop_option]);
+    increment_upgrade_level(selected_shop_option_);
+    add_coins(-costs_[selected_shop_option_]);
 }
 
 void draw_shop_description(void) {
@@ -66,35 +55,41 @@ void draw_shop_description(void) {
         "Decreases the cost of slowdown\n\n\"Take it slow\"",
     };
 
-    const char *description = descriptions[selected_shop_option];
-    Color       cost_color  = can_afford(selected_shop_option) ? WHITE : RED;
-    Color       level_color = get_upgrade_level(selected_shop_option) == get_max_upgrade_level(selected_shop_option) ? DARKGREEN : WHITE;
+    const char *description = descriptions[selected_shop_option_];
+    const Color cost_color  = can_afford(selected_shop_option_) ? WHITE : RED;
+    const Color level_color = get_upgrade_level(selected_shop_option_) == get_max_upgrade_level(selected_shop_option_) ? DARKGREEN : WHITE;
 
     DrawText(description, 270, 50, 20, WHITE);
-    DrawText(TextFormat("Cost: %d coins", costs[selected_shop_option]), 270, 250, 20, cost_color);
-    DrawText(TextFormat("Level: %d/%d", get_upgrade_level(selected_shop_option), get_max_upgrade_level(selected_shop_option)), 270, 300, 20, level_color);
+    DrawText(TextFormat("Cost: %d coins", costs_[selected_shop_option_]), 270, 250, 20, cost_color);
+    DrawText(TextFormat("Level: %d/%d", get_upgrade_level(selected_shop_option_), get_max_upgrade_level(selected_shop_option_)), 270, 300, 20, level_color);
 }
 
 void jump_to_buy_button(void) {
-    selected_row    = 0;
-    selected_column = 1;
+    set_selected_row(0);
+    set_selected_column(1);
 }
 
 void init_shop_scene(void) {
-    column_count[0] = 3;
-    column_count[1] = column_count[2] = column_count[3] = column_count[4] = column_count[5] = column_count[6] = 1;
+    set_column_count(0, 3);
+    set_column_count(1, 1);
+    set_column_count(2, 1);
+    set_column_count(3, 1);
+    set_column_count(4, 1);
+    set_column_count(5, 1);
+    set_column_count(6, 1);
 
-    row_count[0] = 7;
-    row_count[1] = row_count[2] = 1;
+    set_row_count(0, 7);
+    set_row_count(1, 1);
+    set_row_count(2, 1);
 }
 
 void update_shop_scene(void) {
-    if (selected_column == 0 && selected_layer == 0) {
-        selected_shop_option = selected_row;
+    if (get_selected_column() == 0 && get_selected_layer() == 0) {
+        selected_shop_option_ = get_selected_row();
     }
 }
 
-static void exit_callback(int option, void *user_data) {
+static void exit_callback(const int option, void *user_data) {
     if (option == 1) { // yes pressed
         change_scene(MAINMENU);
         return;
@@ -107,37 +102,37 @@ static void exit_callback(int option, void *user_data) {
 
 void draw_shop_scene(void) {
     draw_background();
-    DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, ui_background_color);
+    DrawRectangle(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.6, SCREEN_HEIGHT, get_background_color());
     draw_shop_description();
 
     static void (*callback)(int option, void *user_data) = nullptr;
 
     // Draw total coins
-    DrawRectangle(55, 0, 150, 40, ui_button_color);
-    DrawRectangleLines(55, 0, 150, 40, ui_button_selected_color);
+    DrawRectangle(55, 0, 150, 40, get_button_color());
+    DrawRectangleLines(55, 0, 150, 40, get_button_selected_color());
     const char *coins_text = TextFormat("Coins: %d", get_total_coins());
-    DrawText(coins_text, 55 + (150 - MeasureText(coins_text, 20)) / 2, 10, 20, ui_button_selected_color);
+    DrawText(coins_text, 55 + (150 - MeasureText(coins_text, 20)) / 2, 10, 20, get_button_selected_color());
 
     DrawLine(SCREEN_WIDTH * 0.4, 0, SCREEN_WIDTH * 0.4, SCREEN_HEIGHT, RAYWHITE);
 
-    bool can_buy = can_afford(selected_shop_option) && can_upgrade(selected_shop_option);
+    bool can_buy = can_afford(selected_shop_option_) && can_upgrade(selected_shop_option_);
 
     // Buy
-    if (do_button(shop_buttons[7], can_buy) && can_buy) {
+    if (do_button(shop_buttons_[7], can_buy) && can_buy) {
         purchase();
     }
 
     // Exit
-    if (do_button(shop_buttons[8], true)) {
-        callback        = exit_callback;
-        selected_layer  = 1;
-        selected_column = 0;
-        selected_row    = 0;
+    if (do_button(shop_buttons_[8], true)) {
+        callback = exit_callback;
+        set_selected_layer(1);
+        set_selected_column(0);
+        set_selected_row(0);
     }
 
     // Purchase options
     for (int i = 0; i < 7; i++) {
-        if (do_button(shop_buttons[i], can_afford(i) && can_upgrade(i))) {
+        if (do_button(shop_buttons_[i], can_afford(i) && can_upgrade(i))) {
             jump_to_buy_button();
         }
     }

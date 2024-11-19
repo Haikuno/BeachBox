@@ -8,8 +8,9 @@
 #include "audio.h"
 #include "scenes/game.h"
 
-// TODO: this is shit
-const Color player_colors[PLAYER_COLORS_COUNT] = {
+constexpr int player_colors_count_ = 17;
+
+static const Color player_colors[player_colors_count_] = {
     RED,
     ORANGE,
     GOLD,
@@ -29,12 +30,51 @@ const Color player_colors[PLAYER_COLORS_COUNT] = {
     DARKGRAY,
 };
 
-character_t         player                  = { 0 }; // TODO: make static
+const Color get_player_color(const int index) {
+    return player_colors[index];
+}
+
+const int get_player_color_count(void) {
+    return player_colors_count_;
+}
+
+static character_t  player                  = { 0 };
 static bbox_timer_t teleport_duration_timer = { 0 };
-bbox_timer_t        teleport_cooldown_timer = { 0 }; // TODO: make static
-bool                is_slowing_down         = false; // TODO: make static
-bool                is_teleporting          = false; // TODO: make static
-bool                held_a_during_death     = false; // TODO: make static
+static bbox_timer_t teleport_cooldown_timer = { 0 };
+static bool         is_slowdown_active_     = false;
+static bool         is_teleporting_         = false;
+
+const bool is_slowdown_active(void) {
+    return is_slowdown_active_;
+}
+
+const bool is_player_teleporting(void) {
+    return is_teleporting_;
+}
+
+const bool is_player_shifted(void) {
+    return player.is_shifted;
+}
+
+const Rectangle get_player_rect(void) {
+    return (Rectangle){ player.pos.x, player.pos.y, player.size.x, player.size.y };
+}
+
+const float get_player_meter(void) {
+    return player.meter;
+}
+
+const float get_player_max_meter(void) {
+    return player.max_meter;
+}
+
+void refill_player_meter(const float amount) {
+    player.meter = BBOX_MIN(get_player_meter() + amount, get_player_max_meter());
+}
+
+const bbox_timer_t get_teleport_cooldown_timer(void) {
+    return teleport_cooldown_timer;
+}
 
 void init_player(void) {
     player.size       = (Vector2){ 32.0f, 32.0f };
@@ -44,28 +84,28 @@ void init_player(void) {
     player.max_meter  = 100 + 10 * get_upgrade_level(UPGRADE_METER);
     player.meter      = player.max_meter;
     player.is_shifted = false;
-    player.color      = player_colors[get_player_current_color()];
+    player.color      = player_colors[get_player_current_color_index()];
 
-    is_slowing_down = false;
-    is_teleporting  = false;
+    is_slowdown_active_ = false;
+    is_teleporting_     = false;
 }
 
-void move_player(Vector2 direction) {
-    if (is_teleporting) return; // If the player is teleporting, we don't let the player move
+void move_player(const Vector2 direction) {
+    if (is_teleporting_) return; // If the player is teleporting, we don't let the player move
     player.velocity.x += direction.x * player.speed;
 }
 
-void shift_player(bool is_holding_down_x) {
-    player.is_shifted = is_holding_down_x;
+void shift_player(const bool should_shift) {
+    player.is_shifted = should_shift;
 }
 
 void update_player_pos(void) {
-    player.pos.x += is_teleporting ? 8.5 + 0.5 * get_upgrade_level(UPGRADE_TELEPORT_DISTANCE) : player.velocity.x;
+    player.pos.x += is_teleporting_ ? 8.5 + 0.5 * get_upgrade_level(UPGRADE_TELEPORT_DISTANCE) : player.velocity.x;
     if (player.pos.x < 0) player.pos.x = 0;
     if (player.pos.x > SCREEN_WIDTH - player.size.x) player.pos.x = SCREEN_WIDTH - player.size.x;
     player.velocity.x = 0;
 
-    if (is_teleporting) return; // If the player is teleporting, we skip falling down
+    if (is_teleporting_) return; // If the player is teleporting, we skip falling down
     player.velocity.y += player.velocity.y < 0 ? GRAVITY : GRAVITY * 1.5;
     player.pos.y      += player.velocity.y;
 
@@ -93,43 +133,45 @@ void cut_jump(void) {
     }
 }
 
-// The slowdown power
-void slow_down(void) {
+void toggle_slowdown(void) {
     if (!get_upgrade_level(UPGRADE_SLOWDOWN_UNLOCK)) return;
 
-    if (!is_slowing_down) play_sfx_slowdown();
-    else play_sfx_slowdown_back();
+    if (!is_slowdown_active_) play_sfx_slowdown_activate();
+    else play_sfx_slowdown_deactivate();
 
-    is_slowing_down = !is_slowing_down;
+    is_slowdown_active_ = !is_slowdown_active_;
 }
 
-// The teleport power
+void turn_slowdown_off(void) {
+    is_slowdown_active_ = false;
+}
+
 void teleport(void) {
     if (!get_upgrade_level(UPGRADE_TELEPORT_UNLOCK)) return;
 
     if (teleport_cooldown_timer.is_running) return;
     if (!teleport_duration_timer.is_running) { // If the player can teleport
         play_sfx_teleport();
-        is_teleporting = true;
+        is_teleporting_ = true;
         start_timer(&teleport_duration_timer, 0.4);
         start_timer(&teleport_cooldown_timer, 5 - 0.5 * get_upgrade_level(UPGRADE_TELEPORT_COOLDOWN));
     }
 }
 
 void update_player(void) {
-    if (is_teleporting) {
+    if (is_teleporting_) {
         player.velocity.y = BBOX_MIN(player.velocity.y, 0); // If the player was falling down before teleporting, we set it back to 0
         update_timer(&teleport_duration_timer);
-        if (!teleport_duration_timer.is_running) is_teleporting = false;
+        if (!teleport_duration_timer.is_running) is_teleporting_ = false;
     }
     update_timer(&teleport_cooldown_timer);
 
     update_player_pos();
     player.meter -= 0.16;
-    if (is_slowing_down) player.meter -= 0.22 / (1 + get_upgrade_level(UPGRADE_SLOWDOWN_DRAIN) / 4);
+    if (is_slowdown_active_) player.meter -= 0.22 / (1 + get_upgrade_level(UPGRADE_SLOWDOWN_DRAIN) / 4);
 
     if (player.meter <= 0) {
-        lose_game();
+        end_game();
     }
 }
 
@@ -137,10 +179,10 @@ void draw_player(void) {
     const Color transparent        = { 0, 0, 0, 0 };
     const Color hat_teleport_color = { 0, 0, 0, 120 };
 
-    Color current_player_color = is_teleporting ? transparent : player.color;
+    Color current_player_color = is_teleporting_ ? transparent : player.color;
     current_player_color.a     = player.is_shifted ? 140 : current_player_color.a;
 
-    Color hat_color = is_teleporting ? hat_teleport_color : WHITE;
+    Color hat_color = is_teleporting_ ? hat_teleport_color : WHITE;
     hat_color.a     = player.is_shifted ? 140 : hat_color.a;
 
     DrawRectangleV(player.pos, player.size, current_player_color);

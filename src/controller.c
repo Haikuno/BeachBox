@@ -3,15 +3,13 @@
 #include "scene.h"
 #include "ui.h"
 #include "player.h"
-
-extern bool    is_game_over;
-extern bool    is_game_paused;
+#include "scenes/game.h"
 
 // NOTE: This is in PascalCase to follow raylib naming conventions
-bool IsTriggerPressed(int gamepad, trigger_t trigger) {
-    static bool is_left_trigger_down;
-    static bool is_right_trigger_down;
-    const float trigger_threshold = 0.5f;
+static bool IsTriggerPressed(const int gamepad, const trigger_t trigger) {
+    static bool     is_left_trigger_down;
+    static bool     is_right_trigger_down;
+    constexpr float trigger_threshold = 0.5f;
 
     bool *is_trigger_down  = (trigger == LEFT_TRIGGER) ? &is_left_trigger_down : &is_right_trigger_down;
     float trigger_movement = GetGamepadAxisMovement(0, trigger);
@@ -51,7 +49,7 @@ void update_controller(void) {
 
     switch (get_current_scene()) {
         case GAME:
-            if (is_game_over) {
+            if (is_game_over()) {
                 if (is_left_pressed) {
                     move_cursor('L');
                 } else if (is_right_pressed) {
@@ -61,10 +59,10 @@ void update_controller(void) {
             }
 
             if (is_start_pressed) {
-                is_game_paused = !is_game_paused;
+                toggle_pause();
             }
 
-            if (is_game_paused) break;
+            if (is_game_paused()) break;
 
             const float axis_movement_left_x = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
             if (axis_movement_left_x != 0) {
@@ -85,7 +83,7 @@ void update_controller(void) {
             }
 
             if (is_l_trigger_pressed) {
-                slow_down();
+                toggle_slowdown();
             }
             if (is_r_trigger_pressed) {
                 teleport();

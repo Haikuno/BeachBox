@@ -5,6 +5,7 @@ typedef enum Buttons { DPAD_UP = 1, DPAD_RIGHT, DPAD_DOWN, DPAD_LEFT, BUTTON_Y, 
 
 typedef enum Triggers { LEFT_TRIGGER = 4, RIGHT_TRIGGER } trigger_t;
 
+// Handles controller input
 void update_controller(void);
 
 #endif

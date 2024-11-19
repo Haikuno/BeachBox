@@ -1,18 +1,13 @@
-#include <stddef.h>
 #include <stdio.h>
+#include "loading.h"
 #include "../ui.h"
 #include "../timer.h"
 #include "../config.h"
 #include "../scene.h"
 #include "../save.h"
 #include "../background.h"
-#include "loading.h"
 
-extern uint8_t row_count[];
-extern uint8_t column_count[];
-extern uint8_t selected_layer;
-
-const uibutton_t load_button = {
+static const uibutton_t load_button_ = {
     .pos    = { .x = 10,  .y = SCREEN_HEIGHT * 0.45 },
     .size   = { .x = 300, .y = 50                   },
     .column = 0,
@@ -20,7 +15,7 @@ const uibutton_t load_button = {
     .text   = "Load",
 };
 
-const uibutton_t new_game_button = {
+static const uibutton_t new_game_button_ = {
     .pos    = { .x = 320, .y = SCREEN_HEIGHT * 0.45 },
     .size   = { .x = 300, .y = 50                   },
     .column = 1,
@@ -28,13 +23,13 @@ const uibutton_t new_game_button = {
     .text   = "New",
 };
 
-bbox_timer_t error_popup_timer;
-char         error_text[50];
+static bbox_timer_t error_popup_timer;
+static char         error_text[25];
 
 void init_loading_scene(void) {
-    column_count[0] = 2;
-    row_count[0]    = 1;
-    row_count[1]    = 1;
+    set_column_count(0, 2);
+    set_row_count(0, 1);
+    set_row_count(1, 1);
 }
 
 void update_loading_scene(void) {
@@ -48,7 +43,7 @@ static void draw_error_popup(void) {
     DrawText(error_text, (int)(SCREEN_WIDTH / 2 - MeasureText(error_text, 32) / 2), (int)(SCREEN_HEIGHT / 2 - 15), 32, RED);
 }
 
-static void load_game_callback(int option, void *user_data) {
+static void load_game_callback(const int option, void *user_data) {
     if (option == 1) { // yes pressed
         const int return_code = load_game();
 
@@ -65,12 +60,10 @@ static void load_game_callback(int option, void *user_data) {
                 change_scene(MAINMENU);
                 break;
         }
-
-        return;
     }
 }
 
-static void new_game_callback(int option, void *user_data) {
+static void new_game_callback(const int option, void *user_data) {
     if (option == 1) { // yes pressed
         new_game();
         const int return_code = save_game();
@@ -88,8 +81,6 @@ static void new_game_callback(int option, void *user_data) {
                 change_scene(MAINMENU);
                 break;
         }
-
-        return;
     }
 }
 
@@ -99,15 +90,15 @@ void draw_loading_scene(void) {
     static void (*callback)(int option, void *user_data) = nullptr;
     static char message[50];
 
-    if (do_button(load_button, true) && !error_popup_timer.is_running) {
-        callback       = load_game_callback;
-        selected_layer = 1;
+    if (do_button(load_button_, true) && !error_popup_timer.is_running) {
+        callback = load_game_callback;
+        set_selected_layer(1);
         snprintf(message, sizeof(message), "Load the game?");
     }
 
-    if (do_button(new_game_button, true) && !error_popup_timer.is_running) {
-        callback       = new_game_callback;
-        selected_layer = 1;
+    if (do_button(new_game_button_, true) && !error_popup_timer.is_running) {
+        callback = new_game_callback;
+        set_selected_layer(1);
         snprintf(message, sizeof(message), "Start a new game?");
     }
 

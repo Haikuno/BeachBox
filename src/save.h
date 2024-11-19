@@ -77,7 +77,7 @@ const bool is_hat_unlocked(const hat_t);
 void unlock_hat(const hat_t hat);
 
 // Returns the player's chosen color index
-const uint8_t get_player_current_color(void);
+const uint8_t get_player_current_color_index(void);
 
 // Increments the player's chosen color index
 // NOTE: This function wraps around when the index has reached the end of the array
@@ -86,6 +86,12 @@ void increment_player_color_index(void);
 // Decrements the player's chosen color index
 // NOTE: This function wraps around when the index has reached the start of the array
 void decrement_player_color_index(void);
+
+// Returns the saved music volume
+const uint8_t get_saved_music_volume(void);
+
+// Returns the saved sfx volume
+const uint8_t get_saved_sfx_volume(void);
 
 typedef struct Save {
         // HEADER //
@@ -130,7 +136,9 @@ typedef struct Save {
         uint8_t                 color_index; // Selected color from player_colors array
         uint8_t                 hat_index;   // Selected hat from hats array
         unlocked_hats_t         unlocked_hats;
-        char                    reserved_data[371]; // Reserved for (potential) future use
+        uint8_t                 music_volume;
+        uint8_t                 sfx_volume;
+        char                    reserved_data[369]; // Reserved for (potential) future use
 
 } __attribute__((__packed__)) save_t;
 
