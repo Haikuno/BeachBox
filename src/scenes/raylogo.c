@@ -1,5 +1,5 @@
 #include <raymath.h>
-#include <stdio.h>
+
 #include "raylogo.h"
 #include "../timer.h"
 #include "../scene.h"

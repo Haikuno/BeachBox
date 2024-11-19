@@ -21,7 +21,7 @@ struct SandParticle {
 } sand_particles[max_sand_particles_] = { 0 };
 
 void draw_ocean(void) {
-    const int current_object_speed = get_current_object_speed();
+    const float current_object_speed = get_current_object_speed();
 
     Color ocean_color = { 66, 147, 255, 255 };
     if (is_slowdown_active()) invert_color(&ocean_color);
@@ -67,7 +67,7 @@ void draw_ocean(void) {
 }
 
 void draw_sand_particles(void) {
-    const int current_object_speed = get_current_object_speed();
+    const float current_object_speed = get_current_object_speed();
 
     static bbox_timer_t sand_particle_spawn_timer;
     update_timer(&sand_particle_spawn_timer);

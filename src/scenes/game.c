@@ -1,3 +1,6 @@
+#include <raymath.h>
+
+#include "game.h"
 #include "../ui.h"
 #include "../timer.h"
 #include "../config.h"
@@ -9,8 +12,6 @@
 #include "../background.h"
 #include "../objects.h"
 #include "../audio.h"
-#include <raymath.h>
-#include "game.h"
 
 static bool     is_game_over_;
 static bool     is_game_paused_;

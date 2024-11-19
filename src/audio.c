@@ -3,7 +3,6 @@
 #include <dc/sound/sfxmgr.h>
 #include <dc/sound/sound.h>
 #include <dc/sound/stream.h>
-#include <stdio.h>
 
 #include "audio.h"
 #include "assert.h"

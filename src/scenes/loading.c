@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include "loading.h"
 #include "../ui.h"
 #include "../timer.h"

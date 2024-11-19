@@ -111,7 +111,7 @@ static void spawn_coin(void) {
     objects_.pos[index]        = (Vector2){ .x = SCREEN_WIDTH + 100, .y = GetRandomValue(190, FLOOR_HEIGHT - 100) };
     shifted_objects_bitfield_ |= (1 << index) & GetRandomValue(0, 1);
 
-    base_object_speed = BBOX_MIN(base_object_speed + 0.09, max_object_speed_);
+    base_object_speed = BBOX_MIN(base_object_speed + 0.08, max_object_speed_);
     calculate_object_cooldowns();
     start_timer(&coin_spawn_timer_, coin_spawn_cooldown_);
 }
@@ -221,5 +221,5 @@ const float get_current_object_speed(void) {
 }
 
 void reset_object_speed(void) {
-    current_object_speed_ = 5;
+    current_object_speed_ = 5.0f;
 }

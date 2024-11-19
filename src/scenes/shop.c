@@ -1,4 +1,5 @@
 #include <string.h>
+
 #include "shop.h"
 #include "../ui.h"
 #include "../scene.h"

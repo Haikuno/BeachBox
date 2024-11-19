@@ -14,6 +14,6 @@
 // #define DEBUG_DRAW_CURSOR_INFO
 // #define DEBUG_DRAW_VOLUME
 // #define DEBUG_GODMODE
-#define DEBUG_INFINITE_COINS
+// #define DEBUG_INFINITE_COINS
 
 #endif

@@ -1,6 +1,8 @@
 #ifndef BBOX_GAME_H
 #define BBOX_GAME_H
 
+#include <stdint.h>
+
 // Initializes the game scene
 void init_game_scene(void);
 

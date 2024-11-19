@@ -1,6 +1,3 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stddef.h>
 #include <kos/thread.h>
 #include <stdatomic.h>
 
