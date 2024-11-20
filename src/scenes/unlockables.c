@@ -95,20 +95,20 @@ void draw_unlockables_scene(void) {
     if (current_hat_type != HAT_NIL) {
         float x_pos = player_pos.x + player_size.x / 4;
 
-        // F and Murph need +3 X alignment
+        // F and Murph need +4 X alignment
         if (current_hat_type == HAT_F || current_hat_type == HAT_MUPRH) {
-            x_pos += 3;
+            x_pos += 4;
         }
 
         float y_pos = player_pos.y - 32;
 
-        // M and L need +8 Y alignment, Z needs +4, Crown needs +1
+        // M and L need +8 Y alignment, Z needs +6, Crown needs +2
         if (current_hat_type == HAT_M || current_hat_type == HAT_L) {
             y_pos += 8;
         } else if (current_hat_type == HAT_Z) {
             y_pos += 4;
         } else if (current_hat_type == HAT_CROWN) {
-            y_pos += 1;
+            y_pos += 2;
         }
 
         const Texture2D *current_hat_texture = get_hat_texture(current_hat_type);

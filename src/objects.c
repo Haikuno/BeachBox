@@ -159,7 +159,9 @@ void update_objects(void) {
                 continue; // If the player and the coin's "dimension" do not match, skip
                           // If the player is teleporting, we grab the coin no matter what
 
-            if (CheckCollisionCircleRec(objects_.pos[index], coin_size_, player_rect)) {
+            // Checking against a bigger hitbox when grabbing coins makes the game feel more fair
+            const Rectangle player_rect_coins = (Rectangle){ player_rect.x, player_rect.y, player_rect.width * 1.2, player_rect.height * 1.2 };
+            if (CheckCollisionCircleRec(objects_.pos[index], coin_size_, player_rect_coins)) {
                 active_objects_bitfield_ &= ~(1 << index);
                 play_sfx_coin();
                 add_coin();
@@ -174,7 +176,8 @@ void update_objects(void) {
                           // If the player is teleporting, we do not check for collisions
 
             const Vector2 player_pos  = (Vector2){ player_rect.x, player_rect.y };
-            const Vector2 player_size = (Vector2){ player_rect.width, player_rect.height };
+            // Checking against a smaller hitbox when colliding with pillars makes the game feel more fair
+            const Vector2 player_size = (Vector2){ player_rect.width * 0.8, player_rect.height * 0.8 };
 
             if ((CheckCollisionRectangleV(player_pos, player_size, objects_.pos[index], objects_.size[index]))) {
                 end_game();

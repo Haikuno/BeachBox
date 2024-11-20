@@ -196,19 +196,17 @@ void draw_player(void) {
         // F and Murph need +2 X alignment
         if (current_hat_index == HAT_F || current_hat_index == HAT_MUPRH) {
             x_pos += 2;
-        } else if (current_hat_index == HAT_CROWN) {
-            x_pos -= 2; // Crown needs -2
         }
 
         float y_pos = player.pos.y - 16;
 
-        // M and L need +6 Y alignment, Z needs +3, Crown needs +2
+        // M and L need +4 Y alignment, Z needs +3, Crown needs +1
         if (current_hat_index == HAT_M || current_hat_index == HAT_L) {
-            y_pos += 6;
+            y_pos += 4;
         } else if (current_hat_index == HAT_Z) {
             y_pos += 3;
         } else if (current_hat_index == HAT_CROWN) {
-            y_pos += 2;
+            y_pos += 1;
         }
 
         const Texture2D *current_hat_texture = get_hat_texture(current_hat_index);
