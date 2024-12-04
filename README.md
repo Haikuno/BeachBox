@@ -11,12 +11,10 @@ It showcases [raylib4Dreamcast](https://github.com/raylib4Consoles/raylib4Dreamc
 The project is made using C23.
 
 ## Objective of the game
-The goal is to survive as long as you can, while collecting coins.
+The goal is to survive as long as you can, while collecting coins to spend on upgrades and unlockables.
 
 There are two dimensions which the player can shift between by pressing the X button,
 enabling you to collide with both coins and walls on the same dimension.
-
-You can spend your coins on the shop to buy upgrades and powers.
 
 The green wall can only be passed by using the teleport power.
 
