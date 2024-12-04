@@ -118,9 +118,8 @@ void update_player_pos(void) {
 }
 
 void jump(void) {
-    bool is_player_on_ground = player.pos.y == FLOOR_HEIGHT - player.size.y;
-
-    int jump_force = 15;
+    const bool    is_player_on_ground = player.pos.y == FLOOR_HEIGHT - player.size.y;
+    constexpr int jump_force          = 15;
 
     if (is_player_on_ground) {
         player.velocity.y = -jump_force;
@@ -176,13 +175,13 @@ void update_player(void) {
 }
 
 void draw_player(void) {
-    const Color transparent        = { 0, 0, 0, 0 };
-    const Color hat_teleport_color = { 0, 0, 0, 120 };
+    constexpr Color transparent = { 0, 0, 0, 0 };
+    constexpr Color translucid  = { 0, 0, 0, 120 };
 
     Color current_player_color = is_teleporting_ ? transparent : player.color;
     current_player_color.a     = player.is_shifted ? 140 : current_player_color.a;
 
-    Color hat_color = is_teleporting_ ? hat_teleport_color : WHITE;
+    Color hat_color = is_teleporting_ ? translucid : WHITE;
     hat_color.a     = player.is_shifted ? 140 : hat_color.a;
 
     DrawRectangleV(player.pos, player.size, current_player_color);

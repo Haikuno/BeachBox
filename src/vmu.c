@@ -92,10 +92,11 @@ void *draw_vmu_animation(void *param) {
         maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
         if (!vmu) continue;
 
-        const char **vmu_current_animation  = nullptr;
-        int          vmu_current_num_frames = 0;
+        const char  **vmu_current_animation  = nullptr;
+        int           vmu_current_num_frames = 0;
+        const scene_t current_scene          = get_current_scene();
 
-        switch (get_current_scene()) {
+        switch (current_scene) {
             case RAYLOGO:
                 SET_VMU_ANIMATION(vmu_raylib_animation);
                 break;
@@ -131,8 +132,8 @@ void *draw_vmu_animation(void *param) {
         current_frame_ = (current_frame_ + 1) % vmu_current_num_frames;
         vmufb_paint_area(&fb_, 0, 0, 48, 32, vmu_current_animation[current_frame_]);
 
-        if (get_current_scene() == MAINMENU) update_vmu_menu_text();
-        if (get_current_scene() == CREDITS) update_vmu_credits_animation();
+        if (current_scene == MAINMENU) update_vmu_menu_text();
+        if (current_scene == CREDITS) update_vmu_credits_animation();
 
         vmufb_present(&fb_, vmu);
     }
