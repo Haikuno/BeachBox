@@ -270,8 +270,8 @@ int save_game(void) {
     constexpr size_t save_size   = sizeof(save);
     constexpr size_t header_size = sizeof(save.header);
 
-    snprintf(save.header.dc_description, sizeof(save.header.dc_description), "BeachBox - PsyOps");
-    snprintf(save.header.app_identifier, sizeof(save.header.app_identifier), "Psyops");
+    snprintf(save.header.dc_description, sizeof(save.header.dc_description), "Psyop Studios");
+    snprintf(save.header.app_identifier, sizeof(save.header.app_identifier), "Psyop Studios");
     save.header.number_icons          = 3;
     save.header.icon_animation_speed  = 14;
     save.header.graphic_eyecatch_type = 3;
@@ -352,7 +352,7 @@ int load_game(void) {
 
     free(save_buffer);
     load_in_progress_ = false;
-    return -1;
+    return 0;
 }
 
 void new_game(void) {

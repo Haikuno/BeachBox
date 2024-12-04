@@ -4,7 +4,6 @@
    Copyright (C) 2024 Cypress
 */
 
-
 #include "credits.h"
 #include "../background.h"
 #include "../config.h"
@@ -27,12 +26,12 @@ static struct BouncingImage {
 } images[3];
 
 static void initialize_images(void) {
-    const char *paths[] = { "/rd/creditspngs/koslogo.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyopslogo.png" };
+    const char *paths[] = { "/rd/creditspngs/koslogo.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyoplogo.png" };
 
     constexpr Vector2 positions[] = {
         { 50,  50  },
         { 490, 250 },
-        { 300, 350 }
+        { 240, 350 }
     };
 
     for (int i = 0; i < 3; i++) {
@@ -75,10 +74,14 @@ void draw_credits_scene(void) {
 
     // TODO: add actual credits
 
-    const char *credits_text  = "Made by Psyops :)";
-    const char *credits_text2 = "Thanks to KallistiOS and Raylib";
-    DrawText(credits_text, (int)(SCREEN_WIDTH / 4) + 35, (int)(SCREEN_HEIGHT / 4) + 20, 30, RAYWHITE);
-    DrawText(credits_text2, (int)(SCREEN_WIDTH / 4) - 80, (int)(SCREEN_HEIGHT / 4) + 65, 30, RAYWHITE);
+    const char *credits_text  = "Made by Psyop Studios";
+    const char *credits_text2 = "Music and SFX by Creepypastorius";
+    const char *credits_text3 = "Credits song by mickschen";
+    const char *credits_text4 = "Thanks to KallistiOS and raylib";
+    DrawText(credits_text, (int)(SCREEN_WIDTH / 2) - MeasureText(credits_text, 24) / 2, (int)(SCREEN_HEIGHT / 4) + 20, 24, RAYWHITE);
+    DrawText(credits_text2, (int)(SCREEN_WIDTH / 2) - MeasureText(credits_text2, 24) / 2, (int)(SCREEN_HEIGHT / 4) + 65, 24, RAYWHITE);
+    DrawText(credits_text3, (int)(SCREEN_WIDTH / 2) - MeasureText(credits_text3, 24) / 2, (int)(SCREEN_HEIGHT / 4) + 95, 24, RAYWHITE);
+    DrawText(credits_text4, (int)(SCREEN_WIDTH / 2) - MeasureText(credits_text4, 24) / 2, (int)(SCREEN_HEIGHT / 4) + 135, 24, RAYWHITE);
 
     if (do_button(exit_button_, true)) {
         unload_credits_images();
