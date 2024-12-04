@@ -127,11 +127,11 @@ void update_song(void) {
     }
 }
 
-const uint8_t get_music_volume(void) {
+uint8_t get_music_volume(void) {
     return music_volume_;
 }
 
-void set_music_volume(const uint8_t volume) {
+void set_music_volume(uint8_t volume) {
     music_volume_ = volume;
     update_music_volume();
 }
@@ -163,11 +163,11 @@ void decrement_music_volume(void) {
 
 ///// SFX //////
 
-const uint8_t get_sfx_volume(void) {
+uint8_t get_sfx_volume(void) {
     return (sfx_volume_ / 10);
 }
 
-void set_sfx_volume(const uint8_t volume) {
+void set_sfx_volume(uint8_t volume) {
     sfx_volume_ = volume * 10;
 }
 
