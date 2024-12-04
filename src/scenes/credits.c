@@ -26,7 +26,7 @@ static struct BouncingImage {
 } images[3];
 
 static void initialize_images(void) {
-    const char *paths[] = { "/rd/creditspngs/koslogo.png", "/rd/creditspngs/rayliblogo.png", "/rd/creditspngs/psyoplogo.png" };
+    const char *paths[] = { "/rd/logos/koslogo.png", "/rd/logos/rayliblogo.png", "/rd/logos/psyoplogo.png" };
 
     constexpr Vector2 positions[] = {
         { 50,  50  },
