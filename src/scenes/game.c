@@ -151,11 +151,11 @@ void end_game(void) {
     }
 }
 
-const bool is_game_over(void) {
+bool is_game_over(void) {
     return is_game_over_;
 }
 
-const bool is_game_paused(void) {
+bool is_game_paused(void) {
     return is_game_paused_;
 }
 
@@ -163,11 +163,11 @@ void toggle_pause(void) {
     is_game_paused_ = !is_game_paused_;
 }
 
-const bool is_new_high_score(void) {
+bool is_new_high_score(void) {
     return is_new_high_score_;
 }
 
-const uint16_t get_current_coins(void) {
+uint16_t get_current_coins(void) {
     return current_coins_;
 }
 

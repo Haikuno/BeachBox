@@ -6,14 +6,14 @@
 #include "../config.h"
 #include "../helper_functions.h"
 
-constexpr int raylogo_width_       = 290;
-constexpr int raylogo_height_      = 300;
-constexpr int raylogo_square_size_ = 15;
-constexpr int raylogo_columns_     = (raylogo_width_ / raylogo_square_size_);
-constexpr int raylogo_rows_        = (raylogo_height_ / raylogo_square_size_);
+static constexpr int raylogo_width_       = 290;
+static constexpr int raylogo_height_      = 300;
+static constexpr int raylogo_square_size_ = 15;
+static constexpr int raylogo_columns_     = (raylogo_width_ / raylogo_square_size_);
+static constexpr int raylogo_rows_        = (raylogo_height_ / raylogo_square_size_);
 
-constexpr float animation_duration_ = 1.0f;
-static float    time_elapsed_       = 0.0f;
+static constexpr float animation_duration_ = 1.0f;
+static float           time_elapsed_       = 0.0f;
 
 void init_raylogo_scene(void) {
     //

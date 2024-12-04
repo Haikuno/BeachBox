@@ -28,8 +28,8 @@ struct UiSelected {
         uint8_t layer;
 };
 
-constexpr uint8_t ui_max_columns_ = 10;
-constexpr uint8_t ui_max_rows_    = 10;
+static constexpr uint8_t ui_max_columns_ = 10;
+static constexpr uint8_t ui_max_rows_    = 10;
 
 typedef struct UiState {
         struct UiSelected selected;
@@ -39,16 +39,16 @@ typedef struct UiState {
 
 // Moves the "cursor" when the player presses the D-Pad, changing the selected UI element
 // Direction is one of 'L', 'R', 'U', 'D' for left, right, up, down
-void move_cursor(const char direction);
+void move_cursor(char direction);
 
 // Draws a rotating sun around the selected UIButton
 void draw_rotating_sun(Vector2 anchor_pos);
 
 // Draws an UIButton. Returns true if the button is pressed
-const bool do_button(const uibutton_t button, const bool is_active);
+bool do_button(uibutton_t button, bool is_active);
 
 // Draws UIArrows. Returns 1 if right is pressed, -1 if left is pressed, 0 otherwise
-const int do_arrows(const uiarrows_t arrows);
+int do_arrows(uiarrows_t arrows);
 
 // Takes a callback function, parameters to pass to the function and a message to display
 void draw_confirmation_window(void (*callback)(int option, void *user_data), void *user_data, const char *message);
@@ -56,34 +56,34 @@ void draw_confirmation_window(void (*callback)(int option, void *user_data), voi
 bool are_arrows_selected(uiarrows_t arrows);
 
 // Returns the selected column
-const uint8_t get_selected_column(void);
+uint8_t get_selected_column(void);
 
 // Sets the selected column to the given value
-void set_selected_column(const uint8_t column);
+void set_selected_column(uint8_t column);
 
 // Returns the selected row
-const uint8_t get_selected_row(void);
+uint8_t get_selected_row(void);
 
 // Sets the selected row to the given value
-void set_selected_row(const uint8_t row);
+void set_selected_row(uint8_t row);
 
 // Returns the selected layer
-const uint8_t get_selected_layer(void);
+uint8_t get_selected_layer(void);
 
 // Sets the selected layer to the given value
-void set_selected_layer(const uint8_t layer);
+void set_selected_layer(uint8_t layer);
 
 // Returns the column count for the given row
-const uint8_t get_column_count(const uint8_t row);
+uint8_t get_column_count(const uint8_t row);
 
 // Sets the given row's column count to the given value
-void set_column_count(const uint8_t row, const uint8_t count);
+void set_column_count(uint8_t row, uint8_t count);
 
 // Returns the row count for the given column
-const uint8_t get_row_count(const uint8_t column);
+uint8_t get_row_count(uint8_t column);
 
 // Sets the given column's row count to the given value
-void set_row_count(const uint8_t column, const uint8_t count);
+void set_row_count(uint8_t column, uint8_t count);
 
 // Resets the cursor position to layer 0, column 0, row 0
 void reset_cursor(void);
@@ -95,12 +95,12 @@ void reset_column_count(void);
 void reset_row_count(void);
 
 // Returns the background color
-const Color get_background_color(void);
+Color get_background_color(void);
 
 // Returns the button color
-const Color get_button_color(void);
+Color get_button_color(void);
 
 // Returns the selected button color
-const Color get_button_selected_color(void);
+Color get_button_selected_color(void);
 
 #endif

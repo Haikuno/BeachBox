@@ -20,6 +20,6 @@ void unload_hats(void) {
     }
 }
 
-const Texture2D *get_hat_texture(const hat_t hat) {
+const Texture2D *get_hat_texture(hat_t hat) {
     return &hats[hat];
 }

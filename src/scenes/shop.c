@@ -21,7 +21,7 @@ static const uibutton_t shop_buttons_[] = {
     { .pos = { 460, 400 }, .size = { 100, 40 }, .column = 2, .row = 0, .layer = 0, .text = "Exit"              },
 };
 
-constexpr uint8_t costs_[UPGRADE_COUNT] = {
+static constexpr uint8_t costs_[UPGRADE_COUNT] = {
     20, // SPEED
     20, // MAX_METER
     50, // TELEPORT_UNLOCK
@@ -31,11 +31,11 @@ constexpr uint8_t costs_[UPGRADE_COUNT] = {
     30, // SLOWDOWN_DRAIN
 };
 
-static inline bool can_afford(const player_upgrade_t option) {
+static inline bool can_afford(player_upgrade_t option) {
     return costs_[option] <= get_total_coins();
 }
 
-static inline bool can_upgrade(const player_upgrade_t option) {
+static inline bool can_upgrade(player_upgrade_t option) {
     return get_upgrade_level(option) < get_max_upgrade_level(option);
 }
 

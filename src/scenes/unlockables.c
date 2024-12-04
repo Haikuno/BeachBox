@@ -10,8 +10,8 @@
 #include "../scene.h"
 #include "unlockables.h"
 
-constexpr Vector2 button_size_    = { .x = 200, .y = 50 };
-constexpr float   button_padding_ = 15;
+static constexpr Vector2 button_size_    = { .x = 200, .y = 50 };
+static constexpr float   button_padding_ = 15;
 
 const uibutton_t confirm_button_ = {
     .pos    = { .x = SCREEN_WIDTH / 2 - button_size_.x / 2, .y = SCREEN_HEIGHT - button_size_.y / 2 - button_padding_ * 2 },
@@ -22,7 +22,7 @@ const uibutton_t confirm_button_ = {
     .text   = "Confirm",
 };
 
-constexpr uint8_t hat_prices_[HAT_COUNT] = {
+static constexpr uint8_t hat_prices_[HAT_COUNT] = {
     0,   // No hat
     50,  // Red Slime
     50,  // Blue Slime
@@ -133,7 +133,7 @@ void draw_unlockables_scene(void) {
         draw_hat_price(current_hat_type);
         const bool can_buy_hat = get_total_coins() >= hat_prices_[current_hat_type] && get_selected_row() != 2 && current_hat_type != HAT_CROWN;
         if (IsGamepadButtonReleased(0, BUTTON_A) && can_buy_hat) {
-            callback       = purchase_hat;
+            callback = purchase_hat;
             set_selected_layer(1);
         }
     }

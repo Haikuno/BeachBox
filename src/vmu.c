@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <dc/maple.h>
 #include <dc/vmu_fb.h>
+
 #include "save.h"
 #include "vmu.h"
 #include "vmu_animations.h"
 #include "timer.h"
 #include "scene.h"
 #include "scenes/game.h"
-
-#define SET_VMU_ANIMATION(animation) (vmu_current_animation = animation, vmu_current_num_frames = sizeof(animation) / sizeof(animation[0]))
 
 // Vmu animations are drawn to the vmu frame buffer, and then presented to the screen
 // Each frame is just an array of raw bits, 1bpp (see vmu_animations.h)
@@ -26,36 +25,36 @@ static void update_vmu_menu_text(void) {
     char buffer[16];
     switch (mainmenu_text_frame_) {
         case 0:
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 4, 1, 48, 6, 2, "Hello, and");
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 8, 7, 48, 6, 2, "welcome!");
+            vmufb_print_string_into(&fb_, nullptr, 4, 1, 48, 6, 2, "Hello, and");
+            vmufb_print_string_into(&fb_, nullptr, 8, 7, 48, 6, 2, "welcome!");
             break;
         case 1:
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 2, 1, 48, 6, 2, "I hope that");
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 5, 7, 48, 6, 2, "you enjoy ");
+            vmufb_print_string_into(&fb_, nullptr, 2, 1, 48, 6, 2, "I hope that");
+            vmufb_print_string_into(&fb_, nullptr, 5, 7, 48, 6, 2, "you enjoy ");
             break;
         case 2:
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 5, 5, 48, 6, 2, "BeachBox!!");
+            vmufb_print_string_into(&fb_, nullptr, 5, 5, 48, 6, 2, "BeachBox!!");
             break;
         case 3:
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 4, 1, 48, 6, 2, "Check out");
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 8, 7, 48, 6, 2, "the shop-");
+            vmufb_print_string_into(&fb_, nullptr, 4, 1, 48, 6, 2, "Check out");
+            vmufb_print_string_into(&fb_, nullptr, 8, 7, 48, 6, 2, "the shop-");
             break;
         case 4:
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 4, 1, 48, 6, 2, "-and spend");
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 3, 7, 48, 6, 2, "your money!");
+            vmufb_print_string_into(&fb_, nullptr, 4, 1, 48, 6, 2, "-and spend");
+            vmufb_print_string_into(&fb_, nullptr, 3, 7, 48, 6, 2, "your money!");
             break;
         case 5:
             snprintf(buffer, sizeof(buffer), "You have %d", get_total_coins());
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 1, 1, 48, 6, 2, buffer);
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 3, 7, 48, 6, 2, "coins left");
+            vmufb_print_string_into(&fb_, nullptr, 1, 1, 48, 6, 2, buffer);
+            vmufb_print_string_into(&fb_, nullptr, 3, 7, 48, 6, 2, "coins left");
             break;
         case 6:
             snprintf(buffer, sizeof(buffer), "%d times!!", get_total_runs());
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 4, 1, 48, 6, 2, "You played");
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 8, 7, 48, 6, 2, buffer);
+            vmufb_print_string_into(&fb_, nullptr, 4, 1, 48, 6, 2, "You played");
+            vmufb_print_string_into(&fb_, nullptr, 8, 7, 48, 6, 2, buffer);
             break;
         case 7:
-            vmufb_print_string_into(&fb_, &vmufb_font4x6, 8, 5, 48, 6, 2, "Congrats!");
+            vmufb_print_string_into(&fb_, nullptr, 8, 5, 48, 6, 2, "Congrats!");
             break;
     }
 
@@ -84,6 +83,12 @@ void reset_vmu_animation(void) {
     credits_bar_width_       = 1;
     credits_bar_should_grow_ = true;
 }
+
+#define SET_VMU_ANIMATION(animation)                                            \
+    do {                                                                        \
+        vmu_current_animation = (animation);                                    \
+        vmu_current_num_frames = sizeof((animation)) / sizeof((animation)[0]);  \
+    } while(false)
 
 void *draw_vmu_animation(void *param) {
     while (true) {
@@ -140,3 +145,5 @@ void *draw_vmu_animation(void *param) {
 
     return nullptr;
 };
+
+#undef SET_VMU_ANIMATION

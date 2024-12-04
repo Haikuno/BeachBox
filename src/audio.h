@@ -13,10 +13,10 @@ void deinit_audio(void);
 void update_song(void);
 
 // Returns the music volume
-const uint8_t get_music_volume(void);
+uint8_t get_music_volume(void);
 
 // Sets the music volume to the given value
-void set_music_volume(const uint8_t volume);
+void set_music_volume(uint8_t volume);
 
 // Increases music volume by 1
 void increment_music_volume(void);
@@ -25,10 +25,10 @@ void increment_music_volume(void);
 void decrement_music_volume(void);
 
 // Returns the sound effect volume
-const uint8_t get_sfx_volume(void);
+uint8_t get_sfx_volume(void);
 
 // Sets the sound effect volume to the given value
-void set_sfx_volume(const uint8_t volume);
+void set_sfx_volume(uint8_t volume);
 
 // Increases sfx volume by 1
 void increment_sfx_volume(void);

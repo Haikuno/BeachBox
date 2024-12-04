@@ -8,7 +8,7 @@
 #include "audio.h"
 #include "scenes/game.h"
 
-constexpr int player_colors_count_ = 17;
+static constexpr int player_colors_count_ = 17;
 
 static const Color player_colors[player_colors_count_] = {
     RED,
@@ -30,11 +30,11 @@ static const Color player_colors[player_colors_count_] = {
     DARKGRAY,
 };
 
-const Color get_player_color(const int index) {
+Color get_player_color(int index) {
     return player_colors[index];
 }
 
-const int get_player_color_count(void) {
+int get_player_color_count(void) {
     return player_colors_count_;
 }
 
@@ -44,35 +44,35 @@ static bbox_timer_t teleport_cooldown_timer = { 0 };
 static bool         is_slowdown_active_     = false;
 static bool         is_teleporting_         = false;
 
-const bool is_slowdown_active(void) {
+bool is_slowdown_active(void) {
     return is_slowdown_active_;
 }
 
-const bool is_player_teleporting(void) {
+bool is_player_teleporting(void) {
     return is_teleporting_;
 }
 
-const bool is_player_shifted(void) {
+bool is_player_shifted(void) {
     return player.is_shifted;
 }
 
-const Rectangle get_player_rect(void) {
+Rectangle get_player_rect(void) {
     return (Rectangle){ player.pos.x, player.pos.y, player.size.x, player.size.y };
 }
 
-const float get_player_meter(void) {
+float get_player_meter(void) {
     return player.meter;
 }
 
-const float get_player_max_meter(void) {
+float get_player_max_meter(void) {
     return player.max_meter;
 }
 
-void refill_player_meter(const float amount) {
+void refill_player_meter(float amount) {
     player.meter = BBOX_MIN(get_player_meter() + amount, get_player_max_meter());
 }
 
-const bbox_timer_t get_teleport_cooldown_timer(void) {
+bbox_timer_t get_teleport_cooldown_timer(void) {
     return teleport_cooldown_timer;
 }
 
@@ -90,12 +90,12 @@ void init_player(void) {
     is_teleporting_     = false;
 }
 
-void move_player(const Vector2 direction) {
+void move_player(Vector2 direction) {
     if (is_teleporting_) return; // If the player is teleporting, we don't let the player move
     player.velocity.x += direction.x * player.speed;
 }
 
-void shift_player(const bool should_shift) {
+void shift_player(bool should_shift) {
     player.is_shifted = should_shift;
 }
 

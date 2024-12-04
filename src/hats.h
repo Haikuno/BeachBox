@@ -38,6 +38,6 @@ void load_hats(void);
 void unload_hats(void);
 
 // Returns the texture for the given hat
-const Texture2D *get_hat_texture(const hat_t hat);
+const Texture2D *get_hat_texture(hat_t hat);
 
 #endif // BBOX_HATS_H

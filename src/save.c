@@ -10,40 +10,41 @@
 #include "save.h"
 #include "timer.h"
 
-// Most of the information in this file and the calc_CRC function was taken from:
-// https://mc.pp.se/dc/vms/fileheader.html , credits to Marcus Comstedt
+/*
+    Most of the information in this file and the calc_CRC function was taken from:
+    https://mc.pp.se/dc/vms/fileheader.html , credits to Marcus Comstedt
 
-// Colors must be in ARGB4444 format, so I've converted the RGB values from my image to ARGB4444 below.
+    Colors must be in ARGB4444 format
 
-// The palette consists of 16 16-bit integers, one for each colour in the palette. Each integer consists of four
-// four-bit fields:
+    The palette consists of 16 16-bit integers, one for each colour in the palette. Each integer consists of four
+    four-bit fields:
+        0-3 : Alpha (15 is fully opaque, 0 is fully transparent)
+        4-7 : Red
+        8-11 : Green
+        12-15 : Blue
+    So a value of 0b1111'0000'1111'0000 would be pure green with no transparency.
+*/
 
-// 0-3 : Alpha (15 is fully opaque, 0 is fully transparent)
-// 4-7 : Red
-// 8-11 : Green
-// 12-15 : Blue
-// So a value of 0b1111'0000'1111'0000 would be pure green with no transparency.
+static constexpr uint16_t bios_light_blue_  = 0b1111'1011'1101'1111;
+static constexpr uint16_t bios_black_       = 0b1111'0000'0000'0000;
+static constexpr uint16_t bios_red_         = 0b1111'1100'0001'0001;
+static constexpr uint16_t bios_periwinkle_  = 0b1111'1000'1001'1111;
+static constexpr uint16_t bios_blue_        = 0b1111'0100'0110'1111;
+static constexpr uint16_t bios_sand_        = 0b1111'1100'1010'0101;
+static constexpr uint16_t bios_darksand_    = 0b1111'1100'0111'0010;
+static constexpr uint16_t bios_white_       = 0b1111'1111'1111'1111;
+static constexpr uint16_t bios_purple_      = 0b1110'1010'0001'1010;
+static constexpr uint16_t bios_gold_        = 0b1111'1110'1010'0000;
+static constexpr uint16_t bios_transparent_ = 0b0000'0000'0000'0000;
 
-constexpr uint16_t vmu_light_blue  = 0b1111'1011'1101'1111;
-constexpr uint16_t vmu_black       = 0b1111'0000'0000'0000;
-constexpr uint16_t vmu_red         = 0b1111'1100'0001'0001;
-constexpr uint16_t vmu_periwinkle  = 0b1111'1000'1001'1111;
-constexpr uint16_t vmu_blue        = 0b1111'0100'0110'1111;
-constexpr uint16_t vmu_sand        = 0b1111'1100'1010'0101;
-constexpr uint16_t vmu_darksand    = 0b1111'1100'0111'0010;
-constexpr uint16_t vmu_white       = 0b1111'1111'1111'1111;
-constexpr uint16_t vmu_purple      = 0b1110'1010'0001'1010;
-constexpr uint16_t vmu_gold        = 0b1111'1110'1010'0000;
-constexpr uint16_t vmu_transparent = 0b0000'0000'0000'0000;
-
-constexpr uint16_t bios_save_palette[16] = {
-    vmu_light_blue,  vmu_black,       vmu_red,         vmu_periwinkle,  vmu_blue,        vmu_sand,        vmu_darksand,    vmu_transparent,
-    vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent,
+static constexpr uint16_t bios_save_palette[16] = {
+    bios_light_blue_,  bios_black_,       bios_red_,         bios_periwinkle_,  bios_blue_,        bios_sand_,        bios_darksand_,    bios_transparent_,
+    bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_,
 };
 
-constexpr uint16_t bios_eyecatch_palette[16] = {
-    vmu_purple,      vmu_gold,        vmu_black,       vmu_white,       vmu_red,         vmu_transparent, vmu_transparent, vmu_transparent,
-    vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent, vmu_transparent,
+static constexpr uint16_t bios_eyecatch_palette[16] = {
+    bios_purple_,      bios_gold_,        bios_black_,       bios_white_,       bios_red_,         bios_transparent_, bios_transparent_, bios_transparent_,
+    bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_, bios_transparent_,
 };
 
 // The below array contains the frames of the animation shown in the Dreamcast BIOS.
@@ -51,7 +52,7 @@ constexpr uint16_t bios_eyecatch_palette[16] = {
 // For example, 0x01 would be a light blue pixel on the left and a black pixel on the right.
 
 // clang-format off
-constexpr int8_t bios_save_animation[512 * 3] = {
+static constexpr int8_t bios_save_animation[512 * 3] = {
     ///////////////////////////////////   FRAME 1    /////////////////////////////////////////////
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -155,7 +156,7 @@ constexpr int8_t bios_save_animation[512 * 3] = {
 // clang-format on
 
 // Converted with Crayon VMU tools by Protofall
-constexpr uint8_t bios_eyecatch_bitmap[2016] = {
+static constexpr uint8_t bios_eyecatch_bitmap[2016] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x11, 0x11, 0x11,
     0x11, 0x11, 0x11, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -221,7 +222,7 @@ constexpr uint8_t bios_eyecatch_bitmap[2016] = {
     0x11, 0x11, 0x11, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x00, 0x00, 0x22, 0x33, 0x33, 0x33, 0x33, 0x34, 0x33, 0x33, 0x33, 0x33
 };
 
-static const int calc_CRC(const unsigned char *buf, int size) {
+static int calc_CRC(const unsigned char *buf, int size) {
     int i, c, n = 0;
     for (i = 0; i < size; i++) {
         n ^= (buf[i] << 8);
@@ -246,11 +247,11 @@ void draw_save_popup(void) {
 // So that we make sure saving doesn't fail
 static atomic_bool save_in_progress_ = false;
 
-const bool is_save_in_progress(void) {
+bool is_save_in_progress(void) {
     return save_in_progress_;
 }
 
-const int save_game(void) {
+int save_game(void) {
     save_in_progress_ = true;
     snprintf(save_popup_text, sizeof(save_popup_text), "Saving...");
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
@@ -315,11 +316,11 @@ void update_save_game_timer(void) {
 // So that we make sure loading doesn't fail
 static atomic_bool load_in_progress_ = false;
 
-const bool is_load_in_progress(void) {
+bool is_load_in_progress(void) {
     return load_in_progress_;
 }
 
-const int load_game(void) {
+int load_game(void) {
     load_in_progress_   = true;
     maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
     if (!vmu) {
@@ -328,7 +329,7 @@ const int load_game(void) {
     }
     void *save_buffer = malloc(sizeof(save));
 
-    if (vmufs_read(vmu, "BeachBox", &save_buffer, NULL) == 0) { // If loading was successful
+    if (vmufs_read(vmu, "BeachBox", &save_buffer, nullptr) == 0) { // If loading was successful
         memcpy(&save, save_buffer, sizeof(save));
         free(save_buffer);
         load_in_progress_ = false;
@@ -355,14 +356,14 @@ void new_game(void) {
     save.sfx_volume        = 12;
 }
 
-const uint16_t get_total_coins(void) {
+uint16_t get_total_coins(void) {
 #ifdef DEBUG_INFINITE_COINS
     return UINT16_MAX;
 #endif
     return save.total_coins;
 }
 
-void add_coins(const uint16_t n) {
+void add_coins(uint16_t n) {
     uint16_t n_ = n;
     // Check for overflow
     const int total_coins_ = get_total_coins();
@@ -375,7 +376,7 @@ void add_coins(const uint16_t n) {
     save.total_coins += n_;
 }
 
-const uint16_t get_total_runs(void) {
+uint16_t get_total_runs(void) {
     return save.total_runs;
 }
 
@@ -389,15 +390,15 @@ void increment_total_runs(void) {
     save.total_runs++;
 }
 
-const uint16_t get_high_score(void) {
+uint16_t get_high_score(void) {
     return save.high_score;
 }
 
-void set_high_score(const uint16_t new_high_score) {
+void set_high_score(uint16_t new_high_score) {
     save.high_score = new_high_score;
 }
 
-const uint8_t get_upgrade_level(const player_upgrade_t upgrade) {
+uint8_t get_upgrade_level(player_upgrade_t upgrade) {
     assert_msg(upgrade < UPGRADE_COUNT && upgrade >= 0, "Upgrade passed to get_upgrade_level is out of bounds");
 
     switch (upgrade) {
@@ -423,7 +424,7 @@ const uint8_t get_upgrade_level(const player_upgrade_t upgrade) {
     return -1;
 }
 
-const uint8_t get_max_upgrade_level(const player_upgrade_t upgrade) {
+uint8_t get_max_upgrade_level(player_upgrade_t upgrade) {
     assert_msg(upgrade < UPGRADE_COUNT && upgrade >= 0, "Upgrade passed to get_max_upgrade_level is out of bounds");
 
     switch (upgrade) {
@@ -435,7 +436,7 @@ const uint8_t get_max_upgrade_level(const player_upgrade_t upgrade) {
     }
 }
 
-void increment_upgrade_level(const player_upgrade_t upgrade) {
+void increment_upgrade_level(player_upgrade_t upgrade) {
     assert_msg(upgrade < UPGRADE_COUNT && upgrade >= 0, "Invalid upgrade passed to increment_upgrade_level");
 
     switch (upgrade) {
@@ -465,7 +466,7 @@ void increment_upgrade_level(const player_upgrade_t upgrade) {
     }
 }
 
-const hat_t get_current_hat_type(void) {
+hat_t get_current_hat_type(void) {
     return save.hat_index;
 }
 
@@ -477,7 +478,7 @@ void decrement_current_hat_index(void) {
     save.hat_index = (save.hat_index - 1 + HAT_COUNT) % HAT_COUNT;
 }
 
-const bool is_hat_unlocked(hat_t hat) {
+bool is_hat_unlocked(hat_t hat) {
     assert_msg(hat < HAT_COUNT && hat >= 0, "Hat passed to is_hat_unlocked is out of bounds");
 
     switch (hat) {
@@ -549,7 +550,7 @@ void unlock_hat(hat_t hat) {
     }
 }
 
-const uint8_t get_player_current_color_index(void) {
+uint8_t get_player_current_color_index(void) {
     return save.color_index;
 }
 

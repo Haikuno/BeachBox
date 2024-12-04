@@ -11,7 +11,7 @@ void update_objects(void);
 void draw_objects(void);
 
 // Returns the current object speed
-const float get_current_object_speed(void);
+float get_current_object_speed(void);
 
 // Resets the object speed back to the initial value
 void reset_object_speed(void);

@@ -1,4 +1,5 @@
 #include <raylib.h>
+
 #include "controller.h"
 #include "scene.h"
 #include "ui.h"
@@ -6,7 +7,7 @@
 #include "scenes/game.h"
 
 // NOTE: This is in PascalCase to follow raylib naming conventions
-static bool IsTriggerPressed(const int gamepad, const trigger_t trigger) {
+static bool IsTriggerPressed(int gamepad, trigger_t trigger) {
     static bool     is_left_trigger_down;
     static bool     is_right_trigger_down;
     constexpr float trigger_threshold = 0.5f;

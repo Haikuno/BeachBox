@@ -1,5 +1,3 @@
-#include <raylib.h>
-#include <stdint.h>
 #include "timer.h"
 #include "config.h"
 #include "objects.h"
@@ -8,9 +6,9 @@
 #include "helper_functions.h"
 #include "scenes/game.h"
 
-constexpr uint8_t max_objects_      = 16; // 16 is the limit since we are using a 16-bit bitfield
-constexpr float   max_object_speed_ = 13;
-constexpr float   coin_size_        = 10.0f;
+static constexpr uint8_t max_objects_      = 16; // 16 is the limit since we are using a 16-bit bitfield
+static constexpr float   max_object_speed_ = 13;
+static constexpr float   coin_size_        = 10.0f;
 
 struct Objects {
         Vector2 size[max_objects_ / 2]; // half because all coins are the same size
@@ -21,10 +19,10 @@ struct Objects {
 static uint16_t active_objects_bitfield_;
 
 // We split the bitfield in half, the first 8 bits being the pillars and the last 8 bits being the coins
-constexpr uint8_t pillars_fist_bit_ = 0;
-constexpr uint8_t pillars_last_bit_ = 7;
-constexpr uint8_t coins_first_bit_  = 8;
-constexpr uint8_t coins_last_bit_   = 15;
+static constexpr uint8_t pillars_fist_bit_ = 0;
+static constexpr uint8_t pillars_last_bit_ = 7;
+static constexpr uint8_t coins_first_bit_  = 8;
+static constexpr uint8_t coins_last_bit_   = 15;
 
 // So for example, a value of 0b00010000'00000001 would mean there's a pillar occupying the first bit,
 // and a coin on the 13th bit
@@ -219,7 +217,7 @@ void draw_objects(void) {
     }
 }
 
-const float get_current_object_speed(void) {
+float get_current_object_speed(void) {
     return current_object_speed_;
 }
 

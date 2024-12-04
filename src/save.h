@@ -6,10 +6,10 @@
 #include "upgrades.h"
 
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found, -2 on unknown error
-const int save_game(void);
+int save_game(void);
 
 // Returns 1 on success, 0 on no savefile found, -1 on no VMU found
-const int load_game(void);
+int load_game(void);
 
 // Resets the save data, but doesn't save it
 void new_game(void);
@@ -27,40 +27,40 @@ void update_save_game_timer(void);
 void draw_save_popup(void);
 
 // Returns true if a save is in progress
-const bool is_save_in_progress(void);
+bool is_save_in_progress(void);
 
 // Returns true if a load is in progress
-const bool is_load_in_progress(void);
+bool is_load_in_progress(void);
 
 // Returns the number of coins the player has
-const uint16_t get_total_coins(void);
+uint16_t get_total_coins(void);
 
 // Add n coins to the player's total
-void add_coins(const uint16_t n);
+void add_coins(uint16_t n);
 
 // Returns the number of runs the player has played
-const uint16_t get_total_runs(void);
+uint16_t get_total_runs(void);
 
 // Add a run to the player's total
 void increment_total_runs(void);
 
 // Returns the player's high score
-const uint16_t get_high_score(void);
+uint16_t get_high_score(void);
 
 // Sets the player's high score
-void set_high_score(const uint16_t new_high_score);
+void set_high_score(uint16_t new_high_score);
 
 // Returns the level of the given upgrade
-const uint8_t get_upgrade_level(const player_upgrade_t upgrade);
+uint8_t get_upgrade_level(player_upgrade_t upgrade);
 
 // Increments the level of the given upgrade
-void increment_upgrade_level(const player_upgrade_t upgrade);
+void increment_upgrade_level(player_upgrade_t upgrade);
 
 // Returns the max level of the given upgrade
-const uint8_t get_max_upgrade_level(const player_upgrade_t upgrade);
+uint8_t get_max_upgrade_level(player_upgrade_t upgrade);
 
 // Returns the type of hat the player is currently wearing
-const hat_t get_current_hat_type(void);
+hat_t get_current_hat_type(void);
 
 // Increments the player's chosen hat index
 // NOTE: This function wraps around when the index has reached the end of the array
@@ -71,13 +71,13 @@ void increment_current_hat_index(void);
 void decrement_current_hat_index(void);
 
 // Returns true if the given hat is unlocked
-const bool is_hat_unlocked(const hat_t);
+bool is_hat_unlocked(hat_t);
 
 // Unlocks the given hat
-void unlock_hat(const hat_t hat);
+void unlock_hat(hat_t hat);
 
 // Returns the player's chosen color index
-const uint8_t get_player_current_color_index(void);
+uint8_t get_player_current_color_index(void);
 
 // Increments the player's chosen color index
 // NOTE: This function wraps around when the index has reached the end of the array
@@ -88,12 +88,12 @@ void increment_player_color_index(void);
 void decrement_player_color_index(void);
 
 // Returns the saved music volume
-const uint8_t get_saved_music_volume(void);
+uint8_t get_saved_music_volume(void);
 
 // Returns the saved sfx volume
-const uint8_t get_saved_sfx_volume(void);
+uint8_t get_saved_sfx_volume(void);
 
-typedef struct Save {
+typedef struct __attribute__((__packed__)) Save {
         // HEADER //
         // Text fields are padded with space ($20). String fileds are padded with NUL ($00).
         // NOTE: These MUST be in this specific order
@@ -140,6 +140,6 @@ typedef struct Save {
         uint8_t                 sfx_volume;
         char                    reserved_data[369]; // Reserved for (potential) future use
 
-} __attribute__((__packed__)) save_t;
+} save_t;
 
 #endif

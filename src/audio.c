@@ -26,14 +26,14 @@ static sfxhnd_t sfx_gameover_;
 
 void init_audio(void) {
     snd_stream_init();
-    sfx_menu_move_     = snd_sfx_load("rd/audio/menu_move.wav");
-    sfx_menu_select_   = snd_sfx_load("rd/audio/menu_select.wav");
-    sfx_menu_error_    = snd_sfx_load("rd/audio/menu_error.wav");
-    sfx_coin_          = snd_sfx_load("rd/audio/coin.wav");
-    sfx_teleport_      = snd_sfx_load("rd/audio/teleport.wav");
-    sfx_gameover_      = snd_sfx_load("rd/audio/gameover.wav");
-    sfx_slowdown_      = snd_sfx_load("rd/audio/slowdown.wav");
-    sfx_slowdown_back_ = snd_sfx_load("rd/audio/slowdown_back.wav");
+    sfx_menu_move_     = snd_sfx_load("/rd/audio/menu_move.wav");
+    sfx_menu_select_   = snd_sfx_load("/rd/audio/menu_select.wav");
+    sfx_menu_error_    = snd_sfx_load("/rd/audio/menu_error.wav");
+    sfx_coin_          = snd_sfx_load("/rd/audio/coin.wav");
+    sfx_teleport_      = snd_sfx_load("/rd/audio/teleport.wav");
+    sfx_gameover_      = snd_sfx_load("/rd/audio/gameover.wav");
+    sfx_slowdown_      = snd_sfx_load("/rd/audio/slowdown.wav");
+    sfx_slowdown_back_ = snd_sfx_load("/rd/audio/slowdown_back.wav");
 }
 
 void deinit_audio(void) {
@@ -183,7 +183,7 @@ void decrement_sfx_volume(void) {
     }
 }
 
-constexpr int pan_center_ = 128;
+static constexpr int pan_center_ = 128;
 
 void play_sfx_menu_move(void) {
     snd_sfx_play_chn(4, sfx_menu_move_, sfx_volume_, pan_center_);

@@ -19,7 +19,7 @@
 
 static scene_t current_scene_ = RAYLOGO;
 
-void change_scene(const scene_t scene) {
+void change_scene(scene_t scene) {
     static const void (*init_scene_functions[])(void) = { [RAYLOGO] = init_raylogo_scene, [LOADING] = init_loading_scene,         [MAINMENU] = init_mainmenu_scene, [GAME] = init_game_scene,
                                                           [SHOP] = init_shop_scene,       [UNLOCKABLES] = init_unlockables_scene, [OPTIONS] = init_options_scene,   [CREDITS] = init_credits_scene };
 
@@ -64,6 +64,6 @@ void draw_current_scene(void) {
     draw_save_popup();
 }
 
-const scene_t get_current_scene(void) {
+scene_t get_current_scene(void) {
     return current_scene_;
 }

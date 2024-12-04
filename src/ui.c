@@ -7,12 +7,12 @@
 #include "helper_functions.h"
 #include "ui.h"
 
-static ui_state_t ui_state_                 = { 0 };
-constexpr auto    ui_background_color_      = (Color){ 1, 17, 35, 180 };
-constexpr auto    ui_button_color_          = (Color){ 1, 35, 69, 200 };
-constexpr auto    ui_button_selected_color_ = (Color){ 230, 230, 230, 222 };
+static ui_state_t      ui_state_                 = { 0 };
+static constexpr Color ui_background_color_      = (Color){ 1, 17, 35, 180 };
+static constexpr Color ui_button_color_          = (Color){ 1, 35, 69, 200 };
+static constexpr Color ui_button_selected_color_ = (Color){ 230, 230, 230, 222 };
 
-void move_cursor(const char direction) {
+void move_cursor(char direction) {
     uint8_t *selected_column = &ui_state_.selected.column;
     uint8_t *selected_row    = &ui_state_.selected.row;
     uint8_t *selected_layer  = &ui_state_.selected.layer;
@@ -98,15 +98,15 @@ void move_cursor(const char direction) {
     play_sfx_menu_move();
 }
 
-static const bool is_button_selected(const uibutton_t button) {
+static bool is_button_selected(uibutton_t button) {
     return button.column == ui_state_.selected.column && button.row == ui_state_.selected.row && button.layer == ui_state_.selected.layer;
 }
 
-const bool are_arrows_selected(const uiarrows_t arrows) {
+bool are_arrows_selected(uiarrows_t arrows) {
     return arrows.column == ui_state_.selected.column && arrows.row == ui_state_.selected.row && arrows.layer == ui_state_.selected.layer;
 }
 
-void draw_rotating_sun(const Vector2 anchor_pos) {
+void draw_rotating_sun(Vector2 anchor_pos) {
     static float angle = 0.0f;
     angle              = fmodf(angle + 0.75f, 360.0f);
 
@@ -119,7 +119,7 @@ void draw_rotating_sun(const Vector2 anchor_pos) {
     DrawRectanglePro(rect_2, (Vector2){ 11.25, 11.25 }, angle - 45, YELLOW);
 }
 
-const bool do_button(const uibutton_t button, const bool is_active) {
+bool do_button(uibutton_t button, bool is_active) {
     const bool  is_selected  = is_button_selected(button);
     const bool  is_pressed   = is_selected && IsGamepadButtonReleased(0, BUTTON_A);
     const Color button_color = is_selected ? ui_button_selected_color_ : ui_button_color_;
@@ -146,7 +146,7 @@ const bool do_button(const uibutton_t button, const bool is_active) {
     return is_pressed;
 }
 
-const int do_arrows(const uiarrows_t arrows) {
+int do_arrows(uiarrows_t arrows) {
     const bool  is_selected      = are_arrows_selected(arrows);
     const bool  is_right_pressed = IsGamepadButtonReleased(0, DPAD_RIGHT);
     const bool  is_left_pressed  = IsGamepadButtonReleased(0, DPAD_LEFT);
@@ -224,29 +224,29 @@ void draw_confirmation_window(void (*callback)(int option, void *user_data), voi
     }
 }
 
-const uint8_t get_selected_column(void) {
+uint8_t get_selected_column(void) {
     return ui_state_.selected.column;
 }
 
-void set_selected_column(const uint8_t column) {
+void set_selected_column(uint8_t column) {
     assert_msg(column < ui_max_columns_ && column >= 0, "Column passed to set_selected_column is out of bounds");
     ui_state_.selected.column = column;
 }
 
-const uint8_t get_selected_row(void) {
+uint8_t get_selected_row(void) {
     return ui_state_.selected.row;
 }
 
-void set_selected_row(const uint8_t row) {
+void set_selected_row(uint8_t row) {
     assert_msg(row < ui_max_rows_ && row >= 0, "Row passed to set_selected_row is out of bounds");
     ui_state_.selected.row = row;
 }
 
-const uint8_t get_selected_layer(void) {
+uint8_t get_selected_layer(void) {
     return ui_state_.selected.layer;
 }
 
-void set_selected_layer(const uint8_t layer) {
+void set_selected_layer(uint8_t layer) {
     assert_msg(layer == 0 || layer == 1, "Layer passed to set_selected_layer is out of bounds");
     ui_state_.selected.layer = layer;
 }
@@ -269,38 +269,38 @@ void reset_row_count(void) {
     }
 }
 
-const uint8_t get_column_count(const uint8_t row) {
+uint8_t get_column_count(uint8_t row) {
     assert_msg(row < ui_max_rows_ && row >= 0, "Row passed to get_column_count is out of bounds");
     return ui_state_.column_count[row];
 }
 
-void set_column_count(const uint8_t row, const uint8_t count) {
+void set_column_count(uint8_t row, uint8_t count) {
     assert_msg(row < ui_max_rows_ && row >= 0, "Row passed to set_column_count is out of bounds");
     assert_msg(count >= 0, "Count passed to set_column_count is negative");
     assert_msg(count <= ui_max_columns_, "Count passed to set_column_count is too large");
     ui_state_.column_count[row] = count;
 }
 
-const uint8_t get_row_count(const uint8_t column) {
+uint8_t get_row_count(uint8_t column) {
     assert_msg(column < ui_max_columns_ && column >= 0, "Column passed to get_row_count is out of bounds");
     return ui_state_.row_count[column];
 }
 
-void set_row_count(const uint8_t column, const uint8_t count) {
+void set_row_count(uint8_t column, uint8_t count) {
     assert_msg(column < ui_max_columns_ && column >= 0, "Column passed to set_row_count is out of bounds");
     assert_msg(count >= 0, "Count passed to set_row_count is negative");
     assert_msg(count <= ui_max_rows_, "Count passed to set_row_count is too large");
     ui_state_.row_count[column] = count;
 }
 
-const Color get_background_color(void) {
+Color get_background_color(void) {
     return ui_background_color_;
 }
 
-const Color get_button_color(void) {
+Color get_button_color(void) {
     return ui_button_color_;
 }
 
-const Color get_button_selected_color(void) {
+Color get_button_selected_color(void) {
     return ui_button_selected_color_;
 }

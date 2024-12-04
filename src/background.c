@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <math.h>
+
 #include "background.h"
 #include "helper_functions.h"
 #include "config.h"
@@ -8,17 +9,17 @@
 #include "player.h"
 #include "objects.h"
 
-constexpr int   max_sand_particles_ = 20;
-constexpr float sand_spawn_rate_    = 0.15; // in seconds, lower is faster
-constexpr int   slow_wave_height_   = 12;
-constexpr int   slow_wave_width_    = 8;
-constexpr int   fast_wave_height_   = 20;
-constexpr int   fast_wave_width_    = 15;
+static constexpr int   max_sand_particles_ = 20;
+static constexpr float sand_spawn_rate_    = 0.15; // in seconds, lower is faster
+static constexpr int   slow_wave_height_   = 12;
+static constexpr int   slow_wave_width_    = 8;
+static constexpr int   fast_wave_height_   = 20;
+static constexpr int   fast_wave_width_    = 15;
 
 struct SandParticle {
         Vector2 pos;
         bool    active;
-} sand_particles[max_sand_particles_] = { 0 };
+} static sand_particles[max_sand_particles_] = { 0 };
 
 void draw_ocean(void) {
     const float current_object_speed = get_current_object_speed();
