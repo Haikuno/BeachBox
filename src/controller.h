@@ -1,3 +1,9 @@
+/* KallistiOS ##version##
+   examples/dreamcast/raylib/beachbox/src/controller.h
+   Copyright (C) 2024 Agustín Bellagamba
+   Copyright (C) 2024 Cypress
+*/
+
 #ifndef BBOX_CONTROLLER_H
 #define BBOX_CONTROLLER_H
 

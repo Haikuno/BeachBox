@@ -1,3 +1,9 @@
+/* KallistiOS ##version##
+   examples/dreamcast/raylib/beachbox/src/audio.h
+   Copyright (C) 2024 Agustín Bellagamba
+   Copyright (C) 2024 Cypress
+*/
+
 #ifndef BBOX_AUDIO_H
 #define BBOX_AUDIO_H
 

@@ -1,3 +1,9 @@
+/* KallistiOS ##version##
+   examples/dreamcast/raylib/beachbox/src/vmu_animations.h
+   Copyright (C) 2024 Agustín Bellagamba
+   Copyright (C) 2024 Cypress
+*/
+
 // Hint: if you're using VSCode, turn on the minimap feature with character rendering on ;)
 
 // clang-format off

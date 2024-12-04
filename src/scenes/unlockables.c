@@ -1,3 +1,9 @@
+/* KallistiOS ##version##
+   examples/dreamcast/raylib/beachbox/src/scenes/unlockables.c
+   Copyright (C) 2024 Agustín Bellagamba
+   Copyright (C) 2024 Cypress
+*/
+
 #include <raylib.h>
 #include "../ui.h"
 #include "../save.h"

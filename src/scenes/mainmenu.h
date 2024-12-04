@@ -1,3 +1,9 @@
+/* KallistiOS ##version##
+   examples/dreamcast/raylib/beachbox/src/scenes/mainmenu.h
+   Copyright (C) 2024 Agustín Bellagamba
+   Copyright (C) 2024 Cypress
+*/
+
 #ifndef BBOX_MAINMENU_H
 #define BBOX_MAINMENU_H
 

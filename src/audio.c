@@ -1,3 +1,9 @@
+/* KallistiOS ##version##
+   examples/dreamcast/raylib/beachbox/src/audio.c
+   Copyright (C) 2024 Agustín Bellagamba
+   Copyright (C) 2024 Cypress
+*/
+
 #include <adx/adx.h>
 #include <adx/snddrv.h>
 #include <dc/sound/sfxmgr.h>
