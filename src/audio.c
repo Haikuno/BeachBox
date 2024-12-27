@@ -4,6 +4,7 @@
    Copyright (C) 2024 Cypress
 */
 
+#include <kos/thread.h>
 #include <adx/adx.h>
 #include <adx/snddrv.h>
 #include <dc/sound/sfxmgr.h>
