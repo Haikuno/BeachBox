@@ -72,7 +72,7 @@ void draw_credits_scene(void) {
 
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, get_background_color());
 
-    const char *credits_text  = "Made by Psyop Studios";
+    const char *credits_text  = "Made by Psyops Studio";
     const char *credits_text2 = "Music and SFX by Creepypastorius";
     const char *credits_text3 = "Credits song by mickschen";
     const char *credits_text4 = "Thanks to KallistiOS and raylib";

@@ -5,7 +5,7 @@
 */
 
 #ifndef BBOX_PLAYER_H
-#define BBOX_PLAYER_
+#define BBOX_PLAYER_H
 
 #include <raylib.h>
 #include "timer.h"

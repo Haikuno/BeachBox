@@ -228,7 +228,8 @@ static constexpr uint8_t bios_eyecatch_bitmap[2016] = {
 };
 
 static int calc_CRC(const unsigned char *buf, int size) {
-    int i, c, n = 0;
+    int i, c;
+    uint16_t n = 0;
     for (i = 0; i < size; i++) {
         n ^= (buf[i] << 8);
         for (c = 0; c < 8; c++)
@@ -244,7 +245,16 @@ static char         save_popup_text[20];
 
 bool vmu_has_enough_space(maple_device_t *vmu) {
     if (!vmu) return false;
-    return vmufs_free_blocks(vmu) * 512 >= sizeof(save);
+    int free_blocks = vmufs_free_blocks(vmu);
+    if (free_blocks < 0) return false;
+    if (free_blocks >= (int)((sizeof(save) + 511) / 512)) return true;
+
+    // Overwriting a save reuses the blocks occupied by the old file.
+    void *old_save   = nullptr;
+    int old_size     = 0;
+    const int result = vmufs_read(vmu, "BeachBox", &old_save, &old_size);
+    free(old_save);
+    return result == 0 && old_size >= 0 && free_blocks + old_size / 512 >= (int)((sizeof(save) + 511) / 512);
 }
 
 void draw_save_popup(void) {
@@ -274,12 +284,11 @@ int save_game(void) {
     constexpr size_t save_size   = sizeof(save);
     constexpr size_t header_size = sizeof(save.header);
 
-    snprintf(save.header.dc_description, sizeof(save.header.dc_description), "Psyop Studios");
-    snprintf(save.header.app_identifier, sizeof(save.header.app_identifier), "Psyop Studios");
+    snprintf(save.header.dc_description, sizeof(save.header.dc_description), "Psyops Studio");
+    snprintf(save.header.app_identifier, sizeof(save.header.app_identifier), "Psyops Studio");
     save.header.number_icons          = 3;
     save.header.icon_animation_speed  = 14;
     save.header.graphic_eyecatch_type = 3;
-    save.header.crc                   = calc_CRC((unsigned char *)&save, save_size);
     save.header.bytes_after_header    = (int32_t)(save_size - header_size);
     memcpy(save.header.icon_palette, bios_save_palette, sizeof(bios_save_palette));
     memcpy(save.header.icon_bitmaps, bios_save_animation, sizeof(bios_save_animation));
@@ -288,14 +297,17 @@ int save_game(void) {
 
     save.music_volume = get_music_volume();
     save.sfx_volume   = get_sfx_volume();
+    save.header.crc   = 0;
+    save.header.crc   = calc_CRC((const unsigned char *)&save, save_size);
 
-    if (!vmu_has_enough_space(vmu)) {
+    const int write_result = vmufs_write(vmu, "BeachBox", &save, save_size, VMUFS_OVERWRITE);
+    if (write_result == -7) {
         snprintf(save_popup_text, sizeof(save_popup_text), "Not enough space!");
         save_in_progress_ = false;
         return 0;
     }
 
-    if (0 == vmufs_write(vmu, "BeachBox", &save, save_size, VMUFS_OVERWRITE)) {
+    if (write_result == 0) {
         snprintf(save_popup_text, sizeof(save_popup_text), "Game Saved!");
         save_in_progress_ = false;
         return 1;
@@ -335,12 +347,12 @@ int load_game(void) {
         load_in_progress_ = false;
         return -1;
     }
-    void *save_buffer = malloc(sizeof(save));
+    void *save_buffer    = nullptr;
+    int save_buffer_size = 0;
 
-    if (vmufs_read(vmu, "BeachBox", &save_buffer, nullptr) == 0) { // If loading was successful
+    if (vmufs_read(vmu, "BeachBox", &save_buffer, &save_buffer_size) == 0 && save_buffer && save_buffer_size >= (int)sizeof(save)) {
         memcpy(&save, save_buffer, sizeof(save));
         free(save_buffer);
-        load_in_progress_ = false;
 
         for (int i = 0; i < UPGRADE_COUNT; i++) {
             assert_msg(get_upgrade_level(i) <= get_max_upgrade_level(i), "Invalid upgrade level, save is probably corrupted");
@@ -348,6 +360,7 @@ int load_game(void) {
 
         set_music_volume(save.music_volume);
         set_sfx_volume(save.sfx_volume);
+        load_in_progress_ = false;
 
         return 1;
     }
@@ -362,6 +375,8 @@ void new_game(void) {
     save.unlocked_hats.nil = true;
     save.music_volume      = 12;
     save.sfx_volume        = 12;
+    set_music_volume(save.music_volume);
+    set_sfx_volume(save.sfx_volume);
 }
 
 uint16_t get_total_coins(void) {
@@ -375,11 +390,13 @@ void add_coins(int n) {
     const int total_coins = get_total_coins();
 
     // Check for overflow
-    if (total_coins + n > UINT16_MAX) {
-        n = UINT16_MAX;
+    if (n > UINT16_MAX - total_coins) {
+        save.total_coins = UINT16_MAX;
+        return;
     }
 
-    assert_msg(total_coins + n >= 0, "Tried to spend more coins than available");
+    assert_msg(n >= -total_coins, "Tried to spend more coins than available");
+    if (n < -total_coins) return;
     save.total_coins += n;
 }
 

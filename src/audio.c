@@ -52,9 +52,9 @@ void deinit_audio(void) {
 
 static enum Song : uint8_t { NIL_SONG, MENU_SONG, GAME_SONG, CREDITS_SONG } current_song = NIL_SONG;
 
-static void play_song(void) {
+static bool play_song(void) {
     adx_stop();
-    if (music_volume_ == 0) return;
+    if (music_volume_ == 0) return false;
     int result = -1;
     switch (current_song) {
         case NIL_SONG:
@@ -78,6 +78,7 @@ static void play_song(void) {
         default:
             break;
     }
+    return result == 1;
 }
 
 static void update_music_volume(void) {
@@ -120,7 +121,7 @@ void update_song(void) {
     }
 
     if (prev_song != current_song) {
-        play_song();
+        if (!play_song()) return;
 
         // Wait for the song to start
         while (snddrv.drv_status != SNDDRV_STATUS_STREAMING) {

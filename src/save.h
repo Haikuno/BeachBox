@@ -16,7 +16,7 @@
 // Returns 1 on success, 0 on not enough space, -1 on no VMU found, -2 on unknown error
 int save_game(void);
 
-// Returns 1 on success, 0 on no savefile found, -1 on no VMU found
+// Returns 1 on success, 0 on missing or invalid save data, -1 on no VMU found
 int load_game(void);
 
 // Resets the save data, but doesn't save it

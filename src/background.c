@@ -16,7 +16,7 @@
 #include "objects.h"
 
 static constexpr int   max_sand_particles_ = 20;
-static constexpr float sand_spawn_rate_    = 0.15; // in seconds, lower is faster
+static constexpr float sand_spawn_rate_    = 0.15f; // in seconds, lower is faster
 static constexpr int   slow_wave_height_   = 12;
 static constexpr int   slow_wave_width_    = 8;
 static constexpr int   fast_wave_height_   = 20;

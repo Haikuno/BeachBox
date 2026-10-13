@@ -56,7 +56,8 @@ static void calculate_object_cooldowns(void) {
 void init_objects(void) {
     active_objects_bitfield_  = 0;
     shifted_objects_bitfield_ = 0;
-    current_object_speed_ = base_object_speed = 5;
+    current_object_speed_     = base_object_speed = 5;
+    calculate_object_cooldowns();
     start_timer(&coin_spawn_timer_, 1);
     start_timer(&pillar_spawn_timer_, 2);
     start_timer(&giant_pillar_spawn_timer_, 30); // The first giant pillar spawns later in the run
@@ -72,7 +73,9 @@ static void spawn_pillar(void) {
         }
     }
 
-    active_objects_bitfield_ |= (1 << index);
+    if (index > pillars_last_bit_) return;
+    active_objects_bitfield_  |= (1 << index);
+    shifted_objects_bitfield_ &= ~(1 << index);
 
     // Spawn a giant pillar
     if (!giant_pillar_spawn_timer_.is_running) {
@@ -114,7 +117,9 @@ static void spawn_coin(void) {
         }
     }
 
-    active_objects_bitfield_ |= (1 << index);
+    if (index > coins_last_bit_) return;
+    active_objects_bitfield_  |= (1 << index);
+    shifted_objects_bitfield_ &= ~(1 << index);
     if (GetRandomValue(0, 1)) {
         shifted_objects_bitfield_ |= (1 << index);
     }
@@ -127,7 +132,6 @@ static void spawn_coin(void) {
 }
 
 static void add_objects(void) {
-    if (active_objects_bitfield_ == max_objects_) return;
     spawn_pillar();
     spawn_coin();
 }
@@ -181,7 +185,7 @@ void update_objects(void) {
 
         // Pillars
         if (is_pillar) {
-            if (is_player_teleporting() || (!is_giant_pillar(objects_.size[index]) && (shifted_objects_bitfield_ & (1 << index)) != is_player_shifted()))
+            if (is_player_teleporting() || (!is_giant_pillar(objects_.size[index]) && !!(shifted_objects_bitfield_ & (1 << index)) != is_player_shifted()))
                 continue; // If the player and the pillar's "dimension" do not match, skip
                           // If the player is teleporting, we do not check for collisions
 

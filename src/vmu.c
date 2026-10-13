@@ -5,6 +5,7 @@
 */
 
 #include <stdio.h>
+#include <kos/thread.h>
 #include <dc/maple.h>
 #include <dc/vmu_fb.h>
 
@@ -74,7 +75,7 @@ static void update_vmu_menu_text(void) {
 }
 
 static void update_vmu_credits_animation(void) {
-    static const char data[192] = { 0 };
+    static const uint8_t data[192] = { 0 };
 
     credits_bar_width_ = (credits_bar_width_ + (credits_bar_should_grow_ ? 1 : -1)) % 49;
     if (credits_bar_width_ == 0 || credits_bar_width_ == 48) credits_bar_should_grow_ = !credits_bar_should_grow_;
@@ -92,7 +93,7 @@ void reset_vmu_animation(void) {
 
 #define SET_VMU_ANIMATION(animation)                                            \
     do {                                                                        \
-        vmu_current_animation = (animation);                                    \
+        vmu_current_animation  = (animation);                                    \
         vmu_current_num_frames = sizeof((animation)) / sizeof((animation)[0]);  \
     } while(false)
 
@@ -103,9 +104,9 @@ void *draw_vmu_animation(void *param) {
         maple_device_t *vmu = maple_enum_type(0, MAPLE_FUNC_MEMCARD);
         if (!vmu) continue;
 
-        const char  **vmu_current_animation  = nullptr;
-        int           vmu_current_num_frames = 0;
-        const scene_t current_scene          = get_current_scene();
+        const uint8_t **vmu_current_animation = nullptr;
+        int           vmu_current_num_frames  = 0;
+        const scene_t current_scene           = get_current_scene();
 
         switch (current_scene) {
             case RAYLOGO:

@@ -6,8 +6,10 @@
 
 // Hint: if you're using VSCode, turn on the minimap feature with character rendering on ;)
 
+#include <stdint.h>
+
 // clang-format off
-static const char vmu_loading_1[] = {
+static const uint8_t vmu_loading_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -42,7 +44,7 @@ static const char vmu_loading_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_loading_2[] = {
+static const uint8_t vmu_loading_2[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000111, 0b11100000,
@@ -77,7 +79,7 @@ static const char vmu_loading_2[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_loading_3[] = {
+static const uint8_t vmu_loading_3[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000111, 0b11100000,
@@ -112,7 +114,7 @@ static const char vmu_loading_3[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_loading_4[] = {
+static const uint8_t vmu_loading_4[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000111, 0b11100000,
@@ -147,7 +149,7 @@ static const char vmu_loading_4[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_game_scene_1[] = {
+static const uint8_t vmu_game_scene_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -182,7 +184,7 @@ static const char vmu_game_scene_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_game_scene_2[] = {
+static const uint8_t vmu_game_scene_2[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -217,7 +219,7 @@ static const char vmu_game_scene_2[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_game_scene_3[] = {
+static const uint8_t vmu_game_scene_3[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -252,7 +254,7 @@ static const char vmu_game_scene_3[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_game_scene_4[] = {
+static const uint8_t vmu_game_scene_4[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -287,7 +289,7 @@ static const char vmu_game_scene_4[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_gameover_1[] = {
+static const uint8_t vmu_gameover_1[] = {
     0b00000010, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000100, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000001,
     0b00001000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000010,
@@ -322,7 +324,7 @@ static const char vmu_gameover_1[] = {
     0b00100000, 0b00001111, 0b00000000, 0b00000000, 0b00000000, 0b00001000
 };
 
-static const char vmu_gameover_2[] = {
+static const uint8_t vmu_gameover_2[] = {
     0b00000010, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000100, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000001,
     0b00001000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000010,
@@ -357,7 +359,7 @@ static const char vmu_gameover_2[] = {
     0b00100000, 0b00001111, 0b00000000, 0b00000000, 0b00000000, 0b00001000
 };
 
-static const char vmu_raylib[] = {
+static const uint8_t vmu_raylib[] = {
     0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111,
     0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111,
     0b11000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000011,
@@ -392,7 +394,7 @@ static const char vmu_raylib[] = {
     0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111
 };
 
-static const char vmu_face_frame_1[] = {
+static const uint8_t vmu_face_frame_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -427,7 +429,7 @@ static const char vmu_face_frame_1[] = {
     0b00000111, 0b10000010, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_face_frame_2[] = {
+static const uint8_t vmu_face_frame_2[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -462,7 +464,7 @@ static const char vmu_face_frame_2[] = {
     0b00000111, 0b10000010, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_face_frame_3[] = {
+static const uint8_t vmu_face_frame_3[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -497,7 +499,7 @@ static const char vmu_face_frame_3[] = {
     0b00000111, 0b10000010, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_face_frame_4[] = {
+static const uint8_t vmu_face_frame_4[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -532,7 +534,7 @@ static const char vmu_face_frame_4[] = {
     0b00000111, 0b10000010, 0b00000000, 0b00000000, 0b00000000, 0b00000000
 };
 
-static const char vmu_options_1[] = {
+static const uint8_t vmu_options_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000111, 0b11000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00011000, 0b00110000, 0b00000000, 0b00000000,
@@ -567,7 +569,7 @@ static const char vmu_options_1[] = {
     0b00000011, 0b11100000, 0b00000111, 0b11100000, 0b00000111, 0b00000000
 };
 
-static const char vmu_options_2[] = {
+static const uint8_t vmu_options_2[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000111, 0b11000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00011000, 0b00110000, 0b00000000, 0b00000000,
@@ -602,7 +604,7 @@ static const char vmu_options_2[] = {
     0b00000011, 0b11100000, 0b00000111, 0b11100000, 0b00000111, 0b00000000
 };
 
-static const char vmu_options_3[] = {
+static const uint8_t vmu_options_3[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000111, 0b11000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00011000, 0b00110000, 0b00000000, 0b00000000,
@@ -637,7 +639,7 @@ static const char vmu_options_3[] = {
     0b00000011, 0b11100000, 0b00000111, 0b11100000, 0b00000111, 0b00000000
 };
 
-static const char vmu_shop_1[] = {
+static const uint8_t vmu_shop_1[] = {
     0b00000001, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000001,
     0b00000001, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000001,
     0b00000010, 0b00111110, 0b00011001, 0b10001111, 0b10000111, 0b10000010,
@@ -671,7 +673,7 @@ static const char vmu_shop_1[] = {
     0b10101010, 0b10101010, 0b10101010, 0b10101010, 0b10101010, 0b10101010,
     0b11010101, 0b01010101, 0b01010101, 0b01010101, 0b01010101, 0b11010101
 };
-static const char vmu_unlockables_1[] = {
+static const uint8_t vmu_unlockables_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
@@ -707,7 +709,7 @@ static const char vmu_unlockables_1[] = {
 };
 
 
-static const char vmu_unlockables_2[] = {
+static const uint8_t vmu_unlockables_2[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000001, 0b11111111, 0b11000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000010, 0b00000000, 0b11000000, 0b00000000,
@@ -742,7 +744,7 @@ static const char vmu_unlockables_2[] = {
     0b00000000, 0b10000000, 0b00000000, 0b00000000, 0b00000000, 0b01000000
 };
 
-static const char vmu_unlockables_3[] = {
+static const uint8_t vmu_unlockables_3[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000111, 0b11111111, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000100, 0b00000001, 0b00000000, 0b00000000,
@@ -778,7 +780,7 @@ static const char vmu_unlockables_3[] = {
 };
 
 
-static const char vmu_unlockables_4[] = {
+static const uint8_t vmu_unlockables_4[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00100000, 0b00000000, 0b00000000,
     0b00000000, 0b00000010, 0b00000000, 0b01010000, 0b00000010, 0b00000000,
@@ -813,7 +815,7 @@ static const char vmu_unlockables_4[] = {
     0b00000000, 0b10000000, 0b00000000, 0b00000000, 0b00000000, 0b01000000
 };
 
-static const char vmu_credits_frame_1[] = {
+static const uint8_t vmu_credits_frame_1[] = {
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,
     0b01110000, 0b00011100, 0b00011111, 0b11111000, 0b00000011, 0b11111000,
@@ -849,40 +851,40 @@ static const char vmu_credits_frame_1[] = {
 };
 // clang-format on
 
-static const char *vmu_unlockables_animation[] = {
+static const uint8_t *vmu_unlockables_animation[] = {
     vmu_unlockables_1, vmu_unlockables_1, vmu_unlockables_1, vmu_unlockables_2, vmu_unlockables_2, vmu_unlockables_2,
     vmu_unlockables_3, vmu_unlockables_3, vmu_unlockables_3, vmu_unlockables_4, vmu_unlockables_4, vmu_unlockables_4,
 };
 
-static const char *vmu_shop_animation[] = { vmu_shop_1 };
+static const uint8_t *vmu_shop_animation[] = { vmu_shop_1 };
 
-static const char *vmu_options_animation[] = {
+static const uint8_t *vmu_options_animation[] = {
     vmu_options_1,
     vmu_options_2,
     vmu_options_3,
     vmu_options_2,
 };
 
-static const char *vmu_face_animation[] = { vmu_face_frame_1, vmu_face_frame_2, vmu_face_frame_3, vmu_face_frame_4, vmu_face_frame_3, vmu_face_frame_2 };
+static const uint8_t *vmu_face_animation[] = { vmu_face_frame_1, vmu_face_frame_2, vmu_face_frame_3, vmu_face_frame_4, vmu_face_frame_3, vmu_face_frame_2 };
 
-static const char *vmu_loading_animation[] = {
+static const uint8_t *vmu_loading_animation[] = {
     vmu_loading_1,
     vmu_loading_2,
     vmu_loading_3,
     vmu_loading_4,
 };
 
-static const char *vmu_raylib_animation[] = { vmu_raylib };
+static const uint8_t *vmu_raylib_animation[] = { vmu_raylib };
 
-static const char *vmu_game_scene_animation[] = {
+static const uint8_t *vmu_game_scene_animation[] = {
     vmu_game_scene_1, vmu_game_scene_2, vmu_game_scene_3, vmu_game_scene_4, vmu_game_scene_3, vmu_game_scene_2,
 };
 
-static const char *vmu_game_over_animation[] = {
+static const uint8_t *vmu_game_over_animation[] = {
     vmu_gameover_1,
     vmu_gameover_2,
 };
 
-static const char *vmu_credits_animation[] = {
+static const uint8_t *vmu_credits_animation[] = {
     vmu_credits_frame_1,
 };

@@ -23,12 +23,17 @@ void move_cursor(char direction) {
     uint8_t *selected_row    = &ui_state_.selected.row;
     uint8_t *selected_layer  = &ui_state_.selected.layer;
 
-    // All popups in this game only have two buttons on the same row, so we can assume this:
+    // Popup navigation must not overwrite the underlying scene's layout.
     if (*selected_layer == 1) {
-        ui_state_.column_count[0] = 2;
-        ui_state_.row_count[0]    = 1;
-        ui_state_.row_count[1]    = 1;
+        if (direction == 'L') *selected_column = 0;
+        if (direction == 'R') *selected_column = 1;
+        *selected_row = 0;
+        play_sfx_menu_move();
+        return;
     }
+
+    if (*selected_column >= ui_max_columns_ || *selected_row >= ui_max_rows_
+        || ui_state_.row_count[*selected_column] == 0) return;
 
     const bool can_move_cursor_left  = *selected_column > 0;
     const bool can_move_cursor_right = *selected_column < ui_state_.column_count[*selected_row] - 1;
@@ -174,6 +179,8 @@ int do_arrows(uiarrows_t arrows) {
 
     DrawTriangle(right_v1, right_v2, right_v3, arrow_color);
     DrawTriangleLines(right_v1, right_v2, right_v3, border_color);
+
+    if (!is_selected) return 0;
 
     if (is_right_pressed) return 1;
 

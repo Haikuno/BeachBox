@@ -138,7 +138,7 @@ void draw_unlockables_scene(void) {
     if (!is_hat_unlocked(current_hat_type)) {
         draw_hat_price(current_hat_type);
         const bool can_buy_hat = get_total_coins() >= hat_prices_[current_hat_type] && get_selected_row() != 2 && current_hat_type != HAT_CROWN;
-        if (IsGamepadButtonReleased(0, BUTTON_A) && can_buy_hat) {
+        if (get_selected_layer() == 0 && IsGamepadButtonReleased(0, BUTTON_A) && can_buy_hat) {
             callback = purchase_hat;
             set_selected_layer(1);
         }

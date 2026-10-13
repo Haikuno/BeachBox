@@ -46,18 +46,22 @@ static const uibutton_t main_menu_from_game = {
 void init_game_scene(void) {
     init_player();
     init_objects();
-    is_game_over_      = false;
-    current_coins_     = 0;
-    is_new_high_score_ = false;
+    is_game_over_        = false;
+    is_game_paused_      = false;
+    held_a_during_death_ = false;
+    current_coins_       = 0;
+    is_new_high_score_   = false;
 
     set_column_count(0, 2);
     set_row_count(0, 1);
+    set_row_count(1, 1);
 }
 
 void update_game_scene(void) {
     if (is_game_over_) return;
     if (is_game_paused_) return;
     update_objects();
+    if (is_game_over_) return;
     update_player();
 }
 
@@ -141,6 +145,7 @@ void draw_game_scene(void) {
 }
 
 void end_game(void) {
+    if (is_game_over_) return;
 #ifndef DEBUG_GODMODE
     if (IsGamepadButtonDown(0, BUTTON_A)) held_a_during_death_ = true;
     is_game_over_ = true;

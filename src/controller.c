@@ -19,7 +19,7 @@ static bool IsTriggerPressed(int gamepad, trigger_t trigger) {
     constexpr float trigger_threshold = 0.5f;
 
     bool *is_trigger_down  = (trigger == LEFT_TRIGGER) ? &is_left_trigger_down : &is_right_trigger_down;
-    float trigger_movement = GetGamepadAxisMovement(0, trigger);
+    float trigger_movement = GetGamepadAxisMovement(gamepad, trigger);
 
     if (trigger_movement > trigger_threshold && !*is_trigger_down) {
         *is_trigger_down = true;

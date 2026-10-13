@@ -93,6 +93,7 @@ static void new_game_callback(const int option, void *user_data) {
 
 static void no_save_callback(const int option, void *user_data) {
     if (option == 1) { // yes pressed
+        new_game();
         change_scene(MAINMENU);
     }
 }

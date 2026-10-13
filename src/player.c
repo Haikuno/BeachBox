@@ -92,8 +92,10 @@ void init_player(void) {
     player.is_shifted = false;
     player.color      = player_colors[get_player_current_color_index()];
 
-    is_slowdown_active_ = false;
-    is_teleporting_     = false;
+    is_slowdown_active_     = false;
+    is_teleporting_         = false;
+    teleport_duration_timer = (bbox_timer_t){ 0 };
+    teleport_cooldown_timer = (bbox_timer_t){ 0 };
 }
 
 void move_player(Vector2 direction) {
@@ -115,9 +117,7 @@ void update_player_pos(void) {
     player.velocity.y += player.velocity.y < 0 ? GRAVITY : GRAVITY * 1.5;
     player.pos.y      += player.velocity.y;
 
-    player.pos.y = BBOX_MIN(player.pos.y, FLOOR_HEIGHT - player.size.y);
-
-    if (player.pos.y > FLOOR_HEIGHT - player.size.y) {
+    if (player.pos.y >= FLOOR_HEIGHT - player.size.y) {
         player.pos.y      = FLOOR_HEIGHT - player.size.y;
         player.velocity.y = 0;
     }
@@ -173,7 +173,7 @@ void update_player(void) {
 
     update_player_pos();
     player.meter -= 0.16;
-    if (is_slowdown_active_) player.meter -= 0.22 / (1 + get_upgrade_level(UPGRADE_SLOWDOWN_DRAIN) / 4);
+    if (is_slowdown_active_) player.meter -= 0.22f / (1.0f + get_upgrade_level(UPGRADE_SLOWDOWN_DRAIN) / 4.0f);
 
     if (player.meter <= 0) {
         end_game();
